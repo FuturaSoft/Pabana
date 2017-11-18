@@ -1,0 +1,31 @@
+{
+    "name": "pabana/pabana",
+    "description": "The Pabana framework",
+    "type": "library",
+	"version": "1.0.0",
+    "keywords": [
+        "framework",
+        "mvc"
+    ],
+    "homepage": "https://pabana.co",
+    "license": "BSD-3-Clause",
+    "authors": [
+        {
+            "name": "Pabana Community",
+            "homepage": "https://github.com/FuturaSoft/Pabana/graphs/contributors"
+        }
+    ],
+    "support": {
+        "issues": "https://github.com/FuturaSoft/Pabana/issues",
+        "forum": "https://stackoverflow.com/tags/pabana",
+        "source": "https://github.com/FuturaSoft/Pabana"
+    },
+    "require": {
+        "php": ">=5.6.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Pabana\\": ""
+        }
+    }
+}
