@@ -3,7 +3,7 @@ namespace Pabana\Type;
 
 use Pabana\Debug\Error;
 
-class Array
+class Collection
 {
     private $armArray;
 
@@ -77,6 +77,11 @@ class Array
         return array_search($mKey, array_keys($this->armArray));
     }
 
+    public function merge($oCollection)
+    {
+        $this->armArray = $oCollection->getAll() + $this->armArray;
+    }
+
     public function prepend($mValue)
     {
         array_unshift($this->armArray, $mValue);
@@ -99,6 +104,6 @@ class Array
 
     public function remove($mKey)
     {
-        return unset($this->armArray[$mKey]);
+        unset($this->armArray[$mKey]);
     }
 }

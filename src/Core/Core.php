@@ -31,21 +31,25 @@ const PE_VERSION = '1.0.0';
 const PE_PHP_MIN_VERSION = '5.6.1';
 
 /**
-* Core class
-*
-* This class is used to initialize Pabana and start MVC
-*/
+ * Core class
+ *
+ * This class is used to initialize Pabana and start MVC
+ */
 class Core
 {
+	private $bCheckPhp;
+
 	/**
      * Start Pabana by check PHP version and load default config
 	 */
 	public function __construct()
 	{
 		// Check if current version of PHP can be use by Pabana
-		$this->checkPhpVersion();
-		// Store default settings of Pabana
-		Configuration::base();
+		$this->bCheckPhp = $this->checkPhpVersion();
+		if ($this->bCheckPhp === true) {
+			// Store default settings of Pabana
+			Configuration::base();
+		}
     }
 	
 	/**
@@ -59,32 +63,39 @@ class Core
 			$sErrorMessage = 'Your PHP version "' . PHP_VERSION . '" is less than';
 			$sErrorMessage .= ' require version of PHP "' . PE_PHP_MIN_VERSION . '" to use Pabana';
 			throw new Error($sErrorMessage);
+			return false;
 		}
+		return true;
 	}
 	
 	/**
      * Launch router, then bootstrap and after MVC
+     *
+     * @return void
 	 */
 	public function run()
 	{
-		// Start routing
-		$oRouter = new Router();
-		$oRouter->resolve();
-		// Load bootstrap file
-		$sBootstrapNamespace = Configuration::get('bootstrap.namespace');
-		$oBootstrap = new $sBootstrapNamespace();
-		$oBootstrap->initialize();
-		// Start controller
-		$sControllerName = ucfirst($oRouter::$controller);
-		$sControllerNamespace = Configuration::get('controller.namespace') . '\\' . $sControllerName;
-		$sAction = lcfirst($oRouter::$action);
-		$oController = new $sControllerNamespace();
-		$oController->init();
-		if(method_exists($oController, 'initialize')) {
-			$oController->initialize();
+		// Check if php version is validated
+		if ($this->bCheckPhp === true) {
+			// Start routing
+			/*$oRouter = new Router();
+			$oRouter->resolve();
+			// Load bootstrap file
+			$sBootstrapNamespace = Configuration::read('bootstrap.namespace');
+			$oBootstrap = new $sBootstrapNamespace();
+			$oBootstrap->initialize();
+			// Start controller
+			$sControllerName = ucfirst($oRouter::$controller);
+			$sControllerNamespace = Configuration::read('controller.namespace') . '\\' . $sControllerName;
+			$sAction = lcfirst($oRouter::$action);
+			$oController = new $sControllerNamespace();
+			$oController->init();
+			if(method_exists($oController, 'initialize')) {
+				$oController->initialize();
+			}
+			$oController->$sAction();
+			// Clean Controller object (and launch __destroy method of controller)
+			unset($oController);*/
 		}
-		$oController->$sAction();
-		// Clean Controller object (and launch __destroy method of controller)
-		unset($oController);
 	}
 }
