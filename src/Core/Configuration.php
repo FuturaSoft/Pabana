@@ -14,9 +14,7 @@
  */
 namespace Pabana\Core;
 
-use Pabana\Debug\Error;
 use Pabana\Parser\Ini;
-use Pabana\Type\Collection;
 
 /**
  * Configuration class
@@ -25,12 +23,11 @@ use Pabana\Type\Collection;
  */
 class Configuration
 {
-	/**
-	 * Array to store configuration parameters
-	 *
-	 * @var Type\Collection
-	 */
-    private static $oColConfig;
+    /**
+     * @var    Array Array to store configuration parameters
+     * @since   1.0.0
+     */
+    private static $armConfig = array();
 
     /**
      * Get base configuration of Pabana
@@ -40,52 +37,54 @@ class Configuration
      * @since   1.0.0
      * @return 	void
      */
-    public static function base($bCreateCollection = true)
+    public static function base()
     {
-    	if ($bCreateCollection === true) {
-	    	// Store new Collection object
-	    	self::$oColConfig = new Collection();
-	    }
-    	// Absolute path to application
-        self::write('application.path', 'auto');
+        // Charset by default
+        self::write('application.encoding', 'UTF8');
         // Application environnement
         self::write('application.env', 'dev');
+        // Application name
+        self::write('application.name', 'Awesome Application');
+        // Namespace for application
+        self::write('application.namespace', '\App');
+        // Absolute path to application
+        self::write('application.path', 'auto');
         // Set debug level to all
         self::write('debug.level', E_ALL);
-        // Set intl
-        self::write('intl.enable', false);
-        // Set current locale
-        self::write('intl.locale', locale_get_default());
-        // Set fallback locale
-        self::write('intl.fallback', locale_get_default());
-        // Set default namespace for bootstrap
-        self::write('mvc.bootstrap.namespace', '\Application\Bootstrap');
-        // Set default namespace for controller
-        self::write('mvc.controller.namespace', '\Application\Controller');
-        // Set error controller name
-        self::write('mvc.controller.error', 'Error');
-        // Set default namespace for layout
-        self::write('mvc.layout.namespace', '\Application\Layout');
+        // Set autoloading of shared var between componant
+        self::write('mvc.autoload_shared_var', true);
+        // Set namespace for controller
+        self::write('mvc.controller.namespace', '\App\Controller');
+        // Set namespace for layout
+        self::write('mvc.layout.namespace', '\App\Layout');
         // Set path for Layout
-        self::write('mvc.layout.path', '/application/Layout');
-        // Set default name for layout
-        self::write('mvc.layout.default', 'Default');
+        self::write('mvc.layout.path', '/src/Layout');
+        // Set default layout
+        self::write('mvc.layout.default', 'Application');
+        // Set extension for layout
+        self::write('mvc.layout.extension', 'php');
         // Set auto render for layout
         self::write('mvc.layout.auto_render', true);
-        // Set default namespace for model
-        self::write('mvc.model.namespace', '\Application\Model');
-        // Set default extension for view
-        self::write('mvc.view.extension', 'php');
-        // Set default path for view
-        self::write('mvc.view.path', '/application/View');
+        // Set namespace for model
+        self::write('mvc.model.namespace', '\App\Model');
         // Set auto render for view
         self::write('mvc.view.auto_render', true);
+        // Set extension for view
+        self::write('mvc.view.extension', 'php');
+        // Set path for view
+        self::write('mvc.view.path', '/src/View');
         // Set auto routing
         self::write('routing.auto', true);
         // Set config file for route collection
-        self::write('routing.config_file', '/config/routing.php');
-        // Set default separator for router
-        self::write('routing.separator', '/');
+        self::write('routing.config.enable', true);
+        // Set config file for route collection
+        self::write('routing.config.file', 'routes.php');
+        // Set error action (if not route is avaiable)
+        self::write('routing.fallback.action', 'index');
+        // Set error controller (if not route is avaiable)
+        self::write('routing.fallback.controller', 'Error');
+        // Set config file for route collection
+        self::write('routing.default_separator', '/');
     }
 
     /**
@@ -99,8 +98,7 @@ class Configuration
      */
     public static function check($sKey)
     {
-    	// Check existence of key
-        return self::$oColConfig->exists($sKey);
+        return isset(self::$armConfig[$sKey]);
     }
 
     /**
@@ -115,12 +113,11 @@ class Configuration
      */
     public static function clean($bReloadBase = true)
     {
+        // Delete ALL key and value
+        self::$armConfig = array();
         if ($bReloadBase === true) {
-        	// Delete ALL key and value and reload base configuration
-        	return self::base();
-        } else {
-        	// Delete ALL key and value
-        	return self::$oColConfig->clean();
+            // Reload base configuration
+            self::base();
         }
     }
 
@@ -136,102 +133,87 @@ class Configuration
      */
     public static function delete($sKey)
     {
-    	// Check key existence
-    	if (!self::check($sKey)) {
-    		throw new Error('Configuration key"' . $sKey . '" doesn\'t exists');
-    		return false;
-    	}
-    	// Delete key and value
-        return self::$oColConfig->remove($sKey);
+        // Check key existence
+        if (!self::check($sKey)) {
+            throw new Error('Configuration key "' . $sKey . '" doesn\'t exists');
+            return false;
+        }
+        // Delete key and value
+        unset(self::$armConfig[$sKey]);
+        return true;
     }
 
     /**
-     * Delete a configuration key
+     * Load a configuration file
      *
-     * This method is used to delete a key from Configuration
-     * Key existance is checked first
+     * Load a configuration file
      *
      * @since   1.0.0
-     * @param 	string $key Key to delete.
-     * @return 	bool Result of delete Key
+     * @param 	string $filepath File path of loaded file.
+     * @param   bool $merge If true merge current config to new config.
+     * @return 	void
      */
-    public static function load($sFilename, $sFiletype = false, $bMerge = true)
+    public static function load($sFilename, $bMerge = true)
     {
         // Check if file not exist
         if (!file_exists($sFilename)) {
-            throw new Error('Config file "' . $sFilename . '" doesn\'t exist.');
+            throw new Exception('Config file "' . $sFilename . '" doesn\'t exist.');
         }
         // Read extension of config file
-        if ($sFiletype === false || $sFiletype === 'auto') {
-            $sFiletype = pathinfo($sFilename, PATHINFO_EXTENSION);
-        }
+        $sFiletype = pathinfo($sFilename, PATHINFO_EXTENSION);
         // List allowed extension of file
         $arsAllowedFiletype = array('ini', 'json', 'php', 'xml');
         // Check if extension is recognized
         if (!in_array($sFiletype, $arsAllowedFiletype)) {
-            throw new Error('Config file "' . $sFilename . '" is in unrecognize format. Accepted format are ' . implode(', ', $arsAllowedFiletype) . '.');
+            throw new Exception('Config file "' . $sFilename . '" is in unrecognize format. Accepted format are ' . implode(', ', $arsAllowedFiletype) . '.');
         }
         // Load file and put in array
         if ($sFiletype === 'ini') {
             $oIniConfig = new Ini();
             $oIniConfig->load($sFilename);
             $armConfig = $oIniConfig->toArray();
-        } else if($sFiletype === 'json') {
+        } elseif ($sFiletype === 'json') {
             $sJson = file_get_contents($sFilename);
             $armConfig = json_decode($sJson, true);
-        } else if($sFiletype === 'xml') {
+        } elseif ($sFiletype === 'xml') {
             $oXmlConfig = simplexml_load_file($sFilename);
             $oJsonConfig = json_encode($oXmlConfig);
             $armConfig = json_decode($oJsonConfig, true);
         } else {
-            $armConfig = (include $sFilename);
+            $armConfig = (require $sFilename);
         }
         $armConfigPrepare = self::prepareArray($armConfig);
-        $oColFileConfig = new Collection($armConfigPrepare);
         if ($bMerge === true) {
-            self::merge($oColFileConfig);
+            self::$armConfig = $armConfigPrepare + self::$armConfig;
         } else {
-        	self::$oColConfig = $oColFileConfig;
+            self::$armConfig = $armConfigPrepare;
         }
-    }
-
-    /**
-     * Merge current configuration with another collection
-     *
-     * This method merge current collection with another collection
-     *
-     * @since   1.0.0
-     * @param 	Type\Collection $fileConfig New collection
-     * @return 	void
-     */
-    public static function merge($oColFileConfig)
-    {
-    	self::$oColConfig->merge($oColFileConfig);
+        // Register constant who aren't register by the past
+        self::registerConstant();
     }
 
     /**
      * Prepare a configuration value
      *
      * This method is used to modify a configuration value
-     * For exemple change 'true' to true
+     * For exemple change 'true' string to true boolean
      *
      * @since   1.0.0
-     * @param 	string $sKey Key to prepare
-     * @param 	mixed $mValue Value to prepare.
+     * @param 	string $key Key to prepare
+     * @param 	mixed $value Value to prepare.
      * @return 	mixed Value prepared
      */
     public static function prepare($sKey, $mValue)
     {
-    	if($mValue == "true") {
+        if ($mValue == "true") {
             return true;
-        } else if($mValue == "false") {
+        } elseif ($mValue == "false") {
             return false;
-        } else if($sKey == 'debug.level' && substr($mValue, 0, 2) == "E_") {
+        } elseif ($sKey == 'debug.level' && substr($mValue, 0, 2) == "E_") {
             return eval('return ' . $mValue . ';');
-        } else if($sKey == 'application.path' && ($mValue === false || $mValue === 'false' || $mValue === 'auto')) {
-        	$sLibraryPath = DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'pabana';
-        	$sLibraryPath .= DIRECTORY_SEPARATOR . 'pabana' . DIRECTORY_SEPARATOR . 'src' .DIRECTORY_SEPARATOR . 'Core';
-        	return str_replace($sLibraryPath, '', __DIR__);
+        } elseif ($sKey == 'application.path' && ($mValue === false || $mValue === 'false' || $mValue === 'auto')) {
+            $sLibraryPath = DS . 'vendor' . DS . 'pabana' . DS . 'pabana' . DS . 'src' . DS . 'Core';
+            return str_replace($sLibraryPath, '', __DIR__);
         }
         return $mValue;
     }
@@ -242,15 +224,15 @@ class Configuration
      * Parse array and prepare all of their value
      *
      * @since   1.0.0
-     * @param 	string $array Key to prepare
-     * @return 	array Array prepared
+     * @param 	array $array Array of key and value to prepare
+     * @return 	array Array of key and value prepared
      */
     public static function prepareArray($armArray)
     {
-    	$armArrayPrepare = array();
-    	foreach($armArray as $sKey => $mValue) {
-    		$armArrayPrepare[$sKey] = self::prepare($sKey, $mValue);
-    	}
+        $armArrayPrepare = array();
+        foreach ($armArray as $sKey => $mValue) {
+            $armArrayPrepare[$sKey] = self::prepare($sKey, $mValue);
+        }
         return $armArrayPrepare;
     }
 
@@ -262,17 +244,17 @@ class Configuration
      *
      * @since   1.0.0
      * @param 	string $key Key to read.
-     * @return 	mixed Value of Configuration parameter
+     * @return 	mixed|bool Value of Configuration parameter or false if configuration key doesn't exist
      */
     public static function read($sKey)
     {
-    	// Check key existence
-    	if (!self::check($sKey)) {
-    		throw new Error('Configuration key"' . $sKey . '" doesn\'t exists');
-    		return false;
-    	}
-    	// Get value of key
-        return self::$oColConfig->get($sKey);
+        // Check key existence
+        if (!self::check($sKey)) {
+            throw new \Exception('Configuration key "' . $sKey . '" doesn\'t exists');
+            return false;
+        }
+        // Get value of key
+        return self::$armConfig[$sKey];
     }
 
     /**
@@ -285,7 +267,33 @@ class Configuration
      */
     public static function readAll()
     {
-        return self::$oColConfig->getAll();
+        return self::$armConfig;
+    }
+
+    /**
+     * Register constant
+     *
+     * This method is used to register constant
+     *
+     * @since   1.0.0
+     * @return  void
+     */
+    public static function registerConstant()
+    {
+        if (!defined('DS')) {
+            define('DS', DIRECTORY_SEPARATOR);
+        }
+        if (!defined('PAB_NAME')) {
+            define('PAB_NAME', 'Banana');
+        }
+        if (!defined('PAB_VERSION')) {
+            define('PAB_VERSION', '1.0.0');
+        }
+        if (self::check('application.path') === true) {
+            if (!defined('APP_ROOT')) {
+                define('APP_ROOT', self::read('application.path'));
+            }
+        }
     }
 
     /**
@@ -298,7 +306,7 @@ class Configuration
      */
     public static function version()
     {
-        return PE_VERSION;
+        return PAB_VERSION;
     }
 
     /**
@@ -310,13 +318,13 @@ class Configuration
      * @since   1.0.0
      * @param 	string $key Key to read.
      * @param 	string $value Value of key.
-     * @return 	bool True if write work else false
+     * @return 	void
      */
     public static function write($sKey, $mValue)
     {
-    	// Prepare value (transform 'true' to true, etc...)
-    	$mValue = self::prepare($sKey, $mValue);
-    	// Write value content
-        return self::$oColConfig->set($sKey, $mValue);
+        // Prepare value (transform 'true' to true, etc...)
+        $mValue = self::prepare($sKey, $mValue);
+        // Write value content
+        self::$armConfig[$sKey] = $mValue;
     }
 }
