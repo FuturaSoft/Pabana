@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 1.1.0 "???" - WIP
+
+## 1.0.2 "Banana" - 05/02/2018
+
+FIX : [Composer] : Correct version in composer.json
+
 ## 1.0.1 "Banana" - 05/02/2018
 
 FIX : [Composer] : Correct src path for autoloading
