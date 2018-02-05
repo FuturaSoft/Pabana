@@ -1,8 +1,20 @@
 <?php
+/**
+ * Pabana : PHP Framework (https://pabana.futurasoft.fr)
+ * Copyright (c) FuturaSoft (https://futurasoft.fr)
+ *
+ * Licensed under BSD-3-Clause License
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright     Copyright (c) FuturaSoft (https://futurasoft.fr)
+ * @link          https://pabana.futurasoft.fr Pabana Project
+ * @since         1.0.0
+ * @license       https://opensource.org/licenses/BSD-3-Clause BSD-3-Clause License
+ */
 namespace Pabana\Database\Datasource;
 
 use Pabana\Database\Datasource;
-use Pabana\Debug\Error;
 
 class Sqlserver extends Datasource
 {
@@ -23,67 +35,67 @@ class Sqlserver extends Datasource
     {
         $this->setName($sName);
         $this->setDbms('Sqlserver');
-	}
+    }
     
     protected function checkParam()
     {
-        if(empty($this->getHost())) {
+        if (empty($this->getHost())) {
             $sErrorMessage = 'Connexion to SQL Server must have an host defined';
-            throw new Error($sErrorMessage);
+            throw new \Exception($sErrorMessage);
             return false;
         } else {
             return true;
         }
-	}
+    }
     
-    public function createDsn()
+    public function getDsn()
     {
-        if($this->checkParam()) {
+        if ($this->checkParam()) {
             $sDsn = 'sqlsrv:';
-            if(!empty($this->getApplication())) {
+            if (!empty($this->getApplication())) {
                 $sDsn .= 'APP=' . $this->getApplication() . ';';
             }
-            if(!empty($this->getConnectionPooling())) {
+            if (!empty($this->getConnectionPooling())) {
                 $sDsn .= 'ConnectionPooling=' . $this->getConnectionPooling() . ';';
             }
-            if(!empty($this->getDatabase())) {
+            if (!empty($this->getDatabase())) {
                 $sDsn .= 'Database=' . $this->getDatabase() . ';';
             }
-            if(!empty($this->getEncrypt())) {
+            if (!empty($this->getEncrypt())) {
                 $sDsn .= 'Encrypt=' . $this->getEncrypt() . ';';
             }
-            if(!empty($this->getFailoverPartner())) {
+            if (!empty($this->getFailoverPartner())) {
                 $sDsn .= 'FailoverPartner=' . $this->getFailoverPartner() . ';';
             }
-            if(!empty($this->getLoginTimeout())) {
+            if (!empty($this->getLoginTimeout())) {
                 $sDsn .= 'LoginTimeout=' . $this->getLoginTimeout() . ';';
             }
-            if(!empty($this->getMultipleActiveResultSets())) {
+            if (!empty($this->getMultipleActiveResultSets())) {
                 $sDsn .= ' MultipleActiveResultSets=' . $this->getMultipleActiveResultSets() . ';';
             }
-            if(!empty($this->getQuotedId())) {
+            if (!empty($this->getQuotedId())) {
                 $sDsn .= 'QuotedId=' . $this->getQuotedId() . ';';
             }
-            if(!empty($this->getHost())) {
+            if (!empty($this->getHost())) {
                 $sDsn .= 'Server=' . $this->getHost();
-                if(!empty($this->getPort())) {
+                if (!empty($this->getPort())) {
                     $sDsn .= ',' . $this->getPort();
                 }
                 $sDsn .= ';';
             }
-            if(!empty($this->getTraceFile())) {
+            if (!empty($this->getTraceFile())) {
                 $sDsn .= 'TraceFile=' . $this->getTraceFile() . ';';
             }
-            if(!empty($this->getTraceOn())) {
+            if (!empty($this->getTraceOn())) {
                 $sDsn .= 'TraceOn=' . $this->getTraceOn() . ';';
             }
-            if(!empty($this->getTransactionIsolation())) {
+            if (!empty($this->getTransactionIsolation())) {
                 $sDsn .= 'TransactionIsolation=' . $this->getTransactionIsolation() . ';';
             }
-            if(!empty($this->getTrustServerCertificate())) {
+            if (!empty($this->getTrustServerCertificate())) {
                 $sDsn .= 'TrustServerCertificate=' . $this->getTrustServerCertificate() . ';';
             }
-            if(!empty($this->getWsid())) {
+            if (!empty($this->getWsid())) {
                 $sDsn .= 'WSID=' . $this->getWsid() . ';';
             }
             return $sDsn;

@@ -1,12 +1,24 @@
 <?php
+/**
+ * Pabana : PHP Framework (https://pabana.futurasoft.fr)
+ * Copyright (c) FuturaSoft (https://futurasoft.fr)
+ *
+ * Licensed under BSD-3-Clause License
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright     Copyright (c) FuturaSoft (https://futurasoft.fr)
+ * @link          https://pabana.futurasoft.fr Pabana Project
+ * @since         1.0.0
+ * @license       https://opensource.org/licenses/BSD-3-Clause BSD-3-Clause License
+ */
 namespace Pabana\Database\Datasource;
 
 use Pabana\Database\Datasource;
-use Pabana\Debug\Error;
 
 class Odbc extends Datasource
 {
-    private $sDriver = 'Microsoft Access Driver (*.mdb, *.accdb)';
+    private $sDriver;
     private $nExclusive;
     private $nExtendedAnsiSql;
     private $nLocaleIdentifier;
@@ -20,32 +32,32 @@ class Odbc extends Datasource
 
     protected function checkParam()
     {
-        if(empty($this->getDriver())) {
+        if (empty($this->getDriver())) {
             $sErrorMessage = 'Connexion by Odbc must have a driver defined';
-            throw new Error($sErrorMessage);
+            throw new \Exception($sErrorMessage);
             return false;
         } else {
             return true;
         }
     }
-	
-	public function getDsn()
+    
+    public function getDsn()
     {
-		if($this->checkParam()) {
-			$sDsn = 'odbc:Driver={' . $this->getDriver() . '};';
-            if(!empty($this->getUser())) {
+        if ($this->checkParam()) {
+            $sDsn = 'odbc:Driver={' . $this->getDriver() . '};';
+            if (!empty($this->getUser())) {
                 $sDsn .= 'Uid=' . $this->getUser() . ';';
             } else {
                 $sDsn .= 'Uid=Admin;';
             }
             $sDsn .= 'Pwd=' . $this->getPassword() . ';Dbq=' . $this->getDatabase() . ';';
-			if(!empty($this->getSystemDatabase())) {
-				$sDsn .= 'SystemDB=' . $this->getSystemDatabase() . ';';
-			}
-			return $sDsn;
-		} else {
-			return false;
-		}
+            if (!empty($this->getSystemDatabase())) {
+                $sDsn .= 'SystemDB=' . $this->getSystemDatabase() . ';';
+            }
+            return $sDsn;
+        } else {
+            return false;
+        }
     }
 
     public function getDriver()

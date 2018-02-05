@@ -1,10 +1,23 @@
 <?php
+/**
+ * Pabana : PHP Framework (https://pabana.futurasoft.fr)
+ * Copyright (c) FuturaSoft (https://futurasoft.fr)
+ *
+ * Licensed under BSD-3-Clause License
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright     Copyright (c) FuturaSoft (https://futurasoft.fr)
+ * @link          https://pabana.futurasoft.fr Pabana Project
+ * @since         1.0.0
+ * @license       https://opensource.org/licenses/BSD-3-Clause BSD-3-Clause License
+ */
 namespace Pabana\Database\Datasource;
 
 use Pabana\Database\Datasource;
-use Pabana\Debug\Error;
 
-class Pgsql extends Datasource {
+class Pgsql extends Datasource
+{
     private $sHost;
     private $nPort = 5432;
     
@@ -16,23 +29,23 @@ class Pgsql extends Datasource {
     
     protected function checkParam()
     {
-        if(empty($this->getHost())) {
+        if (empty($this->getHost())) {
             $sErrorMessage = 'Connexion to PostgreSQL must have an host defined';
-            throw new Error($sErrorMessage);
+            throw new \Exception($sErrorMessage);
             return false;
         } else {
             return true;
         }
-	}
+    }
     
     public function getDsn()
     {
-        if($this->checkParam()) {
+        if ($this->checkParam()) {
             $sDsn = 'pgsql:host=' . $this->getHost() . ';';
-            if(!empty($this->getPort())) {
+            if (!empty($this->getPort())) {
                 $sDsn .= 'port=' . $this->getPort() . ';';
             }
-            if(!empty($this->getDatabase())) {
+            if (!empty($this->getDatabase())) {
                 $sDsn .= 'dbname=' . $this->getDatabase() . ';';
             }
             return $sDsn;
