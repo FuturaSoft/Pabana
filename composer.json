@@ -7,7 +7,7 @@
         "framework",
         "mvc"
     ],
-    "homepage": "https://pabana.co",
+    "homepage": "https://pabana.futurasoft.fr/",
     "license": "BSD-3-Clause",
     "authors": [
         {
@@ -21,7 +21,7 @@
         "source": "https://github.com/FuturaSoft/Pabana"
     },
     "require": {
-        "php": ">=5.6.0"
+        "php": "^5.6 || ^7.0"
     },
     "autoload": {
         "psr-4": {
