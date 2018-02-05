@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 1.0.1 "Banana" - 05/02/2018
+
+FIX : [Composer] : Correct src path for autoloading
+FIX : [Database] : Correct getOption method calling
+
 ## 1.0.0 "Banana" - 05/02/2018
 
 NEW : [Global] : Support PSR-1, PSR-2 and PSR-4 (Composer) 
