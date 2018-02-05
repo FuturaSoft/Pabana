@@ -1,128 +1,161 @@
 <?php
 namespace Pabana\Network\Http;
 
-use Pabana\Type\Array;
-
 class Request
 {
-	public $request;
-	public $query;
-	public $cookies;
-	public $files;
-	public $server;
-	public $headers;
-	public $ajax = false;
-	public $connection;
-	public $host;
-	public $method;
-	public $url;
-	public $userAgent;
+    private function accept($sContent, $sType)
+    {
+        $arsAcceptMimetype = $this->parseAccept($sContent);
+        if (empty($sType)) {
+            return $arsAcceptMimetype;
+        } else {
+            foreach ($arsAcceptMimetype as $arsAcceptList) {
+                if (in_array($sType, $arsAcceptList)) {
+                    return true;
+                }
+                if (in_array('*/*', $arsAcceptList)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+    }
 
+    public function acceptCharset($sType = null)
+    {
+        return $this->accept($_SERVER['HTTP_ACCEPT_CHARSET'], $sType);
+    }
 
-	public function __construct($oRequest = array(), $oQuery = array(), $oCookies = array(),
-								$oFiles = array(), $oServer = array(), $oHeaders = array())
-	{
-		$this->request = new Array($oRequest);
-		$this->query = new Array($oQuery);
-        $this->cookies = new Array($oCookies);
-        $this->files = new Array($oFiles);
-        $this->server = new Array($oServer);
-        $this->headers = new Array($oHeaders);
-        $this->initialize();
-	}
+    public function acceptEncoding($sType = null)
+    {
+        return $this->accept($_SERVER['HTTP_ACCEPT_ENCODING'], $sType);
+    }
 
-	public function createFromGlobals()
-	{
-		$this->request = new Array($_POST);
-		$this->query = new Array($_GET);
-        $this->cookies = new Array($_COOKIES);
-        $this->files = new Array($_FILES);
-        $this->server = new Array($_SERVER);
-        $this->headers = new Array(getallheaders());
-        $this->initialize();
-	}
+    public function acceptLanguage($sType = null)
+    {
+        return $this->accept($_SERVER['HTTP_ACCEPT_LANGUAGE'], $sType);
+    }
 
-	public function initialize()
-	{
-		if(!empty($this->server->get('HTTP_X_REQUESTED_WITH')) && strtolower($this->server->get('HTTP_X_REQUESTED_WITH')) == 'xmlhttprequest') {
-			$this->ajax = true;
-		}
-		$this->connection = $this->server->get('HTTP_CONNECTION');
-		$this->host = $this->server->get('HTTP_HOST');
-		$this->method = $this->server->get('REQUEST_METHOD');
-		$this->url = $this->server->get('REQUEST_URI');
-		if(isset($this->server->get('HTTP_USER_AGENT'))) {
-			$this->userAgent = $this->server->get('HTTP_USER_AGENT');
-		}
-	}
+    public function acceptMimetype($sType = null)
+    {
+        return $this->accept($_SERVER['HTTP_ACCEPT'], $sType);
+    }
 
-	public static function getUrl()
-	{
-		return $this->url;
-	}
+    public function clientIp()
+    {
+        if (isset($_SERVER['HTTP_X_FORWARDED_FOR']) && !empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+            $sIp = preg_replace('/(?:,.*)/', '', $_SERVER['HTTP_X_FORWARDED_FOR']);
+        } elseif (isset($_SERVER['HTTP_CLIENT_IP']) && !empty($_SERVER['HTTP_CLIENT_IP'])) {
+            $sIp = $_SERVER['HTTP_CLIENT_IP'];
+        } else {
+            $sIp = $_SERVER['REMOTE_ADDR'];
+        }
+        return trim($sIp);
+    }
 
-	public function getHost()
-	{
-		return $this->host;
-	}
+    public function domain($nTldLength = 1)
+    {
+        $arsSegments = explode('.', $this->host());
+        $arsDomain = array_slice($arsSegments, -1 * ($nTldLength + 1));
+        return implode('.', $arsDomain);
+    }
 
-	public function getUserAgent()
-	{
-		return $this->userAgent;
-	}
+    public function host()
+    {
+        return $_SERVER['HTTP_HOST'];
+    }
 
-	public function getMethod()
-	{
-		return $this->method;
-	}
-	
-	public function isAjax()
-	{
-		return $this->ajax;
-	}
+    public function method()
+    {
+        return $_SERVER['REQUEST_METHOD'];
+    }
 
-	public function isGet()
-	{
-		if($this->method == 'GET') {
-			return true;
-		} else {
-			return false;
-		}
-	}
+    private function parseAccept($sHeaderLine)
+    {
+        $arsAccept = [];
+        $arsHeader = explode(',', $sHeaderLine);
+        foreach (array_filter($arsHeader) as $sValue) {
+            $nPrefValue = '1.0';
+            $sValue = trim($sValue);
+            $semiPos = strpos($sValue, ';');
+            if ($semiPos !== false) {
+                $arsParams = explode(';', $sValue);
+                $sValue = trim($arsParams[0]);
+                foreach ($arsParams as $arsParam) {
+                    $nQPos = strpos($arsParam, 'q=');
+                    if ($nQPos !== false) {
+                        $nPrefValue = substr($arsParam, $nQPos + 2);
+                    }
+                }
+            }
+            if (!isset($arsAccept[$nPrefValue])) {
+                $arsAccept[$nPrefValue] = [];
+            }
+            if ($nPrefValue) {
+                $arsAccept[$nPrefValue][] = $sValue;
+            }
+        }
+        krsort($arsAccept);
+        return $arsAccept;
+    }
 
-	public function isPatch()
-	{
-		if($this->method == 'PATCH') {
-			return true;
-		} else {
-			return false;
-		}
-	}
+    public function port()
+    {
+        return $_SERVER['SERVER_PORT'];
+    }
 
-	public function isPost()
-	{
-		if($this->method == 'POST') {
-			return true;
-		} else {
-			return false;
-		}
-	}
+    public function scheme()
+    {
+        if (isset($_SERVER['HTTPS']) || is_empty($_SERVER['HTTPS'])) {
+            return 'https';
+        } else {
+            return 'http';
+        }
+    }
 
-	public function isPut()
-	{
-		if($this->method == 'PUT') {
-			return true;
-		} else {
-			return false;
-		}
-	}
+    public function subdomain($nTldLength = 1)
+    {
+        $arsSegments = explode('.', $this->host());
+        return array_slice($arsSegments, 0, -1 * ($nTldLength + 1));
+    }
 
-	public function isDelete()
-	{
-		if($this->method == 'DELETE') {
-			return true;
-		} else {
-			return false;
-		}
-	}
+    public function url()
+    {
+        return $_SERVER['REQUEST_URI'];
+    }
+
+    public function userAgent()
+    {
+        return $_SERVER['HTTP_USER_AGENT'];
+    }
+
+    public function is($sTest)
+    {
+        $arsMethod = array('get', 'put', 'patch', 'post', 'delete', 'head', 'options');
+        if (in_array($sTest, $arsMethod)) {
+            if (strtolower($this->method()) == $sTest) {
+                return true;
+            } else {
+                return false;
+            }
+        } elseif ($sTest == 'ajax') {
+            if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+                return true;
+            } else {
+                return false;
+            }
+        } elseif ($sTest == 'json') {
+            if ($this->acceptMimetype('application/json') === true) {
+                return true;
+            } else {
+                return false;
+            }
+        } elseif ($sTest == 'xml') {
+            if ($this->acceptMimetype('application/xml') === true || $this->acceptMimetype('text/xml') === true) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    }
 }
