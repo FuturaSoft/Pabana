@@ -87,10 +87,10 @@ class Datasource
     }
 
 
-    /*public function getOption()
+    public function getOption()
     {
         return array();
-    }*/
+    }
     
     /**
      * Getter for Datasource name
