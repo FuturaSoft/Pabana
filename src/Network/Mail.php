@@ -195,7 +195,7 @@ class Mail
             $sHeaderContent .= 'Bcc: ' . $sRecipientBcc . PHP_EOL;
         }
         if (!empty($this->sMailer)) {
-            $sHeaderContent .= 'X-Mailer: ' . $this->_sMailer . PHP_EOL;
+            $sHeaderContent .= 'X-Mailer: ' . $this->sMailer . PHP_EOL;
         }
         $sHeaderContent .= 'MIME-Version: 1.0' . PHP_EOL;
         if (!empty($this->armAttachment)) {
