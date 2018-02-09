@@ -1,6 +1,6 @@
 ![Logo](https://pabana.futurasoft.fr/img/logo_github.png)
 
-# Welcome to the *Pabana 1.0.1 "Banana"*!
+# Welcome to the *Pabana 1.0.3 "Banana"*!
 
 ## ABOUT PABANA
 
@@ -9,11 +9,12 @@ A modern framework compatible with PHP 5.6+ who give you a simple MVC and much m
 
 ## RELEASE INFORMATION
 
-*Pabana 1.0.1 "Banana"*
+*Pabana 1.0.3 "Banana"*
 
-This is the first fix for public release of Pabana Framework.
+* Fix for Mysql and Sqlserver connexion.
+* Fix for X-mailer tag in Mail
 
-### UPDATES IN 1.0.1
+### UPDATES IN 1.0.3
 
 Please see [CHANGELOG.md](CHANGELOG.md).  
 Or on Pabana website [Changelog](https://pabana.futurasoft.fr/about/changelog/).
@@ -24,9 +25,9 @@ Pabana require PHP 5.6 or later; we recommend using the latest PHP version whene
 
 ### DOCUMENTATION
 
-* [Geeting started](https://pabana.futurasoft.fr/documentation/1.0.0/getting-started/) - Getting started guide
-* [API documentation](https://pabana.futurasoft.fr/api/1.0.0/) - API documentation
-* [Migration guide](https://pabana.futurasoft.fr/documentation/1.0.0/migration/) - Migration guide from older version of Pabana
+* [Geeting started](https://pabana.futurasoft.fr/documentation/1.0/getting-started/) - Getting started guide
+* [API documentation](https://pabana.futurasoft.fr/api/1.0/) - API documentation
+* [Migration guide](https://pabana.futurasoft.fr/documentation/1.0/migration/) - Migration guide from older version of Pabana
 
 ## LICENSE
 

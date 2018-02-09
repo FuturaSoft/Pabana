@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 1.0.3 "Banana" - 09/02/2018
+
+FIX : [Database] : Correct construct method in Mysql and Sqlserver class
+FIX : [Network] : Correct X-Mailer tag in Mail class
+
+## 1.0.2 "Banana" - 05/02/2018
+
+FIX : [Composer] : Correct version in composer.json file
+
 ## 1.0.1 "Banana" - 05/02/2018
 
 FIX : [Composer] : Correct src path for autoloading
