@@ -31,7 +31,7 @@ class Sqlserver extends Datasource
     private $sTrustServerCertificate;
     private $sWsid;
     
-    public function construct($sName)
+    public function __construct($sName)
     {
         $this->setName($sName);
         $this->setDbms('Sqlserver');

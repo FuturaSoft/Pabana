@@ -22,7 +22,7 @@ class Mysql extends Datasource
     private $nPort = 3306;
     private $sUnixSocket;
     
-    public function construct($sCnxName)
+    public function __construct($sCnxName)
     {
         $this->setName($sCnxName);
         $this->setDbms('Mysql');

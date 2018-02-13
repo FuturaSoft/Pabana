@@ -37,12 +37,21 @@ class Encoding
                 $sOutCharset .= '//IGNORE';
             }
             $mReturn = @iconv($sInCharset, $sOutCharset, $mValue);
+            if ($mReturn === false) {
+                $mReturn = $mValue;
+            }
         } elseif (is_array($mValue)) {
             $mReturn = array();
             foreach ($mValue as $mArrayKey => $mArrayValue) {
-                $mArrayKey = $this->convert($mArrayKey, $sInCharset, $sOutCharset, $bTranslit, $bIgnore);
-                $mArrayValue = $this->convert($mArrayValue, $sInCharset, $sOutCharset, $bTranslit, $bIgnore);
-                $mReturn[$mArrayKey] = $mArrayValue;
+                $mArrayKeyConvert = $this->convert($mArrayKey, $sInCharset, $sOutCharset, $bTranslit, $bIgnore);
+                if ($mReturn === false) {
+                    $mArrayKeyConvert = $mArrayKey;
+                }
+                $mArrayValueConvert = $this->convert($mArrayValue, $sInCharset, $sOutCharset, $bTranslit, $bIgnore);
+                if ($mReturn === false) {
+                    $mArrayValueConvert = $mArrayValue;
+                }
+                $mReturn[$mArrayKeyConvert] = $mArrayValueConvert;
             }
         }
         return $mReturn;
