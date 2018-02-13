@@ -13,6 +13,8 @@ A modern framework compatible with PHP 5.6+ who give you a simple MVC and much m
 
 * Fix for Mysql and Sqlserver connexion.
 * Fix for X-mailer tag in Mail
+* Add encoding tag in Mail class
+* If encoding failed, return string before encoding
 
 ### UPDATES IN 1.0.3
 
