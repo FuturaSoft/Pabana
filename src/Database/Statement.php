@@ -14,10 +14,25 @@
  */
 namespace Pabana\Database;
 
+/**
+ * Statement class
+ *
+ * Statement manipulation class
+ */
 class Statement
 {
+    /**
+     * @var     \PDOStatement Object created by PDO query.
+     * @since   1.0.0
+     */
     private $oStatement;
 
+    /**
+     * Constructor
+     *
+     * @since   1.0.0
+     * @param   \PDOStatement $oStatement Object created by PDO->query().
+     */
     public function __construct($oStatement)
     {
         $this->oStatement = $oStatement;
