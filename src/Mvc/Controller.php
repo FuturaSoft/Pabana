@@ -17,8 +17,21 @@ namespace Pabana\Mvc;
 use Pabana\Core\Configuration;
 use Pabana\Network\Request;
 
+/**
+ * Controller class
+ *
+ * Launch controller and call Layout and view if defined
+ */
 class Controller extends Mvc
 {
+    /**
+     * Initialize controller
+     *
+     * Call Initialize of Layout is Layout autorender enable
+     *
+     * @since   1.0.0
+     * @return  void
+     */
     final public function init()
     {
         if ($this->Layout->getAutoRender()) {
@@ -27,6 +40,15 @@ class Controller extends Mvc
         }
     }
 
+    /**
+     * Destruct controller
+     *
+     * Call render of view and layout if autorender enable
+     * Then show html return of controller
+     *
+     * @since   1.0.0
+     * @return  void
+     */
     final public function __destruct()
     {
         $sOutHtml = null;
