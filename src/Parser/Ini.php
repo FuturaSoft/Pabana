@@ -14,10 +14,26 @@
  */
 namespace Pabana\Parser;
 
+/**
+ * Ini class
+ *
+ * Parse Ini file
+ */
 class Ini
 {
+    /**
+     * @var    string Path of ini file
+     * @since   1.0.0
+     */
     private $sFilename;
 
+    /**
+     * Load INI file
+     *
+     * @since   1.0.0
+     * @param   string $sFilename File path.
+     * @return  bool|$this
+     */
     public function load($sFilename)
     {
         if (!file_exists($sFilename)) {
@@ -28,6 +44,13 @@ class Ini
         return $this;
     }
 
+    /**
+     * Transforme INI content to Array
+     *
+     * @since   1.0.0
+     * @param   bool $bProcessSection Process to array with section.
+     * @return  array|bool Array of content of INI or false if error
+     */
     public function toArray($bProcessSection = false)
     {
         return parse_ini_file($this->sFilename, $bProcessSection, INI_SCANNER_TYPED);
