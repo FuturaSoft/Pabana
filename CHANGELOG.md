@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 1.0.5 "Banana" - 15/02/2018
+
+FIX : [Network] : Correct X-Mailer tag in Mail class
+
 ## 1.0.4 "Banana" - 15/02/2018
 
 FIX : [Mvc] : Fix change Layout bug
