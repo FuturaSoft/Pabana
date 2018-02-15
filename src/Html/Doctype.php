@@ -14,25 +14,66 @@
  */
 namespace Pabana\Html;
 
+/**
+ * Doctype class
+ *
+ * Define doctype use
+ */
 class Doctype
 {
+    /**
+     * @var     string Doctype version (by default HTML5).
+     * @since   1.0.0
+     */
     private static $_sDoctype = 'HTML5';
 
+    /**
+     * toString
+     *
+     * Activate the render method
+     *
+     * @since   1.0.0
+     * @return  string Html code for Doctype
+     */
     public function __toString()
     {
         return $this->render();
     }
 
+    /**
+     * Clean
+     *
+     * Reinitialize Doctype value to HTML5
+     *
+     * @since   1.0.0
+     * @return  string HTML5
+     */
     public function clean()
     {
         return self::$_sDoctype = 'HTML5';
     }
 
+    /**
+     * Get doctype
+     *
+     * Get current defined doctype
+     *
+     * @since   1.0.0
+     * @return  string Current defined doctype
+     */
     public function get()
     {
         return self::$_sDoctype;
     }
 
+    /**
+     * Render
+     *
+     * Return HTML code for Doctype
+     *
+     * @since   1.0.0
+     * @return  string Html code for Doctype
+     */
     public function render()
     {
         if (self::$_sDoctype == 'HTML5') {
@@ -54,6 +95,15 @@ class Doctype
         }
     }
 
+    /**
+     * Set doctype
+     *
+     * Set doctype
+     *
+     * @since   1.0.0
+     * @param   string $sDoctype Doctype
+     * @return  $this
+     */
     public function set($sDoctype)
     {
         self::$_sDoctype = $sDoctype;
