@@ -14,13 +14,40 @@
  */
 namespace Pabana\Intl;
 
+/**
+ * Encoding class
+ *
+ * Detect and manipulate encoding
+ */
 class Encoding
 {
+    /**
+     * Detect encoding
+     *
+     * Detect encoding use for a string
+     *
+     * @since   1.0.0
+     * @param   string $sValue String who you want detect encoding.
+     * @return  string Encoding use for string in argument.
+     */
     public function detect($sValue)
     {
         return mb_detect_encoding($sValue);
     }
 
+    /**
+     * Convert encoding
+     *
+     * Convert encoding in a string
+     *
+     * @since   1.0.0
+     * @param   string|array $mValue Array of string or string that you want convert encoding.
+     * @param   string $sInCharset Charset of $mValue before convert (if value = 'auto' so charset will be detected).
+     * @param   string $sInCharset Charset of $mValue after convert(if value = 'auto' so application charset will be use).
+     * @param   bool $bTranslit Enable translit (by default true)
+     * @param   bool $bIgnore Enable ignore (by default true)
+     * @return  string|array String or array according to $mValue.
+     */
     public function convert($mValue, $sInCharset = 'auto', $sOutCharset = 'auto', $bTranslit = true, $bIgnore = true)
     {
         $mReturn = $mValue;
