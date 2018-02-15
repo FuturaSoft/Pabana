@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 1.0.4 "Banana" - 15/02/2018
+
+FIX : [Mvc] : Fix change Layout bug
+DOC : [Global] : Add documentation for all part of Pabana
+
 ## 1.0.3 "Banana" - 13/02/2018
 
 FIX : [Database] : Correct construct method in Mysql and Sqlserver class
