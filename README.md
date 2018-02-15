@@ -12,6 +12,7 @@ A modern framework compatible with PHP 5.6+ who give you a simple MVC and much m
 *Pabana 1.0.5 "Banana"*
 
 * Fix X-Mailer tag for mail
+* Add encoding tag in Mail class
 
 ### UPDATES IN 1.0.5
 
