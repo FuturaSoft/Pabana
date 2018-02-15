@@ -12,7 +12,7 @@ A modern framework compatible with PHP 5.6+ who give you a simple MVC and much m
 *Pabana 1.0.4 "Banana"*
 
 * Fix for Layout change
-* Add documentation
+* Improve documentation
 
 ### UPDATES IN 1.0.4
 
