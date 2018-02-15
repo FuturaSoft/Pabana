@@ -16,6 +16,11 @@ namespace Pabana\Database\Datasource;
 
 use Pabana\Database\Datasource;
 
+/**
+ * Sqlserver class
+ *
+ * Defined a connection to a Sqlserver database
+ */
 class Sqlserver extends Datasource
 {
     private $sApplication;
@@ -31,12 +36,28 @@ class Sqlserver extends Datasource
     private $sTrustServerCertificate;
     private $sWsid;
     
-    public function __construct($sName)
+    /**
+     * Constructor
+     *
+     * Set Connection name and define DBMS to Sqlserver
+     *
+     * @since   1.0.0
+     * @param   string $sCnxName Connection name.
+     */
+    public function __construct($sCnxName)
     {
-        $this->setName($sName);
+        $this->setName($sCnxName);
         $this->setDbms('Sqlserver');
     }
-    
+
+    /**
+     * Check connection parameters
+     *
+     * Check if connection parameters is correct
+     *
+     * @since   1.0.0
+     * @return  bool True if success or false.
+     */    
     protected function checkParam()
     {
         if (empty($this->getHost())) {
@@ -48,6 +69,14 @@ class Sqlserver extends Datasource
         }
     }
     
+    /**
+     * Get DSN string
+     *
+     * Return DSN string build from connection parameters
+     *
+     * @since   1.0.0
+     * @return  string|bool Return DSN string if success or false else.
+     */
     public function getDsn()
     {
         if ($this->checkParam()) {

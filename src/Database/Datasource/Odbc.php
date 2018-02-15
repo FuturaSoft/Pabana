@@ -16,20 +16,65 @@ namespace Pabana\Database\Datasource;
 
 use Pabana\Database\Datasource;
 
+/**
+ * Odbc class
+ *
+ * Defined a connection to a database via Odbc
+ */
 class Odbc extends Datasource
 {
+    /**
+     * @var     string ODBC driver name
+     * @since   1.0.0
+     */
     private $sDriver;
+
+    /**
+     * @var     integer Exclusive
+     * @since   1.0.0
+     */
     private $nExclusive;
+
+    /**
+     * @var     integer Extended Ansi SQL
+     * @since   1.0.0
+     */
     private $nExtendedAnsiSql;
+
+    /**
+     * @var     integer Locale identifier
+     * @since   1.0.0
+     */
     private $nLocaleIdentifier;
+
+    /**
+     * @var     string System database path
+     * @since   1.0.0
+     */
     private $sSystemDatabase;
 
-    public function __construct($sName)
+    /**
+     * Constructor
+     *
+     * Set Connection name and define DBMS to Odbc
+     *
+     * @since   1.0.0
+     * @param   string $sCnxName Connection name.
+     */
+    public function __construct($sCnxName)
     {
-        $this->setName($sName);
+        $this->setName($sCnxName);
         $this->setDbms('Odbc');
     }
 
+    /**
+     * Check connection parameters
+     *
+     * Check if connection parameters is correct
+     *
+     * @since   1.0.0
+     * @return  bool True if success or false.
+     */
     protected function checkParam()
     {
         if (empty($this->getDriver())) {
@@ -41,6 +86,14 @@ class Odbc extends Datasource
         }
     }
     
+    /**
+     * Get DSN string
+     *
+     * Return DSN string build from connection parameters
+     *
+     * @since   1.0.0
+     * @return  string|bool Return DSN string if success or false else.
+     */
     public function getDsn()
     {
         if ($this->checkParam()) {

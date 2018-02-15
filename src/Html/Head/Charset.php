@@ -16,24 +16,56 @@ namespace Pabana\Html\Head;
 
 use Pabana\Html\Doctype;
 
+/**
+ * Charset class
+ *
+ * Define charset use
+ */
 class Charset
 {
+    /**
+     * @var     string Charset (by default UTF-8).
+     * @since   1.0.0
+     */
     private static $_sCharset = 'UTF-8';
 
+    /**
+     * toString
+     *
+     * Activate the render method
+     *
+     * @since   1.0.0
+     * @return  string Html code for Charset
+     */
     public function __toString()
     {
         return $this->render();
     }
 
+    /**
+     * Clean
+     *
+     * Reinitialize Charset value to UTF-8
+     *
+     * @since   1.0.0
+     * @return  void
+     */
     public function clean()
     {
         self::$_sCharset = 'UTF-8';
     }
 
+    /**
+     * Render
+     *
+     * Return HTML code for Charset
+     *
+     * @since   1.0.0
+     * @return  string Html code for Charset
+     */
     public function render()
     {
         $oDoctype = new Doctype();
-        ;
         $arsCharset = array(
             'UTF-8' => 'utf-8',
             'UTF-16' => 'utf-16',
@@ -67,6 +99,15 @@ class Charset
         }
     }
 
+    /**
+     * Set charset
+     *
+     * Set charset
+     *
+     * @since   1.0.0
+     * @param   string $sCharset Charset
+     * @return  $this
+     */
     public function set($sCharset)
     {
         self::$_sCharset = $sCharset;

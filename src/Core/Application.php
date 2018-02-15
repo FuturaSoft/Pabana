@@ -35,7 +35,8 @@ class Application
      * Constructor
      *
      * @since   1.0.0
-     * @param   string $configDir The directory of pabana config files.
+     * @param   string $sConfigDir The directory of pabana config files.
+     * @param   string $sConfigFile Name of config file (by default "app.php").
      */
     public function __construct($sConfigDir, $sConfigFile = 'app.php')
     {

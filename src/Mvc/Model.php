@@ -17,10 +17,27 @@ namespace Pabana\Mvc;
 use Pabana\Core\Configuration;
 use Pabana\Database\ConnectionCollection;
 
+/**
+ * Model class
+ *
+ * Manage Model
+ */
 class Model
 {
+    /**
+     * @var     \Pabana\Database\Connection Object Connection (default connection).
+     * @since   1.0.0
+     */
     public $Connection;
 
+    /**
+     * Initialize model
+     *
+     * If default Connection is defined, call it in $Connection var
+     *
+     * @since   1.0.0
+     * @return  void
+     */
     public function __construct()
     {
         if (ConnectionCollection::existsDefault() === true) {
@@ -28,6 +45,15 @@ class Model
         }
     }
 
+    /**
+     * Get model
+     *
+     * Call a model class
+     *
+     * @since   1.0.0
+     * @param   string $sModel Model class name
+     * @return  object Model defined in $sModel
+     */
     public function get($sModel)
     {
         $sAppNamespace = Configuration::read('application.namespace');
