@@ -105,33 +105,72 @@ class Mysql extends Datasource
         }
     }
 
+    /**
+     * Get host
+     *
+     * @since   1.0.0
+     * @return  string Return host.
+     */
     public function getHost()
     {
         return $this->sHost;
     }
 
+    /**
+     * Get port
+     *
+     * @since   1.0.0
+     * @return  integer Return port.
+     */
     public function getPort()
     {
         return $this->nPort;
     }
 
+    /**
+     * Get UNIX socket
+     *
+     * @since   1.0.0
+     * @return  string Return Unix socket path.
+     */
     public function getUnixSocket()
     {
         return $this->sUnixSocket;
     }
 
+    /**
+     * Set Host
+     *
+     * @since   1.0.0
+     * @param   string $sHost Host.
+     * @return  $this
+     */
     public function setHost($sHost)
     {
         $this->sHost = $sHost;
         return $this;
     }
 
+    /**
+     * Set Port
+     *
+     * @since   1.0.0
+     * @param   integer $nPort Port number.
+     * @return  $this
+     */
     public function setPort($nPort)
     {
         $this->nPort = $nPort;
         return $this;
     }
 
+    /**
+     * Set UNIX Socket
+     *
+     * @since   1.0.0
+     * @param   string $sUnixSocket UNIX Socket path.
+     * @return  $this
+     */
     public function setUnixSocket($sUnixSocket)
     {
         $this->sUnixSocket = $sUnixSocket;

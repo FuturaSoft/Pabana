@@ -47,6 +47,7 @@ class Css
      *
      * @since   1.0.0
      * @param   string $sHref Css file name.
+     * @param   string $sMedia Media type.
      * @return  $this
      */
     public function appendFile($sHref, $sMedia = null)
@@ -63,6 +64,7 @@ class Css
      * @since   1.0.0
      * @param   string $sLibrary Library name.
      * @param   string $sHref Css file name.
+     * @param   string $sMedia Media type.
      * @return  $this
      */
     public function appendLibrary($sLibrary, $sHref, $sMedia = null)
@@ -92,6 +94,7 @@ class Css
      *
      * @since   1.0.0
      * @param   string $sHref Css file name.
+     * @param   string $sMedia Media type.
      * @return  $this
      */
     public function prependFile($sHref, $sMedia = null)
@@ -109,6 +112,7 @@ class Css
      * @since   1.0.0
      * @param   string $sLibrary Library name.
      * @param   string $sHref Css file name.
+     * @param   string $sMedia Media type.
      * @return  $this
      */
     public function prependLibrary($sLibrary, $sHref, $sMedia = null)

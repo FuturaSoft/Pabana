@@ -43,7 +43,7 @@ class Encoding
      * @since   1.0.0
      * @param   string|array $mValue Array of string or string that you want convert encoding.
      * @param   string $sInCharset Charset of $mValue before convert (if value = 'auto' so charset will be detected).
-     * @param   string $sInCharset Charset of $mValue after convert(if value = 'auto' so application charset will be use).
+     * @param   string $sOutCharset Charset of $mValue after convert(if value = 'auto' so application charset will be use).
      * @param   bool $bTranslit Enable translit (by default true)
      * @param   bool $bIgnore Enable ignore (by default true)
      * @return  string|array String or array according to $mValue.

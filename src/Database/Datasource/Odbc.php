@@ -23,10 +23,34 @@ use Pabana\Database\Datasource;
  */
 class Odbc extends Datasource
 {
+    /**
+     * @var     string ODBC driver name
+     * @since   1.0.0
+     */
     private $sDriver;
+
+    /**
+     * @var     integer Exclusive
+     * @since   1.0.0
+     */
     private $nExclusive;
+
+    /**
+     * @var     integer Extended Ansi SQL
+     * @since   1.0.0
+     */
     private $nExtendedAnsiSql;
+
+    /**
+     * @var     integer Locale identifier
+     * @since   1.0.0
+     */
     private $nLocaleIdentifier;
+
+    /**
+     * @var     string System database path
+     * @since   1.0.0
+     */
     private $sSystemDatabase;
 
     /**

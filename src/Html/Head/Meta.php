@@ -110,7 +110,7 @@ class Meta
      * Set meta tag 'author'
      *
      * @since   1.0.0
-     * @param   string $sApplicationName Author name.
+     * @param   string $sAuthor Author name.
      * @return  $this
      */
     public function setAuthor($sAuthor)
