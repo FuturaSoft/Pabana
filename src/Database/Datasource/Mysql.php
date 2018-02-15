@@ -16,18 +16,53 @@ namespace Pabana\Database\Datasource;
 
 use Pabana\Database\Datasource;
 
+/**
+ * Mysql class
+ *
+ * Defined a connection to a Mysql or MariaDb database
+ */
 class Mysql extends Datasource
 {
+    /**
+     * @var     string Hostname or IP adresse
+     * @since   1.0.0
+     */
     private $sHost;
+
+    /**
+     * @var     integer Port number (by default 3306)
+     * @since   1.0.0
+     */
     private $nPort = 3306;
+
+    /**
+     * @var     string Unix Socket path
+     * @since   1.0.0
+     */
     private $sUnixSocket;
     
+    /**
+     * Constructor
+     *
+     * Set Connection name and define DBMS to MySQL
+     *
+     * @since   1.0.0
+     * @param   string $sCnxName Connection name.
+     */
     public function __construct($sCnxName)
     {
         $this->setName($sCnxName);
         $this->setDbms('Mysql');
     }
 
+    /**
+     * Check connection parameters
+     *
+     * Check if connection parameters is correct
+     *
+     * @since   1.0.0
+     * @return  bool True if success or false.
+     */
     protected function checkParam()
     {
         if (empty($this->getHost()) && empty($this->getUnixSocket())) {
@@ -39,6 +74,14 @@ class Mysql extends Datasource
         }
     }
 
+    /**
+     * Get DSN string
+     *
+     * Return DSN string build from connection parameters
+     *
+     * @since   1.0.0
+     * @return  string|bool Return DSN string if success or false else.
+     */
     public function getDsn()
     {
         if ($this->checkParam()) {

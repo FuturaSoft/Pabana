@@ -14,13 +14,44 @@
  */
 namespace Pabana\Routing;
 
+/**
+ * Route class
+ *
+ * Define a route
+ */
 class Route
 {
+    /**
+     * @var    string Route
+     * @since   1.0.0
+     */
     private $_sRoute = null;
+
+    /**
+     * @var    string Redirect controller
+     * @since   1.0.0
+     */
     private $_sController = 'index';
+
+    /**
+     * @var    string Redirect action
+     * @since   1.0.0
+     */
     private $_sAction = 'index';
+
+    /**
+     * @var    string Redirect param list
+     * @since   1.0.0
+     */
     private $_arsParamList = null;
 
+    /**
+     * Create an object Route from parameters
+     *
+     * @since   1.0.0
+     * @param   string $sRoute Route.
+     * @param   array $arsOption Option (controller, action and param).
+     */
     public function __construct($sRoute, $arsOption = array())
     {
         $this->_sRoute = $sRoute;
@@ -35,21 +66,45 @@ class Route
         }
     }
 
+    /**
+     * Get route defined
+     *
+     * @since   1.0.0
+     * @return  string Route.
+     */
     public function getRoute()
     {
         return $this->_sRoute;
     }
 
+    /**
+     * Get controller defined
+     *
+     * @since   1.0.0
+     * @return  string Controller.
+     */
     public function getController()
     {
         return $this->_sController;
     }
 
+    /**
+     * Get action defined
+     *
+     * @since   1.0.0
+     * @return  string Action.
+     */
     public function getAction()
     {
         return $this->_sAction;
     }
 
+    /**
+     * Get param list.
+     *
+     * @since   1.0.0
+     * @return  string Param list.
+     */
     public function getParamList()
     {
         return $this->_arsParamList;

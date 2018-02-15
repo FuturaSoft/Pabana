@@ -19,12 +19,38 @@ use Pabana\Network\Http\Request;
 use Pabana\Routing\Route;
 use Pabana\Routing\RouteCollection;
 
+/**
+ * Router class
+ *
+ * Define controller and action from url and route collection
+ */
 class Router
 {
+    /**
+     * @var     string Controller defined by Router
+     * @since   1.0.0
+     */
     private static $sController;
+
+    /**
+     * @var     string Action defined by Router
+     * @since   1.0.0
+     */
     private static $sAction;
+
+    /**
+     * @var     array Parameters defined by Router
+     * @since   1.0.0
+     */
     private static $arsParameter;
 
+    /**
+     * Auto resolve a Route from URL by separator
+     *
+     * @since   1.0.0
+     * @param   string $arsUrlValueList Liste of url part.
+     * @return  void
+     */
     private static function autoResolve($arsUrlValueList)
     {
         $sController = 'Index';
@@ -54,6 +80,14 @@ class Router
         self::setParameter($arsParamList);
     }
 
+    /**
+     * Check if Route exist in RouterCollection who can match to current url
+     *
+     * @since   1.0.0
+     * @param   array $arcUrlSeparator List of separator of URL.
+     * @param   array $arsUrlValue List of part of URL.
+     * @return  bool True if Route match, else false
+     */
     private static function checkRoute($arcUrlSeparator, $arsUrlValue)
     {
         $aroRouteList = RouteCollection::getAll();
@@ -110,6 +144,12 @@ class Router
         return false;
     }
 
+    /**
+     * Check if controller and action exist, else change to fallback controller and action
+     *
+     * @since   1.0.0
+     * @return  void
+     */
     private static function checkController()
     {
         $bSetFallback = false;
@@ -133,21 +173,46 @@ class Router
         }
     }
 
+    /**
+     * Get action defined by Router.
+     *
+     * @since   1.0.0
+     * @return  string Action defined by Router.
+     */
     public static function getAction()
     {
         return self::$sAction;
     }
 
+    /**
+     * Get controller defined by Router.
+     *
+     * @since   1.0.0
+     * @return  string Controller defined by Router.
+     */
     public static function getController()
     {
         return self::$sController;
     }
 
+    /**
+     * Get parameter defined by Router.
+     *
+     * @since   1.0.0
+     * @return  array Parameter defined by Router.
+     */
     public static function getParameter()
     {
         return self::$arsParameter;
     }
 
+    /**
+     * List of separator defined in URL.
+     *
+     * @since   1.0.0
+     * @param   string $sUrl Current URL.
+     * @return  array List of separator defined in URL.
+     */
     private static function listSeparator($sUrl)
     {
         $armSeparatorPosition = array();
@@ -162,6 +227,13 @@ class Router
         return array_values($armSeparatorPosition);
     }
 
+    /**
+     * List of value defined in URL.
+     *
+     * @since   1.0.0
+     * @param   string $sUrl Current URL.
+     * @return  array List of value defined in URL.
+     */
     private static function listValue($sUrl)
     {
         $sRegexSeparator = implode('', RouteCollection::getSeparator());
@@ -171,6 +243,13 @@ class Router
         return $arsListValue;
     }
 
+    /**
+     * Remove last separtor in URL.
+     *
+     * @since   1.0.0
+     * @param   string $sUrl Current URL.
+     * @return  string $Url without last separator.
+     */
     private static function removeLastSeparator($sUrl)
     {
         $cLastChar = substr($sUrl, -1);
@@ -180,6 +259,12 @@ class Router
         return $sUrl;
     }
 
+    /**
+     * Call differnant action in Router to resolve road from URL.
+     *
+     * @since   1.0.0
+     * @return  void
+     */
     public static function resolve()
     {
         // Get current URL
@@ -205,21 +290,48 @@ class Router
         self::setParameterInGlobal();
     }
 
+    /**
+     * Set action defined by Router from URL.
+     *
+     * @since   1.0.0
+     * @param   string $sAction Action.
+     * @return  void
+     */
     private static function setAction($sAction)
     {
         self::$sAction = $sAction;
     }
 
+    /**
+     * Set controller defined by Router from URL.
+     *
+     * @since   1.0.0
+     * @param   string $sController Controller.
+     * @return  void
+     */
     private static function setController($sController)
     {
         self::$sController = ucfirst($sController);
     }
 
+    /**
+     * Set parameter defined by Router from URL.
+     *
+     * @since   1.0.0
+     * @param   string $arsParameter Parameter.
+     * @return  void
+     */
     private static function setParameter($arsParameter)
     {
         self::$arsParameter = $arsParameter;
     }
 
+    /**
+     * Transfert GET parameter to $_GET global array.
+     *
+     * @since   1.0.0
+     * @return  void
+     */
     private static function setParameterInGlobal()
     {
         $_GET = self::$arsParameter + $_GET;

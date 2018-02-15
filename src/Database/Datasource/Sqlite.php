@@ -16,16 +16,37 @@ namespace Pabana\Database\Datasource;
 
 use Pabana\Database\Datasource;
 
+/**
+ * Sqlite class
+ *
+ * Defined a connection to a Sqlite database
+ */
 class Sqlite extends Datasource
 {
     private $bMemory = false;
     
-    public function __construct($sName)
+    /**
+     * Constructor
+     *
+     * Set Connection name and define DBMS to Sqlite
+     *
+     * @since   1.0.0
+     * @param   string $sCnxName Connection name.
+     */
+    public function __construct($sCnxName)
     {
-        $this->setName($sName);
+        $this->setName($sCnxName);
         $this->setDbms('Sqlite');
     }
-    
+
+    /**
+     * Check connection parameters
+     *
+     * Check if connection parameters is correct
+     *
+     * @since   1.0.0
+     * @return  bool True if success or false.
+     */    
     protected function checkParam()
     {
         if (empty($this->getDatabase()) && $this->getMemory() === false) {
@@ -37,6 +58,14 @@ class Sqlite extends Datasource
         }
     }
     
+    /**
+     * Get DSN string
+     *
+     * Return DSN string build from connection parameters
+     *
+     * @since   1.0.0
+     * @return  string|bool Return DSN string if success or false else.
+     */
     public function getDsn()
     {
         if ($this->checkParam()) {
