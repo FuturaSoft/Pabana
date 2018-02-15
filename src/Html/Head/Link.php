@@ -14,27 +14,76 @@
  */
 namespace Pabana\Html\Head;
 
+/**
+ * Link class
+ *
+ * Add link to Html
+ */
 class Link
 {
+    /**
+     * @var     array List of defined link
+     * @since   1.0.0
+     */
     private static $_arsLinkList = array();
 
+    /**
+     * toString
+     *
+     * Activate the render method
+     *
+     * @since   1.0.0
+     * @return  string Html code to initialize link
+     */
     public function __toString()
     {
         return $this->render();
     }
 
+    /**
+     * Append
+     *
+     * Append a link
+     *
+     * @since   1.0.0
+     * @param   string $sHref Link path.
+     * @param   string $sRel Rel attribute.
+     * @param   string $sType Type attribute.
+     * @param   string $sMedia Media attribute.
+     * @return  $this
+     */
     public function append($sHref, $sRel = null, $sType = null, $sMedia = null)
     {
         self::$_arsLinkList[] = array($sHref, $sRel, $sType, $sMedia);
         return $this;
     }
 
+    /**
+     * Clean
+     *
+     * Clean list of link
+     *
+     * @since   1.0.0
+     * @return  $this
+     */
     public function clean()
     {
         self::$_arsLinkList = array();
         return $this;
     }
 
+    /**
+     * Prepend
+     *
+     * Prepend a link
+     *
+     * @since   1.0.0
+     * @param   string $sHref Link path.
+     * @param   string $sRel Rel attribute.
+     * @param   string $sType Type attribute.
+     * @param   string $sMedia Media attribute.
+     * @return  $this
+     */
     public function prepend($sHref, $sRel = null, $sType = null, $sMedia = null)
     {
         $arsLink = array($sHref, $sRel, $sType, $sMedia);
@@ -42,6 +91,14 @@ class Link
         return $this;
     }
 
+    /**
+     * Render
+     *
+     * Return HTML code for initialize all link in link list
+     *
+     * @since   1.0.0
+     * @return  string Html code to initialize link
+     */
     public function render()
     {
         $sHtml = '';
