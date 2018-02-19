@@ -2,7 +2,7 @@
     "name": "pabana/pabana",
     "description": "The Pabana framework",
     "type": "library",
-	"version": "1.0.4",
+	"version": "1.0.5",
     "keywords": [
         "framework",
         "mvc"

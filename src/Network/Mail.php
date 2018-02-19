@@ -119,6 +119,18 @@ class Mail
     {
         $this->armAttachment[] = array($sAttachmentPath);
     }
+
+    /**
+     * Add encode tag
+     *
+     * @since   1.0.0
+     * @param   string $sValue Value to encapsulate in encode tag.
+     * @return  void
+     */
+    private function addEncodeTag($sValue)
+    {
+        return '=?' . $this->sCharset . '?Q?' . $sValue . '?=';
+    }
     
     /**
      * Add a recipient of mail
@@ -281,8 +293,8 @@ class Mail
      */
     private function setBoundary()
     {
-        $this->sBoundary = uniqid('Pabana-Mail-') . '-' . md5(rand());
-        $this->sBoundaryAlt = uniqid('Pabana-Mail-') . '-' . md5(rand());
+        $this->sBoundary = uniqid('Pabana') . '-' . md5(rand());
+        $this->sBoundaryAlt = uniqid('Pabana-alt') . '-' . md5(rand());
     }
     
     /**
@@ -296,7 +308,7 @@ class Mail
         if (!empty($this->armSender)) {
             $sSender = '';
             if (!empty($this->armSender[1])) {
-                $sSender .= '"' . $this->armSender[1] . '" ';
+                $sSender .= $this->addEncodeTag('"' . $this->armSender[1] . '"') . ' ';
             }
             $sSender .= '<' . $this->armSender[0] . '>';
             return $sSender;
@@ -316,7 +328,7 @@ class Mail
         if (!empty($this->armReply)) {
             $sReply = '';
             if (!empty($this->armReply[1])) {
-                $sReply .= '"' . $this->armReply[1] . '" ';
+                $sReply .= $this->addEncodeTag('"' . $this->armReply[1] . '"') . ' ';
             }
             $sReply .= '<' . $this->armReply[0] . '>';
             return $sReply;
@@ -373,7 +385,7 @@ class Mail
             foreach ($this->armRecipient[$sRecipientArray] as $armRecipient) {
                 $sRecipient = '';
                 if (!empty($armRecipient[1])) {
-                    $sRecipient .= '"' . $armRecipient[1] . '" ';
+                    $sRecipient .= $this->addEncodeTag('"' . $this->armRecipient[1] . '"') . ' ';
                 }
                 $sRecipient .= '<' . $armRecipient[0] . '>';
                 $armRecipientList[] = $sRecipient;
@@ -457,12 +469,12 @@ class Mail
     {
         $sAppEncoding = Configuration::read('application.encoding');
         $oEncoding = new Encoding();
+        $sSubject = $this->addEncodeTag($this->sSubject);
         $sHeaderContent = $this->getHeaderContent();
-        if ($sAppEncoding != $this->sCharset) {
-            $sHeaderContent = $oEncoding->convert($sHeaderContent, $sAppEncoding, $this->sCharset);
-        }
         $sMailContent = $this->getEmailContent();
         if ($sAppEncoding != $this->sCharset) {
+            $sSubject = $oEncoding->convert($sSubject, $sAppEncoding, $this->sCharset);
+            $sHeaderContent = $oEncoding->convert($sHeaderContent, $sAppEncoding, $this->sCharset);
             $sMailContent = $oEncoding->convert($sMailContent, $sAppEncoding, $this->sCharset);
         }
         return mail($this->getRecipientTo(), $this->sSubject, $sMailContent, $sHeaderContent);
