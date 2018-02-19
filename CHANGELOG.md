@@ -1,9 +1,9 @@
 # CHANGELOG
 
-## 1.0.5 "Banana" - 15/02/2018
+## 1.0.5 "Banana" - 19/02/2018
 
-FIX : [Network] : Correct X-Mailer tag in Mail class
-FIX : [Network] : Add encoding tag in Mail class
+FIX : [Network] : Correct X-Mailer tag in Mail class (regression)
+FIX : [Network] : Add encoding tag in Mail class (regression)
 
 ## 1.0.4 "Banana" - 15/02/2018
 
