@@ -1,7 +1,5 @@
 # CHANGELOG
 
-## 1.1.0 "???" - WIP
-
 ## 1.0.5 "Banana" - 19/02/2018
 
 FIX : [Network] : Correct X-Mailer tag in Mail class (regression)

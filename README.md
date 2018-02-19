@@ -1,6 +1,6 @@
 ![Logo](https://pabana.futurasoft.fr/img/logo_github.png)
 
-# Welcome to the *Pabana 1.1.0 "???"*!
+# Welcome to the *Pabana 1.0.5 "Banana"*!
 
 ## ABOUT PABANA
 
@@ -9,12 +9,12 @@ A modern framework compatible with PHP 5.6+ who give you a simple MVC and much m
 
 ## RELEASE INFORMATION
 
-*Pabana 1.1.0 "???"*
+*Pabana 1.0.5 "Banana"*
 
 * Fix X-Mailer tag for mail
 * Add encoding tag in Mail class
 
-### UPDATES IN 1.1.0
+### UPDATES IN 1.0.5
 
 Please see [CHANGELOG.md](CHANGELOG.md).  
 Or on Pabana website [Changelog](https://pabana.futurasoft.fr/about/changelog/).
