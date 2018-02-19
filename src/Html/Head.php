@@ -21,15 +21,56 @@ use Pabana\Html\Head\Link;
 use Pabana\Html\Head\Meta;
 use Pabana\Html\Head\Title;
 
+/**
+ * Head class
+ *
+ * Manipulate Html\Head object
+ */
 class Head
 {
+    /**
+     * @var     \Pabana\Html\Head\Charset Charset object
+     * @since   1.0.0
+     */
     public $Charset;
+
+    /**
+     * @var     \Pabana\Html\Head\Css Css object
+     * @since   1.0.0
+     */
     public $Css;
+
+    /**
+     * @var     \Pabana\Html\Head\Icon Icon object
+     * @since   1.0.0
+     */
     public $Icon;
+
+    /**
+     * @var     \Pabana\Html\Head\Link Link object
+     * @since   1.0.0
+     */
     public $Link;
+
+    /**
+     * @var     \Pabana\Html\Head\Meta Meta object
+     * @since   1.0.0
+     */
     public $Meta;
+
+    /**
+     * @var     \Pabana\Html\Head\Title Title object
+     * @since   1.0.0
+     */
     public $Title;
 
+    /**
+     * Constructor
+     *
+     * Initialize Charset, Css, Icon, Link, Meta and Title Object
+     *
+     * @since   1.0.0
+     */
     public function __construct()
     {
         $this->Charset = new Charset();
@@ -40,11 +81,27 @@ class Head
         $this->Title = new Title();
     }
 
+    /**
+     * toString
+     *
+     * Activate the render method
+     *
+     * @since   1.0.0
+     * @return  string Html code to initialize all head's object
+     */
     public function __toString()
     {
         return $this->render();
     }
 
+    /**
+     * Clean previous configuration
+     *
+     * Clean previous configuration in Charset, Css, Icon, Link, Meta and Title Object
+     *
+     * @since   1.0.0
+     * @return void
+     */
     public function clean()
     {
         $this->Charset->clean();
@@ -55,6 +112,14 @@ class Head
         $this->Title->clean();
     }
 
+    /**
+     * Render
+     *
+     * Return HTML code for initialize all head's object
+     *
+     * @since   1.0.0
+     * @return  string Html code to initialize all head's object
+     */
     public function render()
     {
         $sHtml = '';

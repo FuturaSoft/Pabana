@@ -2,9 +2,26 @@
 
 ## 1.1.0 "???" - WIP
 
+## 1.0.5 "Banana" - 19/02/2018
+
+FIX : [Network] : Correct X-Mailer tag in Mail class (regression)
+FIX : [Network] : Add encoding tag in Mail class (regression)
+
+## 1.0.4 "Banana" - 15/02/2018
+
+FIX : [Mvc] : Fix change Layout bug
+DOC : [Global] : Improve documentation for all part of Pabana
+
+## 1.0.3 "Banana" - 13/02/2018
+
+FIX : [Database] : Correct construct method in Mysql and Sqlserver class
+FIX : [Network] : Correct X-Mailer tag in Mail class
+FIX : [Network] : Add encoding tag in Mail class
+Fix : [Intl] : If encoding failed, return string before encoding
+
 ## 1.0.2 "Banana" - 05/02/2018
 
-FIX : [Composer] : Correct version in composer.json
+FIX : [Composer] : Correct version in composer.json file
 
 ## 1.0.1 "Banana" - 05/02/2018
 

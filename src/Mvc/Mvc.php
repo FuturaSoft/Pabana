@@ -22,14 +22,51 @@ use Pabana\Mvc\View;
 use Pabana\Network\Http\Request;
 use Pabana\Routing\Router;
 
+/**
+ * Mvc class
+ *
+ * Manage Mvc
+ */
 class Mvc
 {
+    /**
+     * @var     \Pabana\Html\Html Object Html to manipulate Html.
+     * @since   1.0.0
+     */
     protected $Html;
+
+    /**
+     * @var     \Pabana\Mvc\Layout Object Layout to manipulate Layout.
+     * @since   1.0.0
+     */
     protected $Layout;
+
+    /**
+     * @var     \Pabana\Mvc\Model Object Model to manipulate Model.
+     * @since   1.0.0
+     */
     protected $Model;
+
+    /**
+     * @var     \Pabana\Network\Http\Request Object Request to get information about http request.
+     * @since   1.0.0
+     */
     protected $Request;
+
+    /**
+     * @var     \Pabana\Mvc\View Object View to manipulate View.
+     * @since   1.0.0
+     */
     protected $View;
 
+    /**
+     * Initialize controller
+     *
+     * Initialize helper object Html, Layout, Model, Request and View
+     *
+     * @since   1.0.0
+     * @return  void
+     */
     final public function __construct()
     {
         // Load Html\Html helper to $Html var

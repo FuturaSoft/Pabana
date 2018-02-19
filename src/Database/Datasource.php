@@ -66,7 +66,7 @@ class Datasource
      * This method can get charset value.
      *
      * @since   1.0.0
-     * @return  string
+     * @return  string Charset defined.
      */
     public function getCharset()
     {
@@ -79,14 +79,21 @@ class Datasource
      * This method can get database name or path value.
      *
      * @since   1.0.0
-     * @return  string
+     * @return  string Database name.
      */
     public function getDatabase()
     {
         return $this->sDatabase;
     }
 
-
+    /**
+     * Getter for Datasource option
+     *
+     * This method can get datasource option value.
+     *
+     * @since   1.0.0
+     * @return  array Array of option.
+     */
     public function getOption()
     {
         return array();
@@ -141,7 +148,7 @@ class Datasource
      *
      * This method can set charset value.
      *
-     * @param   string $charset Charset value of Datasource
+     * @param   string $sCharset Charset value of Datasource
      * @since   1.0.0
      * @return  $this
      */
@@ -156,7 +163,7 @@ class Datasource
      *
      * This method can set database name or path.
      *
-     * @param   string $database Database name or path
+     * @param   string $sDatabase Database name or path
      * @since   1.0.0
      * @return  $this
      */
@@ -171,7 +178,7 @@ class Datasource
      *
      * This method can set database managment system.
      *
-     * @param   string $dbms Database managment system
+     * @param   string $sDbms Database managment system
      * @since   1.0.0
      * @return  $this
      */
@@ -186,7 +193,7 @@ class Datasource
      *
      * This method can set name of datasource.
      *
-     * @param   string $name Datasource name
+     * @param   string $sName Datasource name
      * @since   1.0.0
      * @return  $this
      */
@@ -201,7 +208,7 @@ class Datasource
      *
      * This method can set password of datasource.
      *
-     * @param   string $password Datasource password
+     * @param   string $sPassword Datasource password
      * @since   1.0.0
      * @return  $this
      */
@@ -216,7 +223,7 @@ class Datasource
      *
      * This method can set user of datasource.
      *
-     * @param   string $user Datasource user
+     * @param   string $sUser Datasource user
      * @since   1.0.0
      * @return  $this
      */

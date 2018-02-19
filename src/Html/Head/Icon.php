@@ -14,27 +14,70 @@
  */
 namespace Pabana\Html\Head;
 
+/**
+ * Icon class
+ *
+ * Add icon to Html
+ */
 class Icon
 {
+    /**
+     * @var     array List of defined icon
+     * @since   1.0.0
+     */
     private static $_arsIconList = array();
 
+    /**
+     * toString
+     *
+     * Activate the render method
+     *
+     * @since   1.0.0
+     * @return  string Html code to initialize icon
+     */
     public function __toString()
     {
         return $this->render();
     }
 
+    /**
+     * Append file
+     *
+     * Append a icon localized in public/img/ folder to icon list
+     *
+     * @since   1.0.0
+     * @param   string $sHref Icon name.
+     * @return  $this
+     */
     public function append($sHref)
     {
         self::$_arsIconList[] = array('/img/' . $sHref);
         return $this;
     }
 
+    /**
+     * Clean
+     *
+     * Clean list of icon
+     *
+     * @since   1.0.0
+     * @return  $this
+     */
     public function clean()
     {
         self::$_arsIconList = array();
         return $this;
     }
 
+    /**
+     * Prepend file
+     *
+     * Prepend a icon localized in public/img/ folder to icon list
+     *
+     * @since   1.0.0
+     * @param   string $sHref Icon name.
+     * @return  $this
+     */
     public function prepend($sHref)
     {
         $arsIcon = array('/img/' . $sHref);
@@ -42,6 +85,14 @@ class Icon
         return $this;
     }
 
+    /**
+     * Render
+     *
+     * Return HTML code for initialize all icon in icon list
+     *
+     * @since   1.0.0
+     * @return  string Html code to initialize icon
+     */
     public function render()
     {
         $sHtml = '';

@@ -14,13 +14,40 @@
  */
 namespace Pabana\Intl;
 
+/**
+ * Encoding class
+ *
+ * Detect and manipulate encoding
+ */
 class Encoding
 {
+    /**
+     * Detect encoding
+     *
+     * Detect encoding use for a string
+     *
+     * @since   1.0.0
+     * @param   string $sValue String who you want detect encoding.
+     * @return  string Encoding use for string in argument.
+     */
     public function detect($sValue)
     {
         return mb_detect_encoding($sValue);
     }
 
+    /**
+     * Convert encoding
+     *
+     * Convert encoding in a string
+     *
+     * @since   1.0.0
+     * @param   string|array $mValue Array of string or string that you want convert encoding.
+     * @param   string $sInCharset Charset of $mValue before convert (if value = 'auto' so charset will be detected).
+     * @param   string $sOutCharset Charset of $mValue after convert(if value = 'auto' so application charset will be use).
+     * @param   bool $bTranslit Enable translit (by default true)
+     * @param   bool $bIgnore Enable ignore (by default true)
+     * @return  string|array String or array according to $mValue.
+     */
     public function convert($mValue, $sInCharset = 'auto', $sOutCharset = 'auto', $bTranslit = true, $bIgnore = true)
     {
         $mReturn = $mValue;
@@ -37,12 +64,21 @@ class Encoding
                 $sOutCharset .= '//IGNORE';
             }
             $mReturn = @iconv($sInCharset, $sOutCharset, $mValue);
+            if ($mReturn === false) {
+                $mReturn = $mValue;
+            }
         } elseif (is_array($mValue)) {
             $mReturn = array();
             foreach ($mValue as $mArrayKey => $mArrayValue) {
-                $mArrayKey = $this->convert($mArrayKey, $sInCharset, $sOutCharset, $bTranslit, $bIgnore);
-                $mArrayValue = $this->convert($mArrayValue, $sInCharset, $sOutCharset, $bTranslit, $bIgnore);
-                $mReturn[$mArrayKey] = $mArrayValue;
+                $mArrayKeyConvert = $this->convert($mArrayKey, $sInCharset, $sOutCharset, $bTranslit, $bIgnore);
+                if ($mReturn === false) {
+                    $mArrayKeyConvert = $mArrayKey;
+                }
+                $mArrayValueConvert = $this->convert($mArrayValue, $sInCharset, $sOutCharset, $bTranslit, $bIgnore);
+                if ($mReturn === false) {
+                    $mArrayValueConvert = $mArrayValue;
+                }
+                $mReturn[$mArrayKeyConvert] = $mArrayValueConvert;
             }
         }
         return $mReturn;

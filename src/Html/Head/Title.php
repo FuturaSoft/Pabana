@@ -14,33 +14,84 @@
  */
 namespace Pabana\Html\Head;
 
+/**
+ * Title class
+ *
+ * Define title use
+ */
 class Title
 {
+    /**
+     * @var     array Title of page.
+     * @since   1.0.0
+     */
     private static $_arsTitle = array();
 
+    /**
+     * toString
+     *
+     * Activate the render method
+     *
+     * @since   1.0.0
+     * @return  string Html code for Title
+     */
     public function __toString()
     {
         return $this->render();
     }
 
+    /**
+     * Append
+     *
+     * Append string to title value
+     *
+     * @since   1.0.0
+     * @param   string $sTitle Title of page
+     * @return  $this
+     */
     public function append($sTitle)
     {
         self::$_arsTitle[] = $sTitle;
         return $this;
     }
 
+    /**
+     * Clean
+     *
+     * Clean all element define in title
+     *
+     * @since   1.0.0
+     * @return  $this
+     */
     public function clean()
     {
         self::$_arsTitle = array();
         return $this;
     }
 
+    /**
+     * Prepend
+     *
+     * Prepend string to title value
+     *
+     * @since   1.0.0
+     * @param   string $sTitle Title of page
+     * @return  $this
+     */
     public function prepend($sTitle)
     {
         array_unshift(self::$_arsTitle, $sTitle);
         return $this;
     }
 
+    /**
+     * Render
+     *
+     * Return HTML code for Title
+     *
+     * @since   1.0.0
+     * @return  string|boolean Html code for Title or false is empty
+     */
     public function render()
     {
         if (!empty(self::$_arsTitle)) {
@@ -50,6 +101,15 @@ class Title
         }
     }
 
+    /**
+     * Set
+     *
+     * Set title tag value
+     *
+     * @since   1.0.0
+     * @param   string $sTitle Title of page
+     * @return  $this
+     */
     public function set($sTitle)
     {
         $this->clean();

@@ -11,7 +11,8 @@ A modern framework compatible with PHP 5.6+ who give you a simple MVC and much m
 
 *Pabana 1.1.0 "???"*
 
-This is the first fix for public release of Pabana Framework.
+* Fix X-Mailer tag for mail
+* Add encoding tag in Mail class
 
 ### UPDATES IN 1.1.0
 
@@ -24,9 +25,9 @@ Pabana require PHP 5.6 or later; we recommend using the latest PHP version whene
 
 ### DOCUMENTATION
 
-* [Geeting started](https://pabana.futurasoft.fr/documentation/1.1.0/getting-started/) - Getting started guide
-* [API documentation](https://pabana.futurasoft.fr/api/1.1.0/) - API documentation
-* [Migration guide](https://pabana.futurasoft.fr/documentation/1.0.0/migration/) - Migration guide from older version of Pabana (Older than 1.0)
+* [Geeting started](https://pabana.futurasoft.fr/documentation/1.1/getting-started/) - Getting started guide
+* [API documentation](https://pabana.futurasoft.fr/api/1.1/) - API documentation
+* [Migration guide](https://pabana.futurasoft.fr/documentation/1.1/migration/) - Migration guide from older version of Pabana
 
 ## LICENSE
 

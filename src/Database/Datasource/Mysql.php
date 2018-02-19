@@ -16,18 +16,53 @@ namespace Pabana\Database\Datasource;
 
 use Pabana\Database\Datasource;
 
+/**
+ * Mysql class
+ *
+ * Defined a connection to a Mysql or MariaDb database
+ */
 class Mysql extends Datasource
 {
+    /**
+     * @var     string Hostname or IP adresse
+     * @since   1.0.0
+     */
     private $sHost;
+
+    /**
+     * @var     integer Port number (by default 3306)
+     * @since   1.0.0
+     */
     private $nPort = 3306;
+
+    /**
+     * @var     string Unix Socket path
+     * @since   1.0.0
+     */
     private $sUnixSocket;
     
-    public function construct($sCnxName)
+    /**
+     * Constructor
+     *
+     * Set Connection name and define DBMS to MySQL
+     *
+     * @since   1.0.0
+     * @param   string $sCnxName Connection name.
+     */
+    public function __construct($sCnxName)
     {
         $this->setName($sCnxName);
         $this->setDbms('Mysql');
     }
 
+    /**
+     * Check connection parameters
+     *
+     * Check if connection parameters is correct
+     *
+     * @since   1.0.0
+     * @return  bool True if success or false.
+     */
     protected function checkParam()
     {
         if (empty($this->getHost()) && empty($this->getUnixSocket())) {
@@ -39,6 +74,14 @@ class Mysql extends Datasource
         }
     }
 
+    /**
+     * Get DSN string
+     *
+     * Return DSN string build from connection parameters
+     *
+     * @since   1.0.0
+     * @return  string|bool Return DSN string if success or false else.
+     */
     public function getDsn()
     {
         if ($this->checkParam()) {
@@ -62,33 +105,72 @@ class Mysql extends Datasource
         }
     }
 
+    /**
+     * Get host
+     *
+     * @since   1.0.0
+     * @return  string Return host.
+     */
     public function getHost()
     {
         return $this->sHost;
     }
 
+    /**
+     * Get port
+     *
+     * @since   1.0.0
+     * @return  integer Return port.
+     */
     public function getPort()
     {
         return $this->nPort;
     }
 
+    /**
+     * Get UNIX socket
+     *
+     * @since   1.0.0
+     * @return  string Return Unix socket path.
+     */
     public function getUnixSocket()
     {
         return $this->sUnixSocket;
     }
 
+    /**
+     * Set Host
+     *
+     * @since   1.0.0
+     * @param   string $sHost Host.
+     * @return  $this
+     */
     public function setHost($sHost)
     {
         $this->sHost = $sHost;
         return $this;
     }
 
+    /**
+     * Set Port
+     *
+     * @since   1.0.0
+     * @param   integer $nPort Port number.
+     * @return  $this
+     */
     public function setPort($nPort)
     {
         $this->nPort = $nPort;
         return $this;
     }
 
+    /**
+     * Set UNIX Socket
+     *
+     * @since   1.0.0
+     * @param   string $sUnixSocket UNIX Socket path.
+     * @return  $this
+     */
     public function setUnixSocket($sUnixSocket)
     {
         $this->sUnixSocket = $sUnixSocket;

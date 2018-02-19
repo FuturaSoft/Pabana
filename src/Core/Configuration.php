@@ -93,7 +93,7 @@ class Configuration
      * This method is used to check if a key exists in Configuration
      *
      * @since   1.0.0
-     * @param 	string $key Key to check.
+     * @param 	string $sKey Key to check.
      * @return 	bool True if key exists else false
      */
     public static function check($sKey)
@@ -108,7 +108,7 @@ class Configuration
      * A parameter allow to reload base configuration
      *
      * @since   1.0.0
-     * @param 	bool $reloadBase If true reload base configuration
+     * @param 	bool $bReloadBase If true reload base configuration
      * @return 	bool Result of cleaning
      */
     public static function clean($bReloadBase = true)
@@ -128,7 +128,7 @@ class Configuration
      * Key existance is checked first
      *
      * @since   1.0.0
-     * @param 	string $key Key to delete.
+     * @param 	string $sKey Key to delete.
      * @return 	bool Result of delete Key
      */
     public static function delete($sKey)
@@ -149,8 +149,8 @@ class Configuration
      * Load a configuration file
      *
      * @since   1.0.0
-     * @param 	string $filepath File path of loaded file.
-     * @param   bool $merge If true merge current config to new config.
+     * @param 	string $sFilename File path of loaded file.
+     * @param   bool $bMerge If true merge current config to new config.
      * @return 	void
      */
     public static function load($sFilename, $bMerge = true)
@@ -199,8 +199,8 @@ class Configuration
      * For exemple change 'true' string to true boolean
      *
      * @since   1.0.0
-     * @param 	string $key Key to prepare
-     * @param 	mixed $value Value to prepare.
+     * @param 	string $sKey Key to prepare
+     * @param 	mixed $mValue Value to prepare.
      * @return 	mixed Value prepared
      */
     public static function prepare($sKey, $mValue)
@@ -224,7 +224,7 @@ class Configuration
      * Parse array and prepare all of their value
      *
      * @since   1.0.0
-     * @param 	array $array Array of key and value to prepare
+     * @param 	array $armArray Array of key and value to prepare
      * @return 	array Array of key and value prepared
      */
     public static function prepareArray($armArray)
@@ -243,7 +243,7 @@ class Configuration
      * Key existance is checked first
      *
      * @since   1.0.0
-     * @param 	string $key Key to read.
+     * @param 	string $sKey Key to read.
      * @return 	mixed|bool Value of Configuration parameter or false if configuration key doesn't exist
      */
     public static function read($sKey)
@@ -287,7 +287,7 @@ class Configuration
             define('PAB_NAME', 'Banana');
         }
         if (!defined('PAB_VERSION')) {
-            define('PAB_VERSION', '1.0.0');
+            define('PAB_VERSION', '1.0.5');
         }
         if (self::check('application.path') === true) {
             if (!defined('APP_ROOT')) {
@@ -316,8 +316,8 @@ class Configuration
      * First value is prepare by prepare method
      *
      * @since   1.0.0
-     * @param 	string $key Key to read.
-     * @param 	string $value Value of key.
+     * @param 	string $sKey Key to read.
+     * @param 	string $mValue Value of key.
      * @return 	void
      */
     public static function write($sKey, $mValue)

@@ -17,12 +17,38 @@ namespace Pabana\Html;
 use Pabana\Html\Doctype;
 use Pabana\Html\Head;
 
+/**
+ * Html class
+ *
+ * Manipulate Html object
+ */
 class Html
 {
+    /**
+     * @var     \Pabana\Html\Doctype Doctype object
+     * @since   1.0.0
+     */
     public $Doctype;
+
+    /**
+     * @var     \Pabana\Html\Head Head object
+     * @since   1.0.0
+     */
     public $Head;
+
+    /**
+     * @var     \Pabana\Html\Script Script object
+     * @since   1.0.0
+     */
     public $Script;
 
+    /**
+     * Constructor
+     *
+     * Initialize Doctype, Head and Script Object
+     *
+     * @since   1.0.0
+     */
     public function __construct()
     {
         $this->Doctype = new Doctype();
@@ -30,6 +56,14 @@ class Html
         $this->Script = new Script();
     }
 
+    /**
+     * Clean previous configuration
+     *
+     * Clean previous configuration in Doctype, Head and Script Object
+     *
+     * @since   1.0.0
+     * @return void
+     */
     public function clean()
     {
         $this->Doctype->clean();
