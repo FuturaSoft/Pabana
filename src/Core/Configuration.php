@@ -287,7 +287,7 @@ class Configuration
             define('PAB_NAME', 'Banana');
         }
         if (!defined('PAB_VERSION')) {
-            define('PAB_VERSION', '1.0.5');
+            define('PAB_VERSION', '1.0.6');
         }
         if (self::check('application.path') === true) {
             if (!defined('APP_ROOT')) {
