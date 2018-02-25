@@ -9,7 +9,7 @@
  *
  * @copyright     Copyright (c) FuturaSoft (https://futurasoft.fr)
  * @link          https://pabana.futurasoft.fr Pabana Project
- * @since         1.0.0
+ * @since         1.0
  * @license       https://opensource.org/licenses/BSD-3-Clause BSD-3-Clause License
  */
 namespace Pabana\Mvc;
@@ -25,39 +25,50 @@ use Pabana\Database\ConnectionCollection;
 class Model
 {
     /**
-     * @var     \Pabana\Database\Connection Object Connection (default connection).
-     * @since   1.0.0
+     * @var     Redirection to $connection var.
+     * @since   1.0
+     * @deprecated deprecated since version 1.1
      */
     public $Connection;
 
     /**
+     * @var     \Pabana\Database\Connection Object Connection (default connection).
+     * @since   1.1
+     */
+    public $connection;
+
+    /**
      * Initialize model
      *
-     * If default Connection is defined, call it in $Connection var
+     * If default Connection is defined, call it in $Connection var.
      *
-     * @since   1.0.0
+     * @since   1.0
      * @return  void
      */
     public function __construct()
     {
         if (ConnectionCollection::existsDefault() === true) {
-            $this->Connection = ConnectionCollection::getDefault();
+            $this->connection = ConnectionCollection::getDefault();
+            // To maintain compatibility with version 1.0
+            $this->Connection = $this->connection;
         }
     }
 
     /**
-     * Get model
-     *
      * Call a model class
      *
-     * @since   1.0.0
-     * @param   string $sModel Model class name
-     * @return  object Model defined in $sModel
+     * @since   1.0
+     * @param   string $modelName Model class name
+     * @return  object|bool Return model defined in $modelName or false if error
      */
-    public function get($sModel)
+    public function get($modelName)
     {
-        $sAppNamespace = Configuration::read('application.namespace');
-        $sModelNamespace = $sAppNamespace . '\Model\\' . ucFirst($sModel);
-        return new $sModelNamespace();
+        $modelNamespace = Configuration::read('mvc.model.namespace');
+        $modelNamespace = $modelNamespace . '\\' . ucFirst($modelName);
+        if (!class_exists($modelNamespace)) {
+            trigger_error('Model "' . $modelNamespace . '" doesn\'t exist.', E_USER_ERROR);
+            return false;
+        }
+        return new $modelNamespace();
     }
 }

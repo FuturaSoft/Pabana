@@ -27,27 +27,27 @@ class Application
 
     /**
      * @var     string Contains the path of the config directory
-     * @since   1.0.0
+     * @since   1.0
      */
     protected $configDir;
 
     /**
      * Constructor
      *
-     * @since   1.0.0
-     * @param   string $sConfigDir The directory of pabana config files.
-     * @param   string $sConfigFile Name of config file (by default "app.php").
+     * @since   1.0
+     * @param   string $configDir The directory of pabana config files.
+     * @param   string $configFile Name of config file (by default "app.php").
      */
-    public function __construct($sConfigDir, $sConfigFile = 'app.php')
+    public function __construct($configDir, $configFile = 'app.php')
     {
-        $this->configDir = $sConfigDir;
-        $sPabanaConfigPath = $sConfigDir . '/' . $sConfigFile;
+        $this->configDir = $configDir;
+        $configPath = $configDir . '/' . $configFile;
         // Register constant
         Configuration::registerConstant();
         // Store default settings for Pabana
         Configuration::base();
         // Load user config for Pabana
-        Configuration::load($sPabanaConfigPath);
+        Configuration::load($configPath);
     }
 
     /**
@@ -55,14 +55,15 @@ class Application
      *
      * By default this will load \App\Bootstrap class.
      *
-     * @since   1.0.0
+     * @since   1.0
      * @return  void
      */
     private function bootstrap()
     {
-        $sBootstrapNamespace = Configuration::read('application.namespace') . '\Bootstrap';
-        $oBootstrap = new $sBootstrapNamespace();
-        $oBootstrap->initialize();
+        $applicationNamespace = Configuration::read('application.namespace');
+        $bootstrapNamespace = $applicationNamespace . '\Bootstrap';
+        $bootstrap = new $bootstrapNamespace();
+        $bootstrap->initialize();
     }
 
     /**
@@ -70,22 +71,18 @@ class Application
      *
      * Load controller and action defined during routage and then destroy it.
      *
-     * @since   1.0.0
+     * @since   1.0
      * @return  void
      */
     private function controller()
     {
-        $sAppNamespace = Configuration::read('application.namespace');
-        $sControllerNamespace = $sAppNamespace . '\Controller\\' . Router::getController();
-        $oController = new $sControllerNamespace();
-        $oController->init();
-        if (method_exists($oController, 'initialize')) {
-            $oController->initialize();
-        }
-        $sAction = Router::getAction();
-        $oController->$sAction();
-        // Clean Controller object (and launch __destroy method of controller)
-        unset($oController);
+        $controllerName = Router::getController();
+        $actionName = Router::getAction();
+        $controllerNamespace = Configuration::read('mvc.controller.namespace');
+        $controllerNamespace = $controllerNamespace . '\\' . $controllerName;
+        $controller = new $controllerNamespace();
+        $bodyContent = $controller->render($actionName);
+        return $bodyContent;
     }
 
     /**
@@ -93,7 +90,7 @@ class Application
      *
      * By default this will load `config/routes.php`.
      *
-     * @since   1.0.0
+     * @since   1.0
      * @return  void
      */
     private function routes()
@@ -109,18 +106,20 @@ class Application
      * Start by call user defined routes, then resolve routage
      * After start bootstrap and launch mvc by calling controller
      *
-     * @since   1.0.0
+     * @since   1.0
      * @return  void
      */
     public function run()
     {
-        // Load routing config file
+        // Load routing user config file
         $this->routes();
         // Launch routage
         Router::resolve();
-        // Load bootstrap
+        // Load Bootstrap
         $this->bootstrap();
-        // Launch controller defined by routage
-        $this->controller();
+        // Launch Controller defined by routage
+        $bodyContent = $this->controller();
+        // Show body content return by Controller
+        echo $bodyContent;
     }
 }

@@ -9,7 +9,7 @@
  *
  * @copyright     Copyright (c) FuturaSoft (https://futurasoft.fr)
  * @link          https://pabana.futurasoft.fr Pabana Project
- * @since         1.0.0
+ * @since         1.0
  * @license       https://opensource.org/licenses/BSD-3-Clause BSD-3-Clause License
  */
 namespace Pabana\Mvc;
@@ -18,6 +18,7 @@ use Pabana\Core\Configuration;
 use Pabana\Html\Html;
 use Pabana\Mvc\View;
 use Pabana\Network\Http\Request;
+use Pabana\Type\StringType;
 
 /**
  * Layout class
@@ -28,43 +29,57 @@ class Layout
 {
     /**
      * @var     array Variable spooler to manage send var between controller and layout.
-     * @since   1.0.0
+     * @since   1.0
      */
-    private static $armVariable;
+    private $variableList;
 
     /**
      * @var     bool Define if autorender is enable.
-     * @since   1.0.0
+     * @since   1.0
      */
-    private static $bAutoRender;
+    private $autoRender;
 
     /**
      * @var     string Define directory of Layout part.
-     * @since   1.0.0
+     * @since   1.0
      */
-    private static $sDirectory;
+    private $directory;
 
     /**
      * @var     string Define extension of Layout part.
-     * @since   1.0.0
+     * @since   1.0
      */
-    private static $sExtension;
+    private $extension;
 
     /**
      * @var     string Define name of Layout.
-     * @since   1.0.0
+     * @since   1.0
      */
-    private static $sName;
+    private $name;
 
     /**
      * @var     \Pabana\Html\Html Object Html.
-     * @since   1.0.0
+     * @since   1.1
+     */
+    public $html;
+
+    /**
+     * @var     \Pabana\Mvc\View Object View.
+     * @since   1.1
+     */
+    public $view;
+
+    /**
+     * @var     Redirection to $html var
+     * @since   1.0
+     * @deprecated deprecated since version 1.1
      */
     public $Html;
 
     /**
-     * @var     \Pabana\Mvc\View Object View.
-     * @since   1.0.0
+     * @var     Redirection to $view var
+     * @since   1.0
+     * @deprecated deprecated since version 1.1
      */
     public $View;
 
@@ -74,28 +89,37 @@ class Layout
      * Load Html and View object
      * Define autorender, directory, extension, name from configuration
      *
-     * @since   1.0.0
-     * @param   string $sLayoutName Name of Layout loaded
+     * @since   1.0
+     * @param   \Pabana\Mvc\View $view View object
+     * @param   string $layoutName Name of Layout
      * @return  void
      */
-    public function __construct($sLayoutName = null)
+    public function __construct($view, $cleanHtml = false)
     {
-        // Load Mvc\Html helper to $Html var
-        $this->Html = new Html();
-        // Load Mvc\View helper to $View var
-        $this->View = new View();
+        $layoutString = new StringType(get_class($this));
+        // Get controller by current class name
+        $layoutName = $layoutString->classBasename();
+        $this->setName($layoutName);
+        // Load Mvc\Html class to helper var
+        $this->html = new Html();
+        // Load Mvc\View class to helper var
+        $this->view = $view;
+        // To maintain compatibility with version 1.0
+        $this->Html = $this->html;
+        $this->View = $this->view;
         // Set auto render status from configuration
         $this->setAutoRender(Configuration::read('mvc.layout.auto_render'));
-        // Set default directory for view
-        $sDirectory = Configuration::read('application.path') . Configuration::read('mvc.layout.path');
-        $this->setDirectory($sDirectory);
-        // Set extension from configuration
+        // Set default directory for layout
+        $directory = APP_ROOT . Configuration::read('mvc.layout.path');
+        $this->setDirectory($directory);
+        // Set layout file extension from configuration
         $this->setExtension(Configuration::read('mvc.layout.extension'));
-        // Set default layout name
-        if (empty($sLayoutName)) {
-            $sLayoutName = Configuration::read('mvc.layout.default');
+        if ($cleanHtml === true) {
+            // Clean Html value
+            $this->Html->clean();
         }
-        $this->setName($sLayoutName, false);
+        // Read application namespace
+        $this->initialize();
     }
 
     /**
@@ -103,7 +127,7 @@ class Layout
      *
      * Activate the render method
      *
-     * @since   1.0.0
+     * @since   1.0
      * @return  string Html code for Layout
      */
     public function __toString()
@@ -116,86 +140,94 @@ class Layout
      *
      * Load Html code of part
      *
-     * @since   1.0.0
-     * @param  string $sElement Element or part name
-     * @return  string Html code of part
+     * @since   1.0
+     * @param   string $elementName Element or part name
+     * @return  string|bool Return Element content if success or false if error
      */
-    public function element($sElement)
+    public function element($elementName)
     {
-        if (Configuration::read('mvc.autoload_shared_var') === true && empty(self::$armVariable) === false) {
-            foreach (self::$armVariable as $sVarName => $sVarValue) {
-                ${$sVarName} = $sVarValue;
+        if (Configuration::read('mvc.autoload_shared_var') === true && empty(self::$variableList) === false) {
+            foreach (self::$variableList as $varName => $varValue) {
+                ${$varName} = $varValue;
             }
         }
-        $sPath = $this->getDirectory() . '/' . $this->getName() . '/' . $sElement . '.' . $this->getExtension();
+        $layoutDirectory = $this->getDirectory() . '/' . $this->getName();
+        $elementPath = $layoutDirectory . '/' . $elementName . '.' . $this->getExtension();
+        if (!file_exists($elementPath)) {
+            trigger_error('Element file "' . $elementPath . '" doesn\'t exist.', E_USER_ERROR);
+            return false;
+        }
         ob_start();
-        require($sPath);
+        require($elementPath);
         echo PHP_EOL;
-        $sHtml = ob_get_contents();
-        ob_end_clean();
-        return $sHtml;
+        $bodyContent = ob_get_clean();
+        return $bodyContent;
     }
 
     /**
      * Get autorender state
      *
-     * @since   1.0.0
+     * @since   1.0
      * @return  bool Autorender state
      */
     public function getAutoRender()
     {
-        return self::$bAutoRender;
+        return $this->autoRender;
     }
 
     /**
      * Get directory path
      *
-     * @since   1.0.0
+     * @since   1.0
      * @return  string Layout part directory
      */
     public function getDirectory()
     {
-        return self::$sDirectory;
+        return $this->directory;
     }
 
     /**
      * Get extension of layout file
      *
-     * @since   1.0.0
+     * @since   1.0
      * @return  string Extension of layout file
      */
     public function getExtension()
     {
-        return self::$sExtension;
+        return $this->extension;
     }
 
     /**
      * Get name of layout
      *
-     * @since   1.0.0
+     * @since   1.0
      * @return  string Name of layout
      */
     public function getName()
     {
-        return self::$sName;
+        return $this->name;
     }
 
     /**
-     * Get var send to layout from controller
+     * Get var send to Layout from Controller
      *
-     * @since   1.0.0
-     * @param  string $sVarName Name of var send to Layout
-     * @return  string Value of var send to Layout
+     * @since   1.0
+     * @param   string $varName Name of var send to Layout
+     * @return  string|bool Value of var send to Layout if exist else false
      */
-    public function getVar($sVarName)
+    public function getVar($varName)
     {
-        return self::$armVariable[$sVarName];
+        if (!isset($this->variableList[$varName])) {
+            trigger_error('Variable "' . $varName . '" isn\'t defined in Layout.', E_USER_WARNING);
+            return false;
+        }
+        return $this->variableList[$varName];
     }
 
     /**
      * Render layout from index part
      *
-     * @since   1.0.0
+     * @since   1.0
      * @return  string Html code render
      */
     public function render()
@@ -204,90 +236,83 @@ class Layout
     }
 
     /**
-     * Initialize render by calling Layout user defined class
-     *
-     * @since   1.0.0
-     * @return  void
-     */
-    public function renderInit()
-    {
-        // Clean Html value
-        $this->Html->clean();
-        // Read application namespace
-        $sAppNamespace = Configuration::read('application.namespace');
-        $sLayoutNamespace = $sAppNamespace . '\Layout\\' . $this->getName();
-        $oLayout = new $sLayoutNamespace($this->getName());
-        $oLayout->initialize();
-    }
-
-    /**
      * Set auto render value
      *
-     * @since   1.0.0
+     * @since   1.0
      * @param   bool $bAutoRender Auto render value
      * @return  void
      */
-    public function setAutoRender($bAutoRender)
+    public function setAutoRender($autoRender)
     {
-        self::$bAutoRender = $bAutoRender;
+        $this->autoRender = $autoRender;
     }
 
     /**
      * Set directory value of layout part
      *
-     * @since   1.0.0
+     * @since   1.0
      * @param   string $sDirectory Directory of layout part value
      * @return  void
      */
-    public function setDirectory($sDirectory)
+    public function setDirectory($directory)
     {
-        self::$sDirectory = $sDirectory;
+        $this->directory = $directory;
     }
 
     /**
      * Set extension value for part file
      *
-     * @since   1.0.0
+     * @since   1.0
      * @param   string $sExtension Extension value for part file
      * @return  void
      */
-    public function setExtension($sExtension)
+    public function setExtension($extension)
     {
-        self::$sExtension = $sExtension;
+        $this->extension = $extension;
     }
 
     /**
      * Set name of layout and if define reload renderinit of layout
      *
-     * @since   1.0.0
+     * @since   1.0
      * @param   string $sName Name of Layout
      * @param   bool $bReloadInit Reload renderInit method after change name of Layout
      * @return  void
      */
-    public function setName($sName, $bReloadInit = true)
+    public function setName($name)
     {
-        self::$sName = ucfirst($sName);
-        if ($bReloadInit === true) {
-            $this->renderInit();
-        }
+        $this->name = ucfirst($name);
     }
 
     /**
      * Set var to Layout
      *
-     * @since   1.0.0
-     * @param   string $sVarName Name of var send to Layout
-     * @param   string $sVarValue Value of var send to Layout
-     * @return  bool Return true if success else false 
+     * @since   1.0
+     * @param   string $varName Name of var send to View
+     * @param   string $varValue Value of var send to View
+     * @param   bool $force Force change of var value if var already exist
+     * @return  bool Return true
      */
-    public function setVar($sVarName, $sVarValue)
+    public function setVar($varName, $varValue, $force = false)
     {
-        if (!isset(self::$armVariable[$sVarName])) {
-            self::$armVariable[$sVarName] = $sVarValue;
-            return true;
-        } else {
-            throw new \Exception("Variable " . $sVarName . " is already defined in Layout");
+        if (isset($this->variableList[$varName]) && $force === false) {
+            trigger_error('Variable "' . $varName . '" is already defined in Layout.', E_USER_WARNING);
             return false;
         }
+        $this->variableList[$varName] = $varValue;
+        return true;
+    }
+
+    /**
+     * Set view to Layout
+     *
+     * @since   1.1
+     * @param   \Pabana\Mvc\View $view View object generated in controller
+     * @return  void
+     */
+    public function setView($view)
+    {
+        $this->view = $view;
+        $this->View = $this->view;
     }
 }
