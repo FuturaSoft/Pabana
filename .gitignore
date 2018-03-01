@@ -1,3 +1,7 @@
+# Pabana specific files #
+##########################
+/vendor/*
+
 # OS generated files #
 ######################
 .DS_Store
