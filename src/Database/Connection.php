@@ -215,6 +215,21 @@ class Connection
     }
 
     /**
+     * Check if actual request is transaction
+     *
+     * @since   1.1
+     * @return  bool Return true if actual request is a transaction
+     */
+    public function isTransaction()
+    {
+        if ($this->isConnected()) {
+            return $this->pdo->inTransaction();
+        } else {
+            return false;
+        }
+    }
+
+    /**
      * Get last insert ID
      *
      * Returns the ID of the last inserted row or sequence value
