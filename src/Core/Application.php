@@ -67,6 +67,21 @@ class Application
     }
 
     /**
+     * Load user defined databases
+     *
+     * By default this will load `config/databases.php`.
+     *
+     * @since   1.0
+     * @return  void
+     */
+    private function databases()
+    {
+        if (Configuration::read('database.config.enable') === true) {
+            require $this->configDir . '/' . Configuration::read('database.config.file');
+        }
+    }
+
+    /**
      * Load controller
      *
      * Load controller and action defined during routage and then destroy it.
@@ -115,6 +130,8 @@ class Application
         $this->routes();
         // Launch routage
         Router::resolve();
+        // Load databases user config file
+        $this->databases();
         // Load Bootstrap
         $this->bootstrap();
         // Launch Controller defined by routage
