@@ -59,7 +59,7 @@ class Application
      * By default this will load \App\Bootstrap class.
      *
      * @since   1.0
-     * @return  void
+     * @return  bool True is file is loaded else false.
      */
     private function bootstrap()
     {
@@ -78,7 +78,9 @@ class Application
                 return false;
             }
             $bootstrap->initialize();
+            return true;
         }
+        return false;
     }
 
     /**
