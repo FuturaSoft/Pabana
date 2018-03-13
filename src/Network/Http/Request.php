@@ -9,7 +9,7 @@
  *
  * @copyright     Copyright (c) FuturaSoft (https://futurasoft.fr)
  * @link          https://pabana.futurasoft.fr Pabana Project
- * @since         1.0.0
+ * @since         1.0
  * @license       https://opensource.org/licenses/BSD-3-Clause BSD-3-Clause License
  */
 namespace Pabana\Network\Http;
@@ -21,10 +21,10 @@ namespace Pabana\Network\Http;
  */
 class Request
 {
-	/**
+    /**
      * Check accept field
      *
-     * @since   1.0.0
+     * @since   1.0
      * @param   string $sContent Accept header.
      * @param   string $sType Accept test.
      * @return  bool True if test is ok else false.
@@ -50,7 +50,7 @@ class Request
     /**
      * Check accept charset
      *
-     * @since   1.0.0
+     * @since   1.0
      * @param   string $sCharset Test charset.
      * @return  bool True if test is ok else false.
      */
@@ -62,7 +62,7 @@ class Request
     /**
      * Check accept encoding
      *
-     * @since   1.0.0
+     * @since   1.0
      * @param   string $sEncoding Test encoding.
      * @return  bool True if test is ok else false.
      */
@@ -74,7 +74,7 @@ class Request
     /**
      * Check accept language
      *
-     * @since   1.0.0
+     * @since   1.0
      * @param   string $sLanguage Test language.
      * @return  bool True if test is ok else false.
      */
@@ -86,7 +86,7 @@ class Request
     /**
      * Check accept mimetype
      *
-     * @since   1.0.0
+     * @since   1.0
      * @param   string $sMimetype Test mimetype.
      * @return  bool True if test is ok else false.
      */
@@ -98,7 +98,7 @@ class Request
     /**
      * Get client IP
      *
-     * @since   1.0.0
+     * @since   1.0
      * @return  string Return client IP.
      */
     public function clientIp()
@@ -116,8 +116,8 @@ class Request
     /**
      * Get domain
      *
-     * @since   1.0.0
-     * @param  	string $nTldLength Length of Top Level Domain. (by default 1)
+     * @since   1.0
+     * @param   string $nTldLength Length of Top Level Domain. (by default 1)
      * @return  string Return domain.
      */
     public function domain($nTldLength = 1)
@@ -130,7 +130,7 @@ class Request
     /**
      * Get host
      *
-     * @since   1.0.0
+     * @since   1.0
      * @return  string Return host.
      */
     public function host()
@@ -141,7 +141,7 @@ class Request
     /**
      * Get request method
      *
-     * @since   1.0.0
+     * @since   1.0
      * @return  string Return request method (GET, POST, ...).
      */
     public function method()
@@ -152,8 +152,8 @@ class Request
     /**
      * Parse accept type line
      *
-     * @since   1.0.0
-     * @param  	string $sHeaderLine Accept header line.
+     * @since   1.0
+     * @param   string $sHeaderLine Accept header line.
      * @return  array Return sort accept value.
      */
     private function parseAccept($sHeaderLine)
@@ -188,7 +188,7 @@ class Request
     /**
      * Get request port
      *
-     * @since   1.0.0
+     * @since   1.0
      * @return  integer Return request port.
      */
     public function port()
@@ -199,7 +199,7 @@ class Request
     /**
      * Get request scheme
      *
-     * @since   1.0.0
+     * @since   1.0
      * @return  string Return request scheme (http or https).
      */
     public function scheme()
@@ -214,8 +214,8 @@ class Request
     /**
      * Get subdomain
      *
-     * @since   1.0.0
-     * @param  	string $nTldLength Length of Top Level Domain. (by default 1)
+     * @since   1.0
+     * @param   string $nTldLength Length of Top Level Domain. (by default 1)
      * @return  string Return subdomain.
      */
     public function subdomain($nTldLength = 1)
@@ -227,7 +227,7 @@ class Request
     /**
      * Get request url
      *
-     * @since   1.0.0
+     * @since   1.0
      * @return  string Return request url.
      */
     public function url()
@@ -238,7 +238,7 @@ class Request
     /**
      * Get user agent
      *
-     * @since   1.0.0
+     * @since   1.0
      * @return  string Return user agent.
      */
     public function userAgent()
@@ -249,8 +249,8 @@ class Request
     /**
      * Check method, ajax, json and xml
      *
-     * @since   1.0.0
-     * @param  	string $sTest Type of test (get, put, patch, post, delete, head, options, ajax, json, xml)
+     * @since   1.0
+     * @param   string $sTest Type of test (get, put, patch, post, delete, head, options, ajax, json, xml)
      * @return  bool Return true if test is ok or return false.
      */
     public function is($sTest)
