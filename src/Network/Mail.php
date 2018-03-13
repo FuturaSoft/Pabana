@@ -9,7 +9,7 @@
  *
  * @copyright     Copyright (c) FuturaSoft (https://futurasoft.fr)
  * @link          https://pabana.futurasoft.fr Pabana Project
- * @since         1.0.0
+ * @since         1.0
  * @license       https://opensource.org/licenses/BSD-3-Clause BSD-3-Clause License
  */
 namespace Pabana\Network;
@@ -26,7 +26,7 @@ class Mail
 {
     /**
      * @var    Array List of recipent of mail
-     * @since   1.0.0
+     * @since   1.0
      */
     private $armRecipient = array(
         'to' => array(),
@@ -36,61 +36,61 @@ class Mail
 
     /**
      * @var    Array List of attachement
-     * @since   1.0.0
+     * @since   1.0
      */
     private $armAttachment = array();
 
     /**
      * @var    Array Sender of mail
-     * @since   1.0.0
+     * @since   1.0
      */
     private $armSender = array();
 
     /**
      * @var    Array Reply adresse of mail
-     * @since   1.0.0
+     * @since   1.0
      */
     private $armReply = array();
 
     /**
      * @var     string Subject of mail (by default "No title")
-     * @since   1.0.0
+     * @since   1.0
      */
     private $sSubject = 'No title';
 
     /**
      * @var     string HTML content of mail
-     * @since   1.0.0
+     * @since   1.0
      */
     private $sHtmlContent = '';
 
     /**
      * @var     string Texte content of mail
-     * @since   1.0.0
+     * @since   1.0
      */
     private $sTextContent = '';
 
     /**
      * @var     string Mailer (by default "Pabana")
-     * @since   1.0.0
+     * @since   1.0
      */
     private $sMailer = 'Pabana';
 
     /**
      * @var     integer Priority of mail (1 to 3)
-     * @since   1.0.0
+     * @since   1.0
      */
     private $nPriority = 1;
 
     /**
      * @var     string Boundary of mail
-     * @since   1.0.0
+     * @since   1.0
      */
     private $sBoundary;
 
     /**
      * @var     string Charset of mail
-     * @since   1.0.0
+     * @since   1.0
      */
     private $sCharset;
     
@@ -99,7 +99,7 @@ class Mail
      *
      * Set Boundary and charset (by default application encoding)
      *
-     * @since   1.0.0
+     * @since   1.0
      * @param   string $sCnxName Connection name.
      */
     public function __construct()
@@ -111,7 +111,7 @@ class Mail
     /**
      * Add an attachment to mail
      *
-     * @since   1.0.0
+     * @since   1.0
      * @param   string $sAttachmentPath Attachement path.
      * @return  void
      */
@@ -123,7 +123,7 @@ class Mail
     /**
      * Add encode tag
      *
-     * @since   1.0.0
+     * @since   1.0
      * @param   string $sValue Value to encapsulate in encode tag.
      * @return  void
      */
@@ -135,7 +135,7 @@ class Mail
     /**
      * Add a recipient of mail
      *
-     * @since   1.0.0
+     * @since   1.0
      * @param   string $sRecipientType Type of recipient (to, cc, bcc).
      * @param   string $sRecipientAddress Email address of recipient.
      * @param   string $sRecipientName Name of recipient (optional).
@@ -151,7 +151,7 @@ class Mail
     /**
      * Add a recipient "to" of mail
      *
-     * @since   1.0.0
+     * @since   1.0
      * @param   string $sRecipientAddress Email address of recipient.
      * @param   string $sRecipientName Name of recipient (optional).
      * @return  void
@@ -164,7 +164,7 @@ class Mail
     /**
      * Add a recipient "cc" of mail
      *
-     * @since   1.0.0
+     * @since   1.0
      * @param   string $sRecipientAddress Email address of recipient.
      * @param   string $sRecipientName Name of recipient (optional).
      * @return  void
@@ -177,7 +177,7 @@ class Mail
     /**
      * Add a recipient "bcc" of mail
      *
-     * @since   1.0.0
+     * @since   1.0
      * @param   string $sRecipientAddress Email address of recipient.
      * @param   string $sRecipientName Name of recipient (optional).
      * @return  void
@@ -190,7 +190,7 @@ class Mail
     /**
      * Set charset use in mail
      *
-     * @since   1.0.0
+     * @since   1.0
      * @param   string $sCharset Charset use.
      * @return  void
      */
@@ -202,7 +202,7 @@ class Mail
     /**
      * Set sender of mail
      *
-     * @since   1.0.0
+     * @since   1.0
      * @param   string $sSenderAddress Email address of sender.
      * @param   string $sSenderName Name of sender (optional).
      * @return  void
@@ -215,7 +215,7 @@ class Mail
     /**
      * Set reply of mail
      *
-     * @since   1.0.0
+     * @since   1.0
      * @param   string $sReplyAddress Email address of reply.
      * @param   string $sReplyName Name of reply (optional).
      * @return  void
@@ -228,7 +228,7 @@ class Mail
     /**
      * Set subject of mail
      *
-     * @since   1.0.0
+     * @since   1.0
      * @param   string $sSubject Subject of mail.
      * @return  void
      */
@@ -240,7 +240,7 @@ class Mail
     /**
      * Set HTML content of mail
      *
-     * @since   1.0.0
+     * @since   1.0
      * @param   string $sHtmlContent HTML content of mail.
      * @return  void
      */
@@ -252,7 +252,7 @@ class Mail
     /**
      * Set text content of mail
      *
-     * @since   1.0.0
+     * @since   1.0
      * @param   string $sTextContent Text content of mail.
      * @return  void
      */
@@ -264,7 +264,7 @@ class Mail
     /**
      * Set mailer of mail
      *
-     * @since   1.0.0
+     * @since   1.0
      * @param   string $sMailer Mailer of mail.
      * @return  void
      */
@@ -276,7 +276,7 @@ class Mail
     /**
      * Set priority of mail
      *
-     * @since   1.0.0
+     * @since   1.0
      * @param   integer $nPriority Priority of mail.
      * @return  void
      */
@@ -288,7 +288,7 @@ class Mail
     /**
      * Generate boundary of mail
      *
-     * @since   1.0.0
+     * @since   1.0
      * @return  void
      */
     private function setBoundary()
@@ -300,7 +300,7 @@ class Mail
     /**
      * Get sender of mail
      *
-     * @since   1.0.0
+     * @since   1.0
      * @return  string|bool Return sender of mail or false if not defined
      */
     public function getSender()
@@ -320,7 +320,7 @@ class Mail
     /**
      * Get reply of mail
      *
-     * @since   1.0.0
+     * @since   1.0
      * @return  string|bool Return reply of mail or false if not defined
      */
     public function getReply()
@@ -340,7 +340,7 @@ class Mail
     /**
      * Get recipident "to" of mail
      *
-     * @since   1.0.0
+     * @since   1.0
      * @return  string Return recipident "to" of mail
      */
     public function getRecipientTo()
@@ -351,7 +351,7 @@ class Mail
     /**
      * Get recipident "cc" of mail
      *
-     * @since   1.0.0
+     * @since   1.0
      * @return  string Return recipident "cc" of mail
      */
     public function getRecipientCc()
@@ -362,7 +362,7 @@ class Mail
     /**
      * Get recipident "bcc" of mail
      *
-     * @since   1.0.0
+     * @since   1.0
      * @return  string Return recipident "bcc" of mail
      */
     public function getRecipientBcc()
@@ -373,7 +373,7 @@ class Mail
     /**
      * Get recipident of mail
      *
-     * @since   1.0.0
+     * @since   1.0
      * @param   string $sRecipientArray Type of recipient (to, cc, bcc)
      * @return  string Return recipident of mail
      */
@@ -397,7 +397,7 @@ class Mail
     /**
      * Generate header content
      *
-     * @since   1.0.0
+     * @since   1.0
      * @return  string Return header content of mail
      */
     public function getHeaderContent()
@@ -435,7 +435,7 @@ class Mail
     /**
      * Generate email content
      *
-     * @since   1.0.0
+     * @since   1.0
      * @return  string Return email content
      */
     public function getEmailContent()
@@ -462,7 +462,7 @@ class Mail
     /**
      * Send email
      *
-     * @since   1.0.0
+     * @since   1.0
      * @return  bool Return true if email is send with success else return false
      */
     public function send()
