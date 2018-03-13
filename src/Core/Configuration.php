@@ -49,6 +49,8 @@ class Configuration
         self::write('application.namespace', '\App');
         // Absolute path to application
         self::write('application.path', 'auto');
+        // Defined if bootstrap is use by application
+        self::write('bootstrap.enable', true);
         // Set config file for route collection
         self::write('database.config.enable', true);
         // Set config file for route collection

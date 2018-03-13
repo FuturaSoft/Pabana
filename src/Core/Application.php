@@ -41,13 +41,16 @@ class Application
     public function __construct($configDir, $configFile = 'app.php')
     {
         $this->configDir = $configDir;
-        $configPath = $configDir . '/' . $configFile;
+        $applicationConfigPath = $configDir . '/' . $configFile;
+        if (!file_exists($applicationConfigPath)) {
+            throw new \Exception('Application configuration file "' . $applicationConfigPath . '" doesn\' exist.');
+        }
         // Register constant
         Configuration::registerConstant();
         // Store default settings for Pabana
         Configuration::base();
         // Load user config for Pabana
-        Configuration::load($configPath);
+        Configuration::load($applicationConfigPath);
     }
 
     /**
@@ -60,10 +63,22 @@ class Application
      */
     private function bootstrap()
     {
-        $applicationNamespace = Configuration::read('application.namespace');
-        $bootstrapNamespace = $applicationNamespace . '\Bootstrap';
-        $bootstrap = new $bootstrapNamespace();
-        $bootstrap->initialize();
+        if (Configuration::read('bootstrap.enable') === true) {
+            $applicationNamespace = Configuration::read('application.namespace');
+            $bootstrapNamespace = $applicationNamespace . '\Bootstrap';
+            if (!class_exists($bootstrapNamespace)) {
+                throw new \Exception('Bootstrap "' . $bootstrapNamespace . '" doesn\' exist.');
+                return false;
+            }
+            $bootstrap = new $bootstrapNamespace();
+            if (!method_exists($bootstrap, 'initialize')) {
+                $errorMessage = 'initialize() method isn\'t available in Bootstrap "' . $bootstrapNamespace . '".<br />';
+                $errorMessage .= 'Your bootstrap may not extends \Pabana\Core\Bootstrap.';
+                throw new \Exception($errorMessage);
+                return false;
+            }
+            $bootstrap->initialize();
+        }
     }
 
     /**
@@ -71,14 +86,19 @@ class Application
      *
      * By default this will load `config/databases.php`.
      *
-     * @since   1.0
-     * @return  void
+     * @since   1.1
+     * @return  bool True is file is loaded else false.
      */
     private function databases()
     {
         if (Configuration::read('database.config.enable') === true) {
-            require $this->configDir . '/' . Configuration::read('database.config.file');
+            $databaseConfigPath = $this->configDir . DS . Configuration::read('database.config.file');
+            if (file_exists($databaseConfigPath)) {
+                require $databaseConfigPath;
+                return true;
+            }
         }
+        return false;
     }
 
     /**
@@ -87,7 +107,7 @@ class Application
      * Load controller and action defined during routage and then destroy it.
      *
      * @since   1.0
-     * @return  void
+     * @return  string|bool Return body content or false if controller can't be loaded.
      */
     private function controller()
     {
@@ -95,7 +115,17 @@ class Application
         $actionName = Router::getAction();
         $controllerNamespace = Configuration::read('mvc.controller.namespace');
         $controllerNamespace = $controllerNamespace . '\\' . $controllerName;
+        if (!class_exists($controllerNamespace)) {
+            throw new \Exception('Controller "' . $controllerNamespace . '" doesn\' exist.');
+            return false;
+        }
         $controller = new $controllerNamespace();
+        if (!method_exists($controllerNamespace, 'render')) {
+            $errorMessage = 'render() method isn\'t available in Controller "' . $controllerNamespace . '".<br />';
+            $errorMessage .= 'Your controller may not extends \Pabana\Mvc\Controller.';
+            throw new \Exception($errorMessage);
+            return false;
+        }
         $bodyContent = $controller->render($actionName);
         return $bodyContent;
     }
@@ -106,13 +136,20 @@ class Application
      * By default this will load `config/routes.php`.
      *
      * @since   1.0
-     * @return  void
+     * @return  bool True is file is loaded else false.
      */
     private function routes()
     {
         if (Configuration::read('routing.config.enable') === true) {
-            require $this->configDir . '/' . Configuration::read('routing.config.file');
+            $routingConfigPath = $this->configDir . DS . Configuration::read('routing.config.file');
+            if (file_exists($routingConfigPath)) {
+                require $routingConfigPath;
+                return true;
+            } else {
+                throw new \Exception('Routing configuration file "' . $routingConfigPath . '" doesn\' exist.');
+            }
         }
+        return false;
     }
     
     /**
