@@ -9,7 +9,7 @@
  *
  * @copyright     Copyright (c) FuturaSoft (https://futurasoft.fr)
  * @link          https://pabana.futurasoft.fr Pabana Project
- * @since         1.0.0
+ * @since         1.0
  * @license       https://opensource.org/licenses/BSD-3-Clause BSD-3-Clause License
  */
 namespace Pabana\Core;
@@ -25,7 +25,7 @@ class Configuration
 {
     /**
      * @var    Array Array to store configuration parameters
-     * @since   1.0.0
+     * @since   1.0
      */
     private static $armConfig = array();
 
@@ -34,7 +34,7 @@ class Configuration
      *
      * This method defined default key and value for using Pabana
      *
-     * @since   1.0.0
+     * @since   1.0
      * @return  void
      */
     public static function base()
@@ -98,7 +98,7 @@ class Configuration
      *
      * This method is used to check if a key exists in Configuration
      *
-     * @since   1.0.0
+     * @since   1.0
      * @param   string $sKey Key to check.
      * @return  bool True if key exists else false
      */
@@ -113,7 +113,7 @@ class Configuration
      * Delete all key and value in configuration
      * A parameter allow to reload base configuration
      *
-     * @since   1.0.0
+     * @since   1.0
      * @param   bool $bReloadBase If true reload base configuration
      * @return  bool Result of cleaning
      */
@@ -133,7 +133,7 @@ class Configuration
      * This method is used to delete a key from Configuration
      * Key existance is checked first
      *
-     * @since   1.0.0
+     * @since   1.0
      * @param   string $sKey Key to delete.
      * @return  bool Result of delete Key
      */
@@ -154,7 +154,7 @@ class Configuration
      *
      * Load a configuration file
      *
-     * @since   1.0.0
+     * @since   1.0
      * @param   string $sFilename File path of loaded file.
      * @param   bool $bMerge If true merge current config to new config.
      * @return  void
@@ -204,7 +204,7 @@ class Configuration
      * This method is used to modify a configuration value
      * For exemple change 'true' string to true boolean
      *
-     * @since   1.0.0
+     * @since   1.0
      * @param   string $sKey Key to prepare
      * @param   mixed $mValue Value to prepare.
      * @return  mixed Value prepared
@@ -229,7 +229,7 @@ class Configuration
      *
      * Parse array and prepare all of their value
      *
-     * @since   1.0.0
+     * @since   1.0
      * @param   array $armArray Array of key and value to prepare
      * @return  array Array of key and value prepared
      */
@@ -248,7 +248,7 @@ class Configuration
      * This method is used to read a key from Configuration
      * Key existance is checked first
      *
-     * @since   1.0.0
+     * @since   1.0
      * @param   string $sKey Key to read.
      * @return  mixed|bool Value of Configuration parameter or false if configuration key doesn't exist
      */
@@ -268,7 +268,7 @@ class Configuration
      *
      * This method is used to get collection of configuration
      *
-     * @since   1.0.0
+     * @since   1.0
      * @return  array Array of all configuration
      */
     public static function readAll()
@@ -281,7 +281,7 @@ class Configuration
      *
      * This method is used to register constant
      *
-     * @since   1.0.0
+     * @since   1.0
      * @return  void
      */
     public static function registerConstant()
@@ -307,7 +307,7 @@ class Configuration
      *
      * Return current version of Pabana
      *
-     * @since   1.0.0
+     * @since   1.0
      * @return  string Current version of Pabana
      */
     public static function version()
@@ -321,7 +321,7 @@ class Configuration
      * This method is used to write a key and a value
      * First value is prepare by prepare method
      *
-     * @since   1.0.0
+     * @since   1.0
      * @param   string $sKey Key to read.
      * @param   string $mValue Value of key.
      * @return  void
