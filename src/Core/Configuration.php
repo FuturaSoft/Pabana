@@ -27,7 +27,7 @@ class Configuration
      * @var    Array Array to store configuration parameters
      * @since   1.0
      */
-    private static $armConfig = array();
+    private static $configList = array();
 
     /**
      * Get base configuration of Pabana
@@ -57,6 +57,10 @@ class Configuration
         self::write('database.config.file', 'databases.php');
         // Set debug level to all
         self::write('debug.level', E_ALL);
+        // Define if script file existence is tested
+        self::write('html.script.test_file_existance', true);
+        // Define if css file existence is tested
+        self::write('html.css.test_file_existance', true);
         // Set autoloading of shared var between componant
         self::write('mvc.autoload_shared_var', true);
         // Set namespace for controller
@@ -99,12 +103,12 @@ class Configuration
      * This method is used to check if a key exists in Configuration
      *
      * @since   1.0
-     * @param   string $sKey Key to check.
+     * @param   string $key Key to check.
      * @return  bool True if key exists else false
      */
-    public static function check($sKey)
+    public static function check($key)
     {
-        return isset(self::$armConfig[$sKey]);
+        return isset(self::$configList[$key]);
     }
 
     /**
@@ -114,14 +118,14 @@ class Configuration
      * A parameter allow to reload base configuration
      *
      * @since   1.0
-     * @param   bool $bReloadBase If true reload base configuration
+     * @param   bool $reloadBase If true reload base configuration
      * @return  bool Result of cleaning
      */
-    public static function clean($bReloadBase = true)
+    public static function clean($reloadBase = true)
     {
         // Delete ALL key and value
-        self::$armConfig = array();
-        if ($bReloadBase === true) {
+        self::$configList = array();
+        if ($reloadBase === true) {
             // Reload base configuration
             self::base();
         }
@@ -134,18 +138,18 @@ class Configuration
      * Key existance is checked first
      *
      * @since   1.0
-     * @param   string $sKey Key to delete.
+     * @param   string $key Key to delete.
      * @return  bool Result of delete Key
      */
-    public static function delete($sKey)
+    public static function delete($key)
     {
         // Check key existence
-        if (!self::check($sKey)) {
-            throw new Error('Configuration key "' . $sKey . '" doesn\'t exists');
+        if (!self::check($key)) {
+            throw new \Exception('Configuration key "' . $key . '" doesn\'t exists');
             return false;
         }
         // Delete key and value
-        unset(self::$armConfig[$sKey]);
+        unset(self::$configList[$key]);
         return true;
     }
 
@@ -155,44 +159,44 @@ class Configuration
      * Load a configuration file
      *
      * @since   1.0
-     * @param   string $sFilename File path of loaded file.
-     * @param   bool $bMerge If true merge current config to new config.
+     * @param   string $filename File path of loaded file.
+     * @param   bool $merge If true merge current config to new config.
      * @return  void
      */
-    public static function load($sFilename, $bMerge = true)
+    public static function load($filename, $merge = true)
     {
         // Check if file not exist
-        if (!file_exists($sFilename)) {
-            throw new Exception('Config file "' . $sFilename . '" doesn\'t exist.');
+        if (!file_exists($filename)) {
+            throw new Exception('Config file "' . $filename . '" doesn\'t exist.');
         }
         // Read extension of config file
-        $sFiletype = pathinfo($sFilename, PATHINFO_EXTENSION);
+        $fileExtension = pathinfo($filename, PATHINFO_EXTENSION);
         // List allowed extension of file
-        $arsAllowedFiletype = array('ini', 'json', 'php', 'xml');
+        $allowedExtensionList = array('ini', 'json', 'php', 'xml');
         // Check if extension is recognized
-        if (!in_array($sFiletype, $arsAllowedFiletype)) {
-            throw new Exception('Config file "' . $sFilename . '" is in unrecognize format. Accepted format are ' . implode(', ', $arsAllowedFiletype) . '.');
+        if (!in_array($fileExtension, $allowedExtensionList)) {
+            throw new Exception('Config file "' . $filename . '" is in unrecognize format. Accepted format are ' . implode(', ', $allowedExtensionList) . '.');
         }
         // Load file and put in array
-        if ($sFiletype === 'ini') {
-            $oIniConfig = new Ini();
-            $oIniConfig->load($sFilename);
-            $armConfig = $oIniConfig->toArray();
-        } elseif ($sFiletype === 'json') {
-            $sJson = file_get_contents($sFilename);
-            $armConfig = json_decode($sJson, true);
-        } elseif ($sFiletype === 'xml') {
-            $oXmlConfig = simplexml_load_file($sFilename);
-            $oJsonConfig = json_encode($oXmlConfig);
-            $armConfig = json_decode($oJsonConfig, true);
+        if ($fileExtension === 'ini') {
+            $iniConfig = new Ini();
+            $iniConfig->load($filename);
+            $configList = $iniConfig->toArray();
+        } elseif ($fileExtension === 'json') {
+            $jsonConfig = file_get_contents($filename);
+            $configList = json_decode($jsonConfig, true);
+        } elseif ($fileExtension === 'xml') {
+            $xmlConfig = simplexml_load_file($filename);
+            $jsonConfig = json_encode($xmlConfig);
+            $configList = json_decode($jsonConfig, true);
         } else {
-            $armConfig = (require $sFilename);
+            $configList = (require $filename);
         }
-        $armConfigPrepare = self::prepareArray($armConfig);
-        if ($bMerge === true) {
-            self::$armConfig = $armConfigPrepare + self::$armConfig;
+        $preparedConfigList = self::prepareArray($configList);
+        if ($merge === true) {
+            self::$configList = $preparedConfigList + self::$configList;
         } else {
-            self::$armConfig = $armConfigPrepare;
+            self::$configList = $preparedConfigList;
         }
         // Register constant who aren't register by the past
         self::registerConstant();
@@ -205,23 +209,23 @@ class Configuration
      * For exemple change 'true' string to true boolean
      *
      * @since   1.0
-     * @param   string $sKey Key to prepare
-     * @param   mixed $mValue Value to prepare.
+     * @param   string $key Key to prepare
+     * @param   mixed $value Value to prepare.
      * @return  mixed Value prepared
      */
-    public static function prepare($sKey, $mValue)
+    public static function prepare($key, $value)
     {
-        if ($mValue == "true") {
+        if ($value == 'true') {
             return true;
-        } elseif ($mValue == "false") {
+        } elseif ($value == 'false') {
             return false;
-        } elseif ($sKey == 'debug.level' && substr($mValue, 0, 2) == "E_") {
-            return eval('return ' . $mValue . ';');
-        } elseif ($sKey == 'application.path' && ($mValue === false || $mValue === 'false' || $mValue === 'auto')) {
+        } elseif ($key == 'debug.level' && substr($value, 0, 2) == "E_") {
+            return eval('return ' . $value . ';');
+        } elseif ($key == 'application.path' && ($value === false || $value === 'false' || $value === 'auto')) {
             $sLibraryPath = DS . 'vendor' . DS . 'pabana' . DS . 'pabana' . DS . 'src' . DS . 'Core';
             return str_replace($sLibraryPath, '', __DIR__);
         }
-        return $mValue;
+        return $value;
     }
 
     /**
@@ -230,16 +234,16 @@ class Configuration
      * Parse array and prepare all of their value
      *
      * @since   1.0
-     * @param   array $armArray Array of key and value to prepare
+     * @param   array $configList Array of key and value to prepare
      * @return  array Array of key and value prepared
      */
-    public static function prepareArray($armArray)
+    public static function prepareArray($configList)
     {
-        $armArrayPrepare = array();
-        foreach ($armArray as $sKey => $mValue) {
-            $armArrayPrepare[$sKey] = self::prepare($sKey, $mValue);
+        $preparedConfigList = array();
+        foreach ($configList as $key => $value) {
+            $preparedConfigList[$key] = self::prepare($key, $value);
         }
-        return $armArrayPrepare;
+        return $preparedConfigList;
     }
 
     /**
@@ -249,18 +253,18 @@ class Configuration
      * Key existance is checked first
      *
      * @since   1.0
-     * @param   string $sKey Key to read.
+     * @param   string $key Key to read.
      * @return  mixed|bool Value of Configuration parameter or false if configuration key doesn't exist
      */
-    public static function read($sKey)
+    public static function read($key)
     {
         // Check key existence
-        if (!self::check($sKey)) {
-            throw new \Exception('Configuration key "' . $sKey . '" doesn\'t exists');
+        if (!self::check($key)) {
+            throw new \Exception('Configuration key "' . $key . '" doesn\'t exists');
             return false;
         }
         // Get value of key
-        return self::$armConfig[$sKey];
+        return self::$configList[$key];
     }
 
     /**
@@ -273,7 +277,7 @@ class Configuration
      */
     public static function readAll()
     {
-        return self::$armConfig;
+        return self::$configList;
     }
 
     /**
@@ -290,10 +294,10 @@ class Configuration
             define('DS', DIRECTORY_SEPARATOR);
         }
         if (!defined('PAB_NAME')) {
-            define('PAB_NAME', 'Banana');
+            define('PAB_NAME', 'Kiwi');
         }
         if (!defined('PAB_VERSION')) {
-            define('PAB_VERSION', '1.0.6');
+            define('PAB_VERSION', '1.1.0');
         }
         if (self::check('application.path') === true) {
             if (!defined('APP_ROOT')) {
@@ -322,15 +326,22 @@ class Configuration
      * First value is prepare by prepare method
      *
      * @since   1.0
-     * @param   string $sKey Key to read.
-     * @param   string $mValue Value of key.
-     * @return  void
+     * @param   string $key Key to read.
+     * @param   string $value Value of key.
+     * @param   bool $force Force writing of key even is already defined.
+     * @return  bool Return true if success else return false;.
      */
-    public static function write($sKey, $mValue)
+    public static function write($key, $value, $force = true)
     {
+        // Check key existence
+        if (self::check($key) && $force === false) {
+            throw new \Exception('Configuration key "' . $key . '" already exist (use force argument to modify an already defined key).');
+            return false;
+        }
         // Prepare value (transform 'true' to true, etc...)
-        $mValue = self::prepare($sKey, $mValue);
+        $preparedValue = self::prepare($key, $value);
         // Write value content
-        self::$armConfig[$sKey] = $mValue;
+        self::$configList[$key] = $preparedValue;
+        return true;
     }
 }

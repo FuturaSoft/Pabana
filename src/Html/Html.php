@@ -9,7 +9,7 @@
  *
  * @copyright     Copyright (c) FuturaSoft (https://futurasoft.fr)
  * @link          https://pabana.futurasoft.fr Pabana Project
- * @since         1.0.0
+ * @since         1.0
  * @license       https://opensource.org/licenses/BSD-3-Clause BSD-3-Clause License
  */
 namespace Pabana\Html;
@@ -26,19 +26,40 @@ class Html
 {
     /**
      * @var     \Pabana\Html\Doctype Doctype object
-     * @since   1.0.0
+     * @since   1.1
+     */
+    public $doctype;
+
+    /**
+     * @var     \Pabana\Html\Head Head object
+     * @since   1.1
+     */
+    public $head;
+
+    /**
+     * @var     \Pabana\Html\Script Script object
+     * @since   1.1
+     */
+    public $script;
+
+    /**
+     * @var     \Pabana\Html\Doctype Doctype object
+     * @since   1.0
+     * @deprecated deprecated since version 1.1
      */
     public $Doctype;
 
     /**
      * @var     \Pabana\Html\Head Head object
-     * @since   1.0.0
+     * @since   1.0
+     * @deprecated deprecated since version 1.1
      */
     public $Head;
 
     /**
      * @var     \Pabana\Html\Script Script object
-     * @since   1.0.0
+     * @since   1.0
+     * @deprecated deprecated since version 1.1
      */
     public $Script;
 
@@ -47,13 +68,17 @@ class Html
      *
      * Initialize Doctype, Head and Script Object
      *
-     * @since   1.0.0
+     * @since   1.0
      */
     public function __construct()
     {
-        $this->Doctype = new Doctype();
-        $this->Head = new Head();
-        $this->Script = new Script();
+        $this->doctype = new Doctype();
+        $this->head = new Head();
+        $this->script = new Script();
+        // To maintain compatibility with version 1.0
+        $this->Doctype = $this->doctype;
+        $this->Head = $this->head;
+        $this->Script = $this->script;
     }
 
     /**
@@ -61,13 +86,13 @@ class Html
      *
      * Clean previous configuration in Doctype, Head and Script Object
      *
-     * @since   1.0.0
-     * @return void
+     * @since   1.0
+     * @return  void
      */
     public function clean()
     {
-        $this->Doctype->clean();
-        $this->Head->clean();
-        $this->Script->clean();
+        $this->doctype->clean();
+        $this->head->clean();
+        $this->script->clean();
     }
 }

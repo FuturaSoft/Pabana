@@ -9,10 +9,13 @@
  *
  * @copyright     Copyright (c) FuturaSoft (https://futurasoft.fr)
  * @link          https://pabana.futurasoft.fr Pabana Project
- * @since         1.0.0
+ * @since         1.0
  * @license       https://opensource.org/licenses/BSD-3-Clause BSD-3-Clause License
  */
 namespace Pabana\Html;
+
+use Pabana\Core\Configuration;
+use Pabana\Type\ArrayType;
 
 /**
  * Script class
@@ -22,17 +25,27 @@ namespace Pabana\Html;
 class Script
 {
     /**
-     * @var     array List of defined script
-     * @since   1.0.0
+     * @var     Pabana\Type\ArrayType List of defined script
+     * @since   1.0
      */
-    private static $_arsScriptList = array();
+    private static $scriptList;
+
+    /**
+     * Constructor
+     *
+     * @since   1.1
+     */
+    public function __construct()
+    {
+        self::$scriptList = new ArrayType();
+    }
 
     /**
      * toString
      *
      * Activate the render method
      *
-     * @since   1.0.0
+     * @since   1.0
      * @return  string Html code to initialize scripts
      */
     public function __toString()
@@ -41,128 +54,235 @@ class Script
     }
 
     /**
-     * Append
+     * Append a script to script list
      *
-     * Append a script to script list with it complet path
-     *
-     * @since   1.0.0
-     * @param   string $sHref Complet path of script.
+     * @since   1.0
+     * @param   string $type Type of script (file, library or script)
+     * @param   string $hrefOrScript Path of script from /public or script content.
      * @return  $this
      */
-    public function append($sHref)
+    private function append($type, $hrefOrScript)
     {
-        self::$_arsScriptList[] = array($sHref);
+        self::$scriptList->append(array($type, $hrefOrScript));
         return $this;
     }
 
     /**
-     * Append file
-     *
      * Append a script localized in public/js folder to script list
      *
-     * @since   1.0.0
-     * @param   string $sHref Script name.
+     * @since   1.0
+     * @param   string $href Script name.
      * @return  $this
      */
-    public function appendFile($sHref)
+    public function appendFile($href)
     {
-        self::$_arsScriptList[] = array('/js/' . $sHref);
+        $href = '/js/' . $href;
+        $this->append('file', $href);
         return $this;
     }
 
     /**
-     * Append library
-     *
      * Append a script localized in public/lib/library_name/js/ folder to script list
      *
-     * @since   1.0.0
+     * @since   1.0
      * @param   string $sLibrary Library name.
      * @param   string $sHref Script name.
      * @return  $this
      */
-    public function appendLibrary($sLibrary, $sHref)
+    public function appendLibrary($library, $href)
     {
-        self::$_arsScriptList[] = array('/lib/' . $sLibrary . '/js/' . $sHref);
+        $href = '/lib/' . $library . '/js/' . $href;
+        $this->append('library', $href);
         return $this;
     }
 
     /**
-     * Clean
+     * Append a script give in argument
      *
+     * @since   1.1
+     * @param   string $script Script code.
+     * @return  $this
+     */
+    public function appendScript($script)
+    {
+        $this->append('script', $script);
+        return $this;
+    }
+
+    /**
      * Clean list of script
      *
-     * @since   1.0.0
+     * @since   1.0
      * @return  $this
      */
     public function clean()
     {
-        self::$_arsScriptList = array();
+        self::$scriptList->clean();
         return $this;
     }
 
     /**
-     * Prepend
+     * Get a value of scriptList
      *
-     * Prepend a script to script list with it complet path
+     * @since   1.1
+     * @param   int $index Index of insert position
+     * @return  array Return a value of scriptList
+     */
+    public function get($index)
+    {
+        return self::$scriptList->get($index);
+    }
+
+    /**
+     * Insert a script to script list
      *
-     * @since   1.0.0
-     * @param   string $sHref Complet path of script.
+     * @since   1.1
+     * @param   int $index Index of insert position
+     * @param   string $type Type of script (file, library or script)
+     * @param   string $hrefOrScript Path of script from /public or script content.
      * @return  $this
      */
-    public function prepend($sHref)
+    private function insert($index, $type, $hrefOrScript)
     {
-        $arsScript = array($sHref);
-        array_unshift(self::$_arsScriptList, $arsScript);
+        self::$scriptList->insert($index, array($type, $hrefOrScript));
         return $this;
     }
 
     /**
-     * Prepend file
+     * Insert a script localized in public/js folder to script list
      *
+     * @since   1.1
+     * @param   int $index Index of insert position
+     * @param   string $href Script name.
+     * @return  $this
+     */
+    public function insertFile($index, $href)
+    {
+        $href = '/js/' . $href;
+        $this->insert($index, 'file', $href);
+        return $this;
+    }
+
+    /**
+     * Insert a script localized in public/lib/library_name/js/ folder to script list
+     *
+     * @since   1.1
+     * @param   int $index Index of insert position
+     * @param   string $library Library name.
+     * @param   string $href Script name.
+     * @return  $this
+     */
+    public function insertLibrary($index, $library, $href)
+    {
+        $href = '/lib/' . $library . '/js/' . $href;
+        $this->insert($index, 'library', $href);
+        return $this;
+    }
+
+    /**
+     * Insert a script give in argument
+     *
+     * @since   1.1
+     * @param   int $index Index of insert position
+     * @param   string $script Script code.
+     * @return  $this
+     */
+    public function insertScript($index, $script)
+    {
+        $this->insert($index, 'script', $script);
+        return $this;
+    }
+
+    /**
+     * Prepend a script to script list
+     *
+     * @since   1.0
+     * @param   string $type Type of script (file, library or script)
+     * @param   string $hrefOrScript Path of script from /public or script content.
+     * @return  $this
+     */
+    private function prepend($type, $hrefOrScript)
+    {
+        self::$scriptList->prepend(array($type, $hrefOrScript));
+        return $this;
+    }
+
+    /**
      * Prepend a script localized in public/js folder to script list
      *
-     * @since   1.0.0
-     * @param   string $sHref Script name.
+     * @since   1.0
+     * @param   string $href Script name.
      * @return  $this
      */
-    public function prependFile($sHref)
+    public function prependFile($href)
     {
-        $arsScript = array('/js/' . $sHref);
-        array_unshift(self::$_arsScriptList, $arsScript);
+        $href = '/js/' . $href;
+        $this->prepend('file', $href);
         return $this;
     }
 
     /**
-     * Prepend library
-     *
      * Prepend a script localized in public/lib/library_name/js/ folder to script list
      *
-     * @since   1.0.0
-     * @param   string $sLibrary Library name.
-     * @param   string $sHref Script name.
+     * @since   1.0
+     * @param   string $library Library name.
+     * @param   string $href Script name.
      * @return  $this
      */
-    public function prependLibrary($sLibrary, $sHref)
+    public function prependLibrary($library, $href)
     {
-        $arsScript = array('/lib/' . $sLibrary . '/js/' . $sHref);
-        array_unshift(self::$_arsScriptList, $arsScript);
+        $href = '/lib/' . $library . '/js/' . $href;
+        $this->prepend('library', $href);
         return $this;
     }
 
     /**
-     * Render
+     * Prepend a script give in argument
      *
+     * @since   1.1
+     * @param   string $script Script code.
+     * @return  $this
+     */
+    public function prependScript($script)
+    {
+        $this->prepend('script', $script);
+        return $this;
+    }
+
+    /**
+     * Remove a script to script list
+     *
+     * @since   1.1
+     * @param   int $index Index of script
+     * @return  bool True if remove success, else false.
+     */
+    public function remove($index)
+    {
+        return self::$scriptList->remove($index);
+    }
+
+    /**
      * Return HTML code for initialize all script in script list
      *
-     * @since   1.0.0
+     * @since   1.0
      * @return  string Html code to initialize scripts
      */
     public function render()
     {
-        $sHtml = '';
-        foreach (self::$_arsScriptList as $arsScript) {
-            $sHtml .= '<script src="' . $arsScript[0] . '" type="text/javascript"></script>' . PHP_EOL;
+        $htmlContent = '';
+        foreach (self::$scriptList->toArray() as $script) {
+            if ($script[0] == 'script') {
+                $htmlContent .= '<script type="text/javascript">' . $script[1] . '</script>' . PHP_EOL;
+            } else {
+                if (Configuration::read('html.script.test_file_existance') === true) {
+                    $scriptPath = APP_ROOT . '/public' . $script[1];
+                    if (!file_exists($scriptPath)) {
+                        trigger_error('Script file "' . $scriptPath . '" doesn\'t exist.', E_USER_WARNING);
+                    }
+                }
+                $htmlContent .= '<script src="' . $script[1] . '" type="text/javascript"></script>' . PHP_EOL;
+            }
         }
-        return $sHtml;
+        return $htmlContent;
     }
 }
