@@ -2,15 +2,15 @@
 
 ## 1.1.0 "Kiwi" - 18/03/2018
 
+ - Community : Add an issue template to formalize issue
+ - Documentation : Replace version number 1.0.0 by 1.0 in docblock
+ - Documentation : Solve documentation error (expect in Database class)
  - Enhancement : [#8 [Mvc] Improves the MVC process](https://github.com/FuturaSoft/Pabana/issues/8)
+ - Enhancement : [#14 [Database] Add transaction method in Connection](https://github.com/FuturaSoft/Pabana/issues/14)
  - Feature : [#9 [Type] Create a String class](https://github.com/FuturaSoft/Pabana/issues/9)
  - Feature : [#11 [Database] Autoload database configuration from config file](https://github.com/FuturaSoft/Pabana/issues/11)
  - Feature : [#12 [Type] Create an Array class](https://github.com/FuturaSoft/Pabana/issues/12)
- - Enhancement : [#14 [Database] Add transaction method in Connection](https://github.com/FuturaSoft/Pabana/issues/14)
- - Documentation : Replace version number 1.0.0 by 1.0 in docblock
- - Documentation : Solve documentation error (expect in Database class)
  - Feature : Add PHPUnit and create first sample test for Configuration
- - Community : Add an issue template to formalize issue
 
 ## 1.0.6 "Banana" - 21/02/2018
 
