@@ -396,7 +396,7 @@ class Request
      * Check accept field
      *
      * @since   1.1
-     * @param   string $sContent Accept header.
+     * @param   string $acceptHeader Accept header.
      * @param   string $test Accept test.
      * @return  bool True if test is ok else false.
      */
@@ -496,6 +496,7 @@ class Request
      * Check method
      *
      * @since   1.1
+     * @param   string $methodName Method name (GET, POST, ...).
      * @return  bool Return true if test is ok or return false.
      */
     public function isMethod($methodName)

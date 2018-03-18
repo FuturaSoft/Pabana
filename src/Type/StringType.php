@@ -31,6 +31,7 @@ class StringType
      * Initialize class with a String
      *
      * @since   1.1
+     * @param   string $stringVar String who will be transform in StringType (by default empty String)
      * @return  void
      */
     public function __construct($stringVar = '')

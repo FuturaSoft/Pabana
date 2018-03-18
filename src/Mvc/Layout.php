@@ -91,7 +91,7 @@ class Layout
      *
      * @since   1.0
      * @param   \Pabana\Mvc\View $view View object
-     * @param   string $layoutName Name of Layout
+     * @param   bool $cleanHtml Reset Html object (by default false)
      * @return  void
      */
     public function __construct($view, $cleanHtml = false)
@@ -239,7 +239,7 @@ class Layout
      * Set auto render value
      *
      * @since   1.0
-     * @param   bool $bAutoRender Auto render value
+     * @param   bool $autoRender Auto render value
      * @return  void
      */
     public function setAutoRender($autoRender)
@@ -251,7 +251,7 @@ class Layout
      * Set directory value of layout part
      *
      * @since   1.0
-     * @param   string $sDirectory Directory of layout part value
+     * @param   string $directory Directory of layout part value
      * @return  void
      */
     public function setDirectory($directory)
@@ -263,7 +263,7 @@ class Layout
      * Set extension value for part file
      *
      * @since   1.0
-     * @param   string $sExtension Extension value for part file
+     * @param   string $extension Extension value for part file
      * @return  void
      */
     public function setExtension($extension)
@@ -275,8 +275,7 @@ class Layout
      * Set name of layout and if define reload renderinit of layout
      *
      * @since   1.0
-     * @param   string $sName Name of Layout
-     * @param   bool $bReloadInit Reload renderInit method after change name of Layout
+     * @param   string $name Name of Layout
      * @return  void
      */
     public function setName($name)

@@ -98,8 +98,8 @@ class Css
      * Append a css localized in public/lib/library_name/css/ folder to css list
      *
      * @since   1.0
-     * @param   string $sLibrary Library name.
-     * @param   string $sHref Css file name.
+     * @param   string $library Library name.
+     * @param   string $href Css file name.
      * @return  $this
      */
     public function appendLibrary($library, $href)

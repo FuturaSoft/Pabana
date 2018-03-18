@@ -85,8 +85,8 @@ class Script
      * Append a script localized in public/lib/library_name/js/ folder to script list
      *
      * @since   1.0
-     * @param   string $sLibrary Library name.
-     * @param   string $sHref Script name.
+     * @param   string $library Library name.
+     * @param   string $href Script name.
      * @return  $this
      */
     public function appendLibrary($library, $href)

@@ -91,6 +91,7 @@ class ArrayType
      * Initialize class with a String
      *
      * @since   1.1
+     * @param   array $arrayVar Array who will be transform in ArrayType (by default empty Array)
      * @return  void
      */
     public function __construct($arrayVar = array())

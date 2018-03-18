@@ -130,6 +130,7 @@ class Controller
      * Get Layout and View render if enable
      *
      * @since   1.1
+     * @param   string $action Name of Action
      * @return  string bodyContent of Controller, Layout and View
      */
     final public function render($action)
