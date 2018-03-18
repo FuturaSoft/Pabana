@@ -9,7 +9,7 @@
  *
  * @copyright     Copyright (c) FuturaSoft (https://futurasoft.fr)
  * @link          https://pabana.futurasoft.fr Pabana Project
- * @since         1.0.0
+ * @since         1.0
  * @license       https://opensource.org/licenses/BSD-3-Clause BSD-3-Clause License
  */
 namespace Pabana\Routing;
@@ -23,32 +23,32 @@ class Route
 {
     /**
      * @var    string Route
-     * @since   1.0.0
+     * @since   1.0
      */
     private $_sRoute = null;
 
     /**
      * @var    string Redirect controller
-     * @since   1.0.0
+     * @since   1.0
      */
     private $_sController = 'index';
 
     /**
      * @var    string Redirect action
-     * @since   1.0.0
+     * @since   1.0
      */
     private $_sAction = 'index';
 
     /**
      * @var    string Redirect param list
-     * @since   1.0.0
+     * @since   1.0
      */
     private $_arsParamList = null;
 
     /**
      * Create an object Route from parameters
      *
-     * @since   1.0.0
+     * @since   1.0
      * @param   string $sRoute Route.
      * @param   array $arsOption Option (controller, action and param).
      */
@@ -69,7 +69,7 @@ class Route
     /**
      * Get route defined
      *
-     * @since   1.0.0
+     * @since   1.0
      * @return  string Route.
      */
     public function getRoute()
@@ -80,7 +80,7 @@ class Route
     /**
      * Get controller defined
      *
-     * @since   1.0.0
+     * @since   1.0
      * @return  string Controller.
      */
     public function getController()
@@ -91,7 +91,7 @@ class Route
     /**
      * Get action defined
      *
-     * @since   1.0.0
+     * @since   1.0
      * @return  string Action.
      */
     public function getAction()
@@ -102,7 +102,7 @@ class Route
     /**
      * Get param list.
      *
-     * @since   1.0.0
+     * @since   1.0
      * @return  string Param list.
      */
     public function getParamList()

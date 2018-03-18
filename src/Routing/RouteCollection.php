@@ -9,7 +9,7 @@
  *
  * @copyright     Copyright (c) FuturaSoft (https://futurasoft.fr)
  * @link          https://pabana.futurasoft.fr Pabana Project
- * @since         1.0.0
+ * @since         1.0
  * @license       https://opensource.org/licenses/BSD-3-Clause BSD-3-Clause License
  */
 namespace Pabana\Routing;
@@ -25,38 +25,38 @@ class RouteCollection
 {
     /**
      * @var    array Liste of route
-     * @since   1.0.0
+     * @since   1.0
      */
     private static $arsRouteCollection;
 
     /**
      * @var    string Fallback action (by default "index")
-     * @since   1.0.0
+     * @since   1.0
      */
     private static $sFallbackAction = 'index';
 
     /**
      * @var    string Fallback controller (by default "Error")
-     * @since   1.0.0
+     * @since   1.0
      */
     private static $sFallbackController = 'Error';
 
     /**
      * @var    array List of separator of url (by default '/', '?', '&', '=')
-     * @since   1.0.0
+     * @since   1.0
      */
     private static $arcSeparator = array('/', '?', '&', '=');
 
     /**
      * @var    char Default separator ('/')
-     * @since   1.0.0
+     * @since   1.0
      */
     private static $cDefaultSeparator = '/';
 
     /**
      * Create a route to collection
      *
-     * @since   1.0.0
+     * @since   1.0
      * @param   string $sRoute Route.
      * @param   array $arsOption Option (controller, action and param).
      */
@@ -68,7 +68,7 @@ class RouteCollection
     /**
      * Get fallback action
      *
-     * @since   1.0.0
+     * @since   1.0
      * @return  string Fallback action.
      */
     public static function getFallbackAction()
@@ -79,7 +79,7 @@ class RouteCollection
     /**
      * Get fallback controller
      *
-     * @since   1.0.0
+     * @since   1.0
      * @return  string Fallback controller.
      */
     public static function getFallbackController()
@@ -90,7 +90,7 @@ class RouteCollection
     /**
      * Get list of route defined in collection
      *
-     * @since   1.0.0
+     * @since   1.0
      * @return  array List of route defined in collection.
      */
     public static function getAll()
@@ -101,7 +101,7 @@ class RouteCollection
     /**
      * Get default separator
      *
-     * @since   1.0.0
+     * @since   1.0
      * @return  char Default separator.
      */
     public static function getDefaultSeparator()
@@ -112,7 +112,7 @@ class RouteCollection
     /**
      * Get separator list
      *
-     * @since   1.0.0
+     * @since   1.0
      * @return  array List of separator.
      */
     public static function getSeparator()
@@ -123,7 +123,7 @@ class RouteCollection
     /**
      * Set fallback
      *
-     * @since   1.0.0
+     * @since   1.0
      * @param   string $sController Fallback controller.
      * @param   string $sAction Fallback action.
      * @return  void
@@ -137,7 +137,7 @@ class RouteCollection
     /**
      * Set default separator
      *
-     * @since   1.0.0
+     * @since   1.0
      * @param   char $cSeparator Separator.
      * @param   bool $bMerge Merge default separtor to separator list.
      * @return  void
@@ -151,7 +151,7 @@ class RouteCollection
     /**
      * Set separator
      *
-     * @since   1.0.0
+     * @since   1.0
      * @param   array|string $mSeparator Separator char or array of char.
      * @param   bool $bMerge Merge $mSeparator with separator list.
      * @return  void
