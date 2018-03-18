@@ -79,7 +79,7 @@ class View
      * @param   string $controller Name of Controller
      * @return  void
      */
-    public function __construct($action, $controller)
+    public function __construct($controller, $action)
     {
         // Load Mvc\Html helper to $html var
         $this->html = new Html();

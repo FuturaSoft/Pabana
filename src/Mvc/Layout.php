@@ -146,8 +146,8 @@ class Layout
      */
     public function element($elementName)
     {
-        if (Configuration::read('mvc.autoload_shared_var') === true && empty(self::$variableList) === false) {
-            foreach (self::$variableList as $varName => $varValue) {
+        if (Configuration::read('mvc.autoload_shared_var') === true && empty($this->variableList) === false) {
+            foreach ($this->variableList as $varName => $varValue) {
                 ${$varName} = $varValue;
             }
         }

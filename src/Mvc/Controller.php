@@ -135,22 +135,31 @@ class Controller
      */
     final public function render($action)
     {
-        $this->setView($action);
-        // Get Layout default name from Configuration
-        $layoutName = Configuration::read('mvc.layout.default');
-        $this->setLayout($layoutName);
+        // Initialize view object if auto render is enable
+        if (Configuration::read('mvc.view.auto_render') === true) {
+            $this->setView($this->controller, $action);
+        }
+        // Initialize layout object if auto render is enable
+        if (Configuration::read('mvc.layout.auto_render') === true) {
+            // Get Layout default name from Configuration
+            $layoutName = Configuration::read('mvc.layout.default');
+            $this->setLayout($layoutName);
+        }
         // Call initialize method in Controller if exists
         if (method_exists($this, 'initialize')) {
             $this->initialize();
         }
         // Launch action of controller
-        $bodyContent = $this->$action();
+        ob_start();
+        $actionResult = $this->$action();
+        echo PHP_EOL;
+        $bodyContent = ob_get_clean();
         // If Controller's Action return false, disable Layout and View
-        if ($bodyContent !== false) {
-            if ($this->layout->getAutoRender()) {
+        if ($actionResult !== false) {
+            if (isset($this->layout) && $this->layout->getAutoRender()) {
                 // Get Layout and View if auto render of View enable
                 $bodyContent .= $this->layout->render();
-            } elseif ($this->view->getAutoRender()) {
+            } elseif (isset($this->view) && $this->view->getAutoRender()) {
                 // Get View only
                 $bodyContent .= $this->view->render();
             }
@@ -182,11 +191,12 @@ class Controller
      * @param   string $action Target action name
      * @return  void
      */
-    final public function setView($action)
+    final public function setView($controller, $action)
     {
-        $this->view = new View($action, $this->controller);
+        $this->view = new View($controller, $action);
         // To maintain compatibility with version 1.0
         $this->View = $this->view;
+        // If Layout is enable, send new view to it
         if (isset($this->layout)) {
             $this->layout->setView($this->view);
             // To maintain compatibility with version 1.0
