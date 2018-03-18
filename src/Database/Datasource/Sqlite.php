@@ -9,7 +9,7 @@
  *
  * @copyright     Copyright (c) FuturaSoft (https://futurasoft.fr)
  * @link          https://pabana.futurasoft.fr Pabana Project
- * @since         1.0.0
+ * @since         1.0
  * @license       https://opensource.org/licenses/BSD-3-Clause BSD-3-Clause License
  */
 namespace Pabana\Database\Datasource;
@@ -30,7 +30,7 @@ class Sqlite extends Datasource
      *
      * Set Connection name and define DBMS to Sqlite
      *
-     * @since   1.0.0
+     * @since   1.0
      * @param   string $sCnxName Connection name.
      */
     public function __construct($sCnxName)
@@ -44,9 +44,9 @@ class Sqlite extends Datasource
      *
      * Check if connection parameters is correct
      *
-     * @since   1.0.0
+     * @since   1.0
      * @return  bool True if success or false.
-     */    
+     */
     protected function checkParam()
     {
         if (empty($this->getDatabase()) && $this->getMemory() === false) {
@@ -63,7 +63,7 @@ class Sqlite extends Datasource
      *
      * Return DSN string build from connection parameters
      *
-     * @since   1.0.0
+     * @since   1.0
      * @return  string|bool Return DSN string if success or false else.
      */
     public function getDsn()

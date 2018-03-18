@@ -9,7 +9,7 @@
  *
  * @copyright     Copyright (c) FuturaSoft (https://futurasoft.fr)
  * @link          https://pabana.futurasoft.fr Pabana Project
- * @since         1.0.0
+ * @since         1.0
  * @license       https://opensource.org/licenses/BSD-3-Clause BSD-3-Clause License
  */
 namespace Pabana\Database\Datasource;
@@ -25,19 +25,19 @@ class Mysql extends Datasource
 {
     /**
      * @var     string Hostname or IP adresse
-     * @since   1.0.0
+     * @since   1.0
      */
     private $sHost;
 
     /**
      * @var     integer Port number (by default 3306)
-     * @since   1.0.0
+     * @since   1.0
      */
     private $nPort = 3306;
 
     /**
      * @var     string Unix Socket path
-     * @since   1.0.0
+     * @since   1.0
      */
     private $sUnixSocket;
     
@@ -46,7 +46,7 @@ class Mysql extends Datasource
      *
      * Set Connection name and define DBMS to MySQL
      *
-     * @since   1.0.0
+     * @since   1.0
      * @param   string $sCnxName Connection name.
      */
     public function __construct($sCnxName)
@@ -60,7 +60,7 @@ class Mysql extends Datasource
      *
      * Check if connection parameters is correct
      *
-     * @since   1.0.0
+     * @since   1.0
      * @return  bool True if success or false.
      */
     protected function checkParam()
@@ -79,7 +79,7 @@ class Mysql extends Datasource
      *
      * Return DSN string build from connection parameters
      *
-     * @since   1.0.0
+     * @since   1.0
      * @return  string|bool Return DSN string if success or false else.
      */
     public function getDsn()
@@ -108,7 +108,7 @@ class Mysql extends Datasource
     /**
      * Get host
      *
-     * @since   1.0.0
+     * @since   1.0
      * @return  string Return host.
      */
     public function getHost()
@@ -119,7 +119,7 @@ class Mysql extends Datasource
     /**
      * Get port
      *
-     * @since   1.0.0
+     * @since   1.0
      * @return  integer Return port.
      */
     public function getPort()
@@ -130,7 +130,7 @@ class Mysql extends Datasource
     /**
      * Get UNIX socket
      *
-     * @since   1.0.0
+     * @since   1.0
      * @return  string Return Unix socket path.
      */
     public function getUnixSocket()
@@ -141,7 +141,7 @@ class Mysql extends Datasource
     /**
      * Set Host
      *
-     * @since   1.0.0
+     * @since   1.0
      * @param   string $sHost Host.
      * @return  $this
      */
@@ -154,7 +154,7 @@ class Mysql extends Datasource
     /**
      * Set Port
      *
-     * @since   1.0.0
+     * @since   1.0
      * @param   integer $nPort Port number.
      * @return  $this
      */
@@ -167,7 +167,7 @@ class Mysql extends Datasource
     /**
      * Set UNIX Socket
      *
-     * @since   1.0.0
+     * @since   1.0
      * @param   string $sUnixSocket UNIX Socket path.
      * @return  $this
      */

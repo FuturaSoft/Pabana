@@ -46,7 +46,7 @@ class Connection
      * @var     string Connection name (by default same as Datasource)
      * @since   1.0
      */
-    private $sName;
+    private $name;
 
     /**
      * Constructor
@@ -156,7 +156,7 @@ class Connection
      * Execute an SQL statement and return the number of affected rows
      *
      * @since   1.0
-     * @param   string $sQuery SQL Statement.
+     * @param   string $query SQL Statement.
      * @return  bool|integer Return an integer with number of affected rows or return false if error.
      */
     public function exec($query)

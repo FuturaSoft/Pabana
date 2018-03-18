@@ -31,35 +31,35 @@ class Controller
 {
     /**
      * @var     Redirection to $html var
-     * @since   1.1
+     * @since   1.0
      * @deprecated deprecated since version 1.1
      */
     public $Html;
 
     /**
      * @var     Redirection to $layout var
-     * @since   1.1
+     * @since   1.0
      * @deprecated deprecated since version 1.1
      */
     public $Layout;
 
     /**
      * @var     Redirection to $model var
-     * @since   1.1
+     * @since   1.0
      * @deprecated deprecated since version 1.1
      */
     public $Model;
 
     /**
      * @var     Redirection to $request var
-     * @since   1.1
+     * @since   1.0
      * @deprecated deprecated since version 1.1
      */
     public $Request;
 
     /**
      * @var     Redirection to $view var
-     * @since   1.1
+     * @since   1.0
      * @deprecated deprecated since version 1.1
      */
     public $View;
