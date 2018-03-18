@@ -9,7 +9,7 @@
  *
  * @copyright     Copyright (c) FuturaSoft (https://futurasoft.fr)
  * @link          https://pabana.futurasoft.fr Pabana Project
- * @since         1.0.0
+ * @since         1.0
  * @license       https://opensource.org/licenses/BSD-3-Clause BSD-3-Clause License
  */
 namespace Pabana\Database\Datasource;
@@ -23,20 +23,20 @@ use Pabana\Database\Datasource;
  */
 class Pgsql extends Datasource
 {
-    private $sHost;
-    private $nPort = 5432;
+    private $host;
+    private $port = 5432;
     
     /**
      * Constructor
      *
      * Set Connection name and define DBMS to Pgsql
      *
-     * @since   1.0.0
-     * @param   string $sCnxName Connection name.
+     * @since   1.0
+     * @param   string $connectionName Connection name.
      */
-    public function __construct($sCnxName)
+    public function __construct($connectionName)
     {
-        $this->setName($sCnxName);
+        $this->setName($connectionName);
         $this->setDbms('Pgsql');
     }
 
@@ -45,14 +45,14 @@ class Pgsql extends Datasource
      *
      * Check if connection parameters is correct
      *
-     * @since   1.0.0
+     * @since   1.0
      * @return  bool True if success or false.
-     */ 
+     */
     protected function checkParam()
     {
         if (empty($this->getHost())) {
-            $sErrorMessage = 'Connexion to PostgreSQL must have an host defined';
-            throw new \Exception($sErrorMessage);
+            $errorMessage = 'Connexion to PostgreSQL must have an host defined';
+            throw new \Exception($errorMessage);
             return false;
         } else {
             return true;
@@ -64,20 +64,20 @@ class Pgsql extends Datasource
      *
      * Return DSN string build from connection parameters
      *
-     * @since   1.0.0
+     * @since   1.0
      * @return  string|bool Return DSN string if success or false else.
      */
     public function getDsn()
     {
         if ($this->checkParam()) {
-            $sDsn = 'pgsql:host=' . $this->getHost() . ';';
+            $dsn = 'pgsql:host=' . $this->getHost() . ';';
             if (!empty($this->getPort())) {
-                $sDsn .= 'port=' . $this->getPort() . ';';
+                $dsn .= 'port=' . $this->getPort() . ';';
             }
             if (!empty($this->getDatabase())) {
-                $sDsn .= 'dbname=' . $this->getDatabase() . ';';
+                $dsn .= 'dbname=' . $this->getDatabase() . ';';
             }
-            return $sDsn;
+            return $dsn;
         } else {
             return false;
         }
@@ -85,21 +85,21 @@ class Pgsql extends Datasource
     
     public function getHost()
     {
-        return $this->sHost;
+        return $this->host;
     }
     
     public function getPort()
     {
-        return $this->nPort;
+        return $this->port;
     }
     
-    public function setHost($sHost)
+    public function setHost($host)
     {
-        $this->sHost = $sHost;
+        $this->host = $host;
     }
     
-    public function setPort($nPort)
+    public function setPort($port)
     {
-        $this->nPort = $nPort;
+        $this->port = $port;
     }
 }

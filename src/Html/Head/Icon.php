@@ -9,10 +9,12 @@
  *
  * @copyright     Copyright (c) FuturaSoft (https://futurasoft.fr)
  * @link          https://pabana.futurasoft.fr Pabana Project
- * @since         1.0.0
+ * @since         1.0
  * @license       https://opensource.org/licenses/BSD-3-Clause BSD-3-Clause License
  */
 namespace Pabana\Html\Head;
+
+use Pabana\Type\ArrayType;
 
 /**
  * Icon class
@@ -22,17 +24,27 @@ namespace Pabana\Html\Head;
 class Icon
 {
     /**
-     * @var     array List of defined icon
-     * @since   1.0.0
+     * @var     Pabana\Type\ArrayType List of defined icon
+     * @since   1.0
      */
-    private static $_arsIconList = array();
+    private static $iconList;
+
+    /**
+     * Constructor
+     *
+     * @since   1.1
+     */
+    public function __construct()
+    {
+        self::$iconList = new ArrayType();
+    }
 
     /**
      * toString
      *
      * Activate the render method
      *
-     * @since   1.0.0
+     * @since   1.0
      * @return  string Html code to initialize icon
      */
     public function __toString()
@@ -45,44 +57,80 @@ class Icon
      *
      * Append a icon localized in public/img/ folder to icon list
      *
-     * @since   1.0.0
-     * @param   string $sHref Icon name.
+     * @since   1.0
+     * @param   string $href Icon path.
      * @return  $this
      */
-    public function append($sHref)
+    public function append($href)
     {
-        self::$_arsIconList[] = array('/img/' . $sHref);
+        $href = '/img/' . $href;
+        self::$iconList->append(array($href));
         return $this;
     }
 
     /**
-     * Clean
-     *
      * Clean list of icon
      *
-     * @since   1.0.0
+     * @since   1.0
      * @return  $this
      */
     public function clean()
     {
-        self::$_arsIconList = array();
+        self::$iconList->clean();
         return $this;
     }
 
     /**
-     * Prepend file
+     * Get a value of an item in icon list
      *
-     * Prepend a icon localized in public/img/ folder to icon list
+     * @since   1.1
+     * @param   int $index Index of item position
+     * @return  array Return a value of icon list
+     */
+    public function get($index)
+    {
+        return self::$iconList->get($index);
+    }
+
+    /**
+     * Insert an icon to defined position in icon list
      *
-     * @since   1.0.0
-     * @param   string $sHref Icon name.
+     * @since   1.1
+     * @param   int $index Index of insert position
+     * @param   string $href Path of icon.
      * @return  $this
      */
-    public function prepend($sHref)
+    private function insert($index, $href)
     {
-        $arsIcon = array('/img/' . $sHref);
-        array_unshift(self::$_arsIconList, $arsIcon);
+        $href = '/img/' . $href;
+        self::$iconList->insert($index, array($href));
         return $this;
+    }
+
+    /**
+     * Prepend a icon localized in public/img/ folder to icon list
+     *
+     * @since   1.0
+     * @param   string $href Icon name.
+     * @return  $this
+     */
+    public function prepend($href)
+    {
+        $href = '/img/' . $href;
+        self::$iconList->prepend(array($href));
+        return $this;
+    }
+
+    /**
+     * Remove an icon from icon list
+     *
+     * @since   1.1
+     * @param   int $index Index of icon
+     * @return  bool True if remove success, else false.
+     */
+    public function remove($index)
+    {
+        return self::$iconList->remove($index);
     }
 
     /**
@@ -90,15 +138,15 @@ class Icon
      *
      * Return HTML code for initialize all icon in icon list
      *
-     * @since   1.0.0
+     * @since   1.0
      * @return  string Html code to initialize icon
      */
     public function render()
     {
-        $sHtml = '';
-        foreach (self::$_arsIconList as $arsIcon) {
-            $sHtml .= '<link href="' . $arsIcon[0] . '" rel="icon">' . PHP_EOL;
+        $htmlContent = '';
+        foreach (self::$iconList->toArray() as $icon) {
+            $htmlContent .= '<link href="' . $icon[0] . '" rel="icon">' . PHP_EOL;
         }
-        return $sHtml;
+        return $htmlContent;
     }
 }

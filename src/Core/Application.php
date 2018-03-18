@@ -9,7 +9,7 @@
  *
  * @copyright     Copyright (c) FuturaSoft (https://futurasoft.fr)
  * @link          https://pabana.futurasoft.fr Pabana Project
- * @since         1.0.0
+ * @since         1.0
  * @license       https://opensource.org/licenses/BSD-3-Clause BSD-3-Clause License
  */
 namespace Pabana\Core;
@@ -27,27 +27,30 @@ class Application
 
     /**
      * @var     string Contains the path of the config directory
-     * @since   1.0.0
+     * @since   1.0
      */
     protected $configDir;
 
     /**
      * Constructor
      *
-     * @since   1.0.0
-     * @param   string $sConfigDir The directory of pabana config files.
-     * @param   string $sConfigFile Name of config file (by default "app.php").
+     * @since   1.0
+     * @param   string $configDir The directory of pabana config files.
+     * @param   string $configFile Name of config file (by default "app.php").
      */
-    public function __construct($sConfigDir, $sConfigFile = 'app.php')
+    public function __construct($configDir, $configFile = 'app.php')
     {
-        $this->configDir = $sConfigDir;
-        $sPabanaConfigPath = $sConfigDir . '/' . $sConfigFile;
+        $this->configDir = $configDir;
+        $applicationConfigPath = $configDir . '/' . $configFile;
+        if (!file_exists($applicationConfigPath)) {
+            throw new \Exception('Application configuration file "' . $applicationConfigPath . '" doesn\' exist.');
+        }
         // Register constant
         Configuration::registerConstant();
         // Store default settings for Pabana
         Configuration::base();
         // Load user config for Pabana
-        Configuration::load($sPabanaConfigPath);
+        Configuration::load($applicationConfigPath);
     }
 
     /**
@@ -55,14 +58,49 @@ class Application
      *
      * By default this will load \App\Bootstrap class.
      *
-     * @since   1.0.0
-     * @return  void
+     * @since   1.0
+     * @return  bool True is file is loaded else false.
      */
     private function bootstrap()
     {
-        $sBootstrapNamespace = Configuration::read('application.namespace') . '\Bootstrap';
-        $oBootstrap = new $sBootstrapNamespace();
-        $oBootstrap->initialize();
+        if (Configuration::read('bootstrap.enable') === true) {
+            $applicationNamespace = Configuration::read('application.namespace');
+            $bootstrapNamespace = $applicationNamespace . '\Bootstrap';
+            if (!class_exists($bootstrapNamespace)) {
+                throw new \Exception('Bootstrap "' . $bootstrapNamespace . '" doesn\' exist.');
+                return false;
+            }
+            $bootstrap = new $bootstrapNamespace();
+            if (!method_exists($bootstrap, 'initialize')) {
+                $errorMessage = 'initialize() method isn\'t available in Bootstrap "' . $bootstrapNamespace . '".<br />';
+                $errorMessage .= 'Your bootstrap may not extends \Pabana\Core\Bootstrap.';
+                throw new \Exception($errorMessage);
+                return false;
+            }
+            $bootstrap->initialize();
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Load user defined databases
+     *
+     * By default this will load `config/databases.php`.
+     *
+     * @since   1.1
+     * @return  bool True is file is loaded else false.
+     */
+    private function databases()
+    {
+        if (Configuration::read('database.config.enable') === true) {
+            $databaseConfigPath = $this->configDir . DS . Configuration::read('database.config.file');
+            if (file_exists($databaseConfigPath)) {
+                require $databaseConfigPath;
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -70,22 +108,28 @@ class Application
      *
      * Load controller and action defined during routage and then destroy it.
      *
-     * @since   1.0.0
-     * @return  void
+     * @since   1.0
+     * @return  string|bool Return body content or false if controller can't be loaded.
      */
     private function controller()
     {
-        $sAppNamespace = Configuration::read('application.namespace');
-        $sControllerNamespace = $sAppNamespace . '\Controller\\' . Router::getController();
-        $oController = new $sControllerNamespace();
-        $oController->init();
-        if (method_exists($oController, 'initialize')) {
-            $oController->initialize();
+        $controllerName = Router::getController();
+        $actionName = Router::getAction();
+        $controllerNamespace = Configuration::read('mvc.controller.namespace');
+        $controllerNamespace = $controllerNamespace . '\\' . $controllerName;
+        if (!class_exists($controllerNamespace)) {
+            throw new \Exception('Controller "' . $controllerNamespace . '" doesn\' exist.');
+            return false;
         }
-        $sAction = Router::getAction();
-        $oController->$sAction();
-        // Clean Controller object (and launch __destroy method of controller)
-        unset($oController);
+        $controller = new $controllerNamespace();
+        if (!method_exists($controllerNamespace, 'render')) {
+            $errorMessage = 'render() method isn\'t available in Controller "' . $controllerNamespace . '".<br />';
+            $errorMessage .= 'Your controller may not extends \Pabana\Mvc\Controller.';
+            throw new \Exception($errorMessage);
+            return false;
+        }
+        $bodyContent = $controller->render($actionName);
+        return $bodyContent;
     }
 
     /**
@@ -93,14 +137,21 @@ class Application
      *
      * By default this will load `config/routes.php`.
      *
-     * @since   1.0.0
-     * @return  void
+     * @since   1.0
+     * @return  bool True is file is loaded else false.
      */
     private function routes()
     {
         if (Configuration::read('routing.config.enable') === true) {
-            require $this->configDir . '/' . Configuration::read('routing.config.file');
+            $routingConfigPath = $this->configDir . DS . Configuration::read('routing.config.file');
+            if (file_exists($routingConfigPath)) {
+                require $routingConfigPath;
+                return true;
+            } else {
+                throw new \Exception('Routing configuration file "' . $routingConfigPath . '" doesn\' exist.');
+            }
         }
+        return false;
     }
     
     /**
@@ -109,18 +160,22 @@ class Application
      * Start by call user defined routes, then resolve routage
      * After start bootstrap and launch mvc by calling controller
      *
-     * @since   1.0.0
+     * @since   1.0
      * @return  void
      */
     public function run()
     {
-        // Load routing config file
+        // Load routing user config file
         $this->routes();
         // Launch routage
         Router::resolve();
-        // Load bootstrap
+        // Load databases user config file
+        $this->databases();
+        // Load Bootstrap
         $this->bootstrap();
-        // Launch controller defined by routage
-        $this->controller();
+        // Launch Controller defined by routage
+        $bodyContent = $this->controller();
+        // Show body content return by Controller
+        echo $bodyContent;
     }
 }

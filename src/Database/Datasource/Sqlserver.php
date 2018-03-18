@@ -9,7 +9,7 @@
  *
  * @copyright     Copyright (c) FuturaSoft (https://futurasoft.fr)
  * @link          https://pabana.futurasoft.fr Pabana Project
- * @since         1.0.0
+ * @since         1.0
  * @license       https://opensource.org/licenses/BSD-3-Clause BSD-3-Clause License
  */
 namespace Pabana\Database\Datasource;
@@ -23,50 +23,18 @@ use Pabana\Database\Datasource;
  */
 class Sqlserver extends Datasource
 {
-    private $sApplication;
-    private $sConnectionPooling;
-    private $sEncrypt;
-    private $sFailoverPartner;
-    private $nLoginTimeout;
-    private $sMultipleActiveResultSets;
-    private $nQuotedId;
-    private $sTraceFile;
-    private $sTraceOn;
-    private $nTransactionIsolation;
-    private $sTrustServerCertificate;
-    private $sWsid;
-    
     /**
      * Constructor
      *
      * Set Connection name and define DBMS to Sqlserver
      *
-     * @since   1.0.0
+     * @since   1.0
      * @param   string $sCnxName Connection name.
      */
     public function __construct($sCnxName)
     {
         $this->setName($sCnxName);
-        $this->setDbms('Sqlserver');
-    }
-
-    /**
-     * Check connection parameters
-     *
-     * Check if connection parameters is correct
-     *
-     * @since   1.0.0
-     * @return  bool True if success or false.
-     */    
-    protected function checkParam()
-    {
-        if (empty($this->getHost())) {
-            $sErrorMessage = 'Connexion to SQL Server must have an host defined';
-            throw new \Exception($sErrorMessage);
-            return false;
-        } else {
-            return true;
-        }
+        $this->setDbms('sqlsrv');
     }
     
     /**
@@ -74,7 +42,7 @@ class Sqlserver extends Datasource
      *
      * Return DSN string build from connection parameters
      *
-     * @since   1.0.0
+     * @since   1.0
      * @return  string|bool Return DSN string if success or false else.
      */
     public function getDsn()
@@ -135,67 +103,77 @@ class Sqlserver extends Datasource
     
     public function getApplication()
     {
-        return $this->sApplication;
+        return $this->getDsnParam('APP');
     }
     
     public function getConnectionPooling()
     {
-        return $this->sConnectionPooling;
+        return $this->getDsnParam('ConnectionPooling');
+    }
+
+    public function getDatabase()
+    {
+        return $this->getDsnParam('Database');
     }
     
     public function getEncrypt()
     {
-        return $this->sEncrypt;
+        return $this->getDsnParam('Encrypt');
     }
     
     public function getFailoverPartner()
     {
-        return $this->sFailoverPartner;
+        return $this->getDsnParam('Failover_Partner');
     }
     
     public function getLoginTimeout()
     {
-        return $this->nLoginTimeout;
+        return $this->getDsnParam('LoginTimeout');
     }
     
     public function getMultipleActiveResultSets()
     {
-        return $this->sMultipleActiveResultSets;
+        return $this->getDsnParam('MultipleActiveResultSets');
     }
     
     public function getQuotedId()
     {
-        return $this->nQuotedId;
+        return $this->getDsnParam('QuotedId');
+    }
+
+    public function getServer()
+    {
+        return $this->getDsnParam('Server');
     }
     
     public function getTraceFile()
     {
-        return $this->sTraceFile;
+        return $this->getDsnParam('TraceFile');
     }
     
     public function getTraceOn()
     {
-        return $this->sTraceOn;
+        return $this->getDsnParam('TraceOn');
     }
     
     public function getTransactionIsolation()
     {
-        return $this->nTransactionIsolation;
+        return $this->getDsnParam('TransactionIsolation');
     }
     
     public function getTrustServerCertificate()
     {
-        return $this->sTrustServerCertificate;
+        return $this->getDsnParam('TrustServerCertificate');
     }
     
     public function getWsid()
     {
-        return $this->sWsid;
+        return $this->getDsnParam('WSID');
     }
     
-    public function setApplication($sApplication)
+    public function setApplication($application)
     {
-        $this->sApplication = $sApplication;
+        $this->setDsnParam('APP', $application);
         return $this;
     }
     

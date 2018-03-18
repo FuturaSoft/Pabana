@@ -2,7 +2,7 @@
     "name": "pabana/pabana",
     "description": "The Pabana framework",
     "type": "library",
-	  "version": "1.0.6",
+	"version": "1.1.0",
     "keywords": [
         "framework",
         "mvc"
@@ -23,9 +23,17 @@
     "require": {
         "php": "^5.6 || ^7.0"
     },
+	"require-dev": {
+		"phpdocumentor/phpdocumentor": "2.*",
+		"phpunit/phpunit": "^5",
+        "squizlabs/php_codesniffer": "3.*"
+    },
     "autoload": {
-        "psr-4": {
+        "classmap": [
+            "src/"
+        ],
+		"psr-4": {
             "Pabana\\": "./src"
         }
-    }
+	}
 }

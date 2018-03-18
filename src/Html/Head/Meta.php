@@ -9,7 +9,7 @@
  *
  * @copyright     Copyright (c) FuturaSoft (https://futurasoft.fr)
  * @link          https://pabana.futurasoft.fr Pabana Project
- * @since         1.0.0
+ * @since         1.0
  * @license       https://opensource.org/licenses/BSD-3-Clause BSD-3-Clause License
  */
 namespace Pabana\Html\Head;
@@ -23,22 +23,22 @@ class Meta
 {
     /**
      * @var     array List of defined meta http-equiv
-     * @since   1.0.0
+     * @since   1.0
      */
-    private static $_arsHttpEquiv = array();
+    private static $httpEquivList = array();
 
     /**
      * @var     array List of defined default meta
-     * @since   1.0.0
+     * @since   1.0
      */
-    private static $_arsMeta = array();
+    private static $metaList = array();
 
     /**
      * toString
      *
      * Activate the render method
      *
-     * @since   1.0.0
+     * @since   1.0
      * @return  string Html code to initialize meta
      */
     public function __toString()
@@ -51,13 +51,13 @@ class Meta
      *
      * Clean list of default meta and http-equiv meta
      *
-     * @since   1.0.0
+     * @since   1.0
      * @return  $this
      */
     public function clean()
     {
-        self::$_arsHttpEquiv = array();
-        self::$_arsMeta = array();
+        self::$httpEquivList = array();
+        self::$metaList = array();
     }
 
     /**
@@ -65,154 +65,154 @@ class Meta
      *
      * Return HTML code for initialize all meta in meta list
      *
-     * @since   1.0.0
+     * @since   1.0
      * @return  string Html code to initialize meta
      */
     public function render()
     {
-        $sHtml = '';
-        foreach (self::$_arsHttpEquiv as $sHttpEquivName => $sHttpEquivValue) {
-            $sHtml .= '<meta http-equiv="' . $sHttpEquivName . '" content="' . $sHttpEquivValue . '">' . PHP_EOL;
+        $htmlContent = '';
+        foreach (self::$httpEquivList as $httpEquivName => $httpEquivValue) {
+            $htmlContent .= '<meta http-equiv="' . $httpEquivName . '" content="' . $httpEquivValue . '">' . PHP_EOL;
         }
-        foreach (self::$_arsMeta as $sMetaName => $sMetaValue) {
-            $sHtml .= '<meta name="' . $sMetaName . '" content="' . $sMetaValue . '">' . PHP_EOL;
+        foreach (self::$metaList as $metaName => $metaValue) {
+            $htmlContent .= '<meta name="' . $metaName . '" content="' . $metaValue . '">' . PHP_EOL;
         }
-        return $sHtml;
+        return $htmlContent;
     }
 
     /**
      * Set a default meta
      *
-     * @since   1.0.0
-     * @param   string $sMetaName Meta tag name.
-     * @param   string $sMetaValue Meta tag value.
+     * @since   1.0
+     * @param   string $metaName Meta tag name.
+     * @param   string $metaValue Meta tag value.
      * @return  $this
      */
-    public function set($sMetaName, $sMetaValue)
+    public function set($metaName, $metaValue)
     {
-        self::$_arsMeta[$sMetaName] = $sMetaValue;
+        self::$metaList[$metaName] = $metaValue;
         return $this;
     }
 
     /**
      * Set meta tag 'application-name'
      *
-     * @since   1.0.0
-     * @param   string $sApplicationName Application name.
+     * @since   1.0
+     * @param   string $applicationName Application name.
      * @return  $this
      */
-    public function setApplicationName($sApplicationName)
+    public function setApplicationName($applicationName)
     {
-        return $this->set('application-name', $sApplicationName);
+        return $this->set('application-name', $applicationName);
     }
 
     /**
      * Set meta tag 'author'
      *
-     * @since   1.0.0
-     * @param   string $sAuthor Author name.
+     * @since   1.0
+     * @param   string $author Author name.
      * @return  $this
      */
-    public function setAuthor($sAuthor)
+    public function setAuthor($author)
     {
-        return $this->set('author', $sAuthor);
+        return $this->set('author', $author);
     }
 
     /**
      * Set meta tag 'default-style'
      *
-     * @since   1.0.0
-     * @param   string $sDefaultStyle Default style.
+     * @since   1.0
+     * @param   string $defaultStyle Default style.
      * @return  $this
      */
-    public function setDefaultStyle($sDefaultStyle)
+    public function setDefaultStyle($defaultStyle)
     {
-        return $this->setHttpEquiv('default-style', $sDefaultStyle);
+        return $this->setHttpEquiv('default-style', $defaultStyle);
     }
 
     /**
      * Set meta tag 'description'
      *
-     * @since   1.0.0
-     * @param   string $sDescription Description.
+     * @since   1.0
+     * @param   string $description Description.
      * @return  $this
      */
-    public function setDescription($sDescription)
+    public function setDescription($description)
     {
-        return $this->set('description', $sDescription);
+        return $this->set('description', $description);
     }
 
     /**
      * Set meta tag 'generator'
      *
-     * @since   1.0.0
-     * @param   string $sGenerator Generator.
+     * @since   1.0
+     * @param   string $generator Generator.
      * @return  $this
      */
-    public function setGenerator($sGenerator)
+    public function setGenerator($generator)
     {
-        return $this->set('generator', $sGenerator);
+        return $this->set('generator', $generator);
     }
 
     /**
      * Set a http-equiv meta
      *
-     * @since   1.0.0
-     * @param   string $sHttpEquivName Http-equiv name.
-     * @param   string $sHttpEquivValue Http-equiv value.
+     * @since   1.0
+     * @param   string $httpEquivName Http-equiv name.
+     * @param   string $httpEquivValue Http-equiv value.
      * @return  $this
      */
-    public function setHttpEquiv($sHttpEquivName, $sHttpEquivValue)
+    public function setHttpEquiv($httpEquivName, $httpEquivValue)
     {
-        self::$_arsHttpEquiv[$sHttpEquivName] = $sHttpEquivValue;
+        self::$httpEquivList[$httpEquivName] = $httpEquivValue;
         return $this;
     }
 
     /**
      * Set meta tag 'keywords'
      *
-     * @since   1.0.0
-     * @param   string $sKeyword Keywords.
+     * @since   1.0
+     * @param   string $keyword Keywords.
      * @return  $this
      */
-    public function setKeyword($sKeyword)
+    public function setKeyword($keyword)
     {
-        return $this->set('keywords', $sKeyword);
+        return $this->set('keywords', $keyword);
     }
 
     /**
      * Set meta tag 'refresh'
      *
-     * @since   1.0.0
-     * @param   string $sRefresh Refresh.
+     * @since   1.0
+     * @param   string $refresh Refresh.
      * @return  $this
      */
-    public function setRefresh($sRefresh)
+    public function setRefresh($refresh)
     {
-        return $this->setHttpEquiv('refresh', $sRefresh);
+        return $this->setHttpEquiv('refresh', $refresh);
     }
 
     /**
      * Set meta tag 'X-UA-Compatible'
      *
-     * @since   1.0.0
-     * @param   string $sUaCompatible X-UA-Compatible.
+     * @since   1.0
+     * @param   string $uaCompatible X-UA-Compatible.
      * @return  $this
      */
-    public function setUaCompatible($sUaCompatible)
+    public function setUaCompatible($uaCompatible)
     {
-        return $this->setHttpEquiv('X-UA-Compatible', $sUaCompatible);
+        return $this->setHttpEquiv('X-UA-Compatible', $uaCompatible);
     }
 
     /**
      * Set meta tag 'viewport'
      *
-     * @since   1.0.0
-     * @param   string $sViewport Viewport.
+     * @since   1.0
+     * @param   string $viewport Viewport.
      * @return  $this
      */
-    public function setViewport($sViewport)
+    public function setViewport($viewport)
     {
-        return $this->set('viewport', $sViewport);
+        return $this->set('viewport', $viewport);
     }
 }

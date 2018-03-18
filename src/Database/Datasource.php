@@ -9,7 +9,7 @@
  *
  * @copyright     Copyright (c) FuturaSoft (https://futurasoft.fr)
  * @link          https://pabana.futurasoft.fr Pabana Project
- * @since         1.0.0
+ * @since         1.0
  * @license       https://opensource.org/licenses/BSD-3-Clause BSD-3-Clause License
  */
 namespace Pabana\Database;
@@ -26,51 +26,51 @@ class Datasource
 {
     /**
      * @var     string Charset use in Datasource
-     * @since   1.0.0
+     * @since   1.0
      */
-    protected $sCharset;
+    protected $charset;
 
     /**
      * @var     string Database value, can be a name in MySQL or a path in Odbc
-     * @since   1.0.0
+     * @since   1.0
      */
-    protected $sDatabase;
+    protected $database;
 
     /**
      * @var     string Database Management System name (Mysql, Odbc, Pgsql, ...)
-     * @since   1.0.0
+     * @since   1.0
      */
-    protected $sDbms;
+    protected $dbms;
 
     /**
      * @var     string Datasource name
-     * @since   1.0.0
+     * @since   1.0
      */
-    protected $sName;
+    protected $name;
 
     /**
      * @var     string Datasource password
-     * @since   1.0.0
+     * @since   1.0
      */
-    protected $sPassword;
+    protected $password;
 
     /**
      * @var     string Datasource user
-     * @since   1.0.0
+     * @since   1.0
      */
-    protected $sUser;
+    protected $user;
 
     /**
      * Getter for Datasource charset
      *
      * This method can get charset value.
      *
-     * @since   1.0.0
+     * @since   1.0
      * @return  string Charset defined.
      */
     public function getCharset()
     {
-        return $this->sCharset;
+        return $this->charset;
     }
 
     /**
@@ -78,12 +78,12 @@ class Datasource
      *
      * This method can get database name or path value.
      *
-     * @since   1.0.0
+     * @since   1.0
      * @return  string Database name.
      */
     public function getDatabase()
     {
-        return $this->sDatabase;
+        return $this->database;
     }
 
     /**
@@ -91,7 +91,7 @@ class Datasource
      *
      * This method can get datasource option value.
      *
-     * @since   1.0.0
+     * @since   1.0
      * @return  array Array of option.
      */
     public function getOption()
@@ -104,12 +104,12 @@ class Datasource
      *
      * This method can get name value.
      *
-     * @since   1.0.0
+     * @since   1.0
      * @return  string
      */
     public function getName()
     {
-        return $this->sName;
+        return $this->name;
     }
 
     /**
@@ -117,12 +117,12 @@ class Datasource
      *
      * This method can get password value.
      *
-     * @since   1.0.0
+     * @since   1.0
      * @return  string
      */
     public function getPassword()
     {
-        return $this->sPassword;
+        return $this->password;
     }
 
     /**
@@ -130,31 +130,26 @@ class Datasource
      *
      * This method can get user value.
      *
-     * @since   1.0.0
+     * @since   1.0
      * @return  string
      */
     public function getUser()
     {
-        return $this->sUser;
+        return $this->user;
     }
-
-    /*public function isDefault()
-    {
-        return $this->bDefault;
-    }*/
 
     /**
      * Setter for Datasource charset
      *
      * This method can set charset value.
      *
-     * @param   string $sCharset Charset value of Datasource
-     * @since   1.0.0
+     * @param   string $charset Charset value of Datasource
+     * @since   1.0
      * @return  $this
      */
-    public function setCharset($sCharset)
+    public function setCharset($charset)
     {
-        $this->sCharset = $sCharset;
+        $this->charset = $charset;
         return $this;
     }
 
@@ -163,13 +158,13 @@ class Datasource
      *
      * This method can set database name or path.
      *
-     * @param   string $sDatabase Database name or path
-     * @since   1.0.0
+     * @param   string $database Database name or path
+     * @since   1.0
      * @return  $this
      */
-    public function setDatabase($sDatabase)
+    public function setDatabase($database)
     {
-        $this->sDatabase = $sDatabase;
+        $this->database = $database;
         return $this;
     }
 
@@ -178,13 +173,13 @@ class Datasource
      *
      * This method can set database managment system.
      *
-     * @param   string $sDbms Database managment system
-     * @since   1.0.0
+     * @param   string $dbms Database managment system
+     * @since   1.0
      * @return  $this
      */
-    public function setDbms($sDbms)
+    public function setDbms($dbms)
     {
-        $this->sDbms = $sDbms;
+        $this->dbms = $dbms;
         return $this;
     }
 
@@ -193,13 +188,13 @@ class Datasource
      *
      * This method can set name of datasource.
      *
-     * @param   string $sName Datasource name
-     * @since   1.0.0
+     * @param   string $name Datasource name
+     * @since   1.0
      * @return  $this
      */
-    public function setName($sName)
+    public function setName($name)
     {
-        $this->sName = $sName;
+        $this->name = $name;
         return $this;
     }
     
@@ -208,13 +203,13 @@ class Datasource
      *
      * This method can set password of datasource.
      *
-     * @param   string $sPassword Datasource password
-     * @since   1.0.0
+     * @param   string $password Datasource password
+     * @since   1.0
      * @return  $this
      */
-    public function setPassword($sPassword)
+    public function setPassword($password)
     {
-        $this->sPassword = $sPassword;
+        $this->password = $password;
         return $this;
     }
 
@@ -223,13 +218,13 @@ class Datasource
      *
      * This method can set user of datasource.
      *
-     * @param   string $sUser Datasource user
-     * @since   1.0.0
+     * @param   string $user Datasource user
+     * @since   1.0
      * @return  $this
      */
-    public function setUser($sUser)
+    public function setUser($user)
     {
-        $this->sUser = $sUser;
+        $this->user = $user;
         return $this;
     }
 }

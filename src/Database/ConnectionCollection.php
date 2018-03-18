@@ -9,7 +9,7 @@
  *
  * @copyright     Copyright (c) FuturaSoft (https://futurasoft.fr)
  * @link          https://pabana.futurasoft.fr Pabana Project
- * @since         1.0.0
+ * @since         1.0
  * @license       https://opensource.org/licenses/BSD-3-Clause BSD-3-Clause License
  */
 namespace Pabana\Database;
@@ -23,31 +23,32 @@ class ConnectionCollection
 {
     /**
      * @var     array List of connection in collection
-     * @since   1.0.0
+     * @since   1.0
      */
-    private static $aroConnectionList;
+    private static $connectionList;
 
     /**
      * @var     string Name of default connection
-     * @since   1.0.0
+     * @since   1.0
      */
-    private static $sDefaultConnectionName;
+    private static $defaultConnectionName;
 
     /**
      * Add a connection to collection
      *
      * Store Connection to collection and defined it by default if would
      *
-     * @since   1.0.0
-     * @param   \Pabana\Database\Connection $cnxConnection Object defined a connection and its parameters.
-     * @param   bool $bSetAsDefault If defined connection will be defined as default connection.
+     * @since   1.0
+     * @param   \Pabana\Database\Connection $connection Object defined a connection and its parameters.
+     * @param   bool $setAsDefault If defined connection will be defined as default connection.
+     * @return  void
      */
-    public static function add($cnxConnection, $bSetAsDefault = false)
+    public static function add($connection, $setAsDefault = false)
     {
-        $sConnectionName = $cnxConnection->getName();
-        self::$aroConnectionList[$sConnectionName] = $cnxConnection;
-        if ($bSetAsDefault === true) {
-            self::setDefault($sConnectionName);
+        $connectionName = $connection->getName();
+        self::$connectionList[$connectionName] = $connection;
+        if ($setAsDefault === true) {
+            self::setDefault($connectionName);
         }
     }
 
@@ -56,13 +57,13 @@ class ConnectionCollection
      *
      * Check if a connection exist by it name
      *
-     * @since   1.0.0
-     * @param   string $sConnectionName Connection who will check.
+     * @since   1.0
+     * @param   string $connectionName Connection who will check.
      * @return  bool Return true if connection exist in collection or return false.
      */
-    public static function exists($sConnectionName)
+    public static function exists($connectionName)
     {
-        return isset(self::$aroConnectionList[$sConnectionName]);
+        return isset(self::$connectionList[$connectionName]);
     }
 
     /**
@@ -70,27 +71,27 @@ class ConnectionCollection
      *
      * Check if default connection exist
      *
-     * @since   1.0.0
+     * @since   1.0
      * @return  bool Return true if default connection exist in collection or return false.
      */
     public static function existsDefault()
     {
-        return isset(self::$sDefaultConnectionName);
+        return isset(self::$defaultConnectionName);
     }
 
     /**
      * Get connection by his name
      *
-     * @since   1.0.0
-     * @param   string $sConnectionName Connection who will get.
+     * @since   1.0
+     * @param   string $connectionName Connection who will get.
      * @return  bool|\Pabana\Database\Connection Return Connection object if exist or return false.
      */
-    public static function get($sConnectionName)
+    public static function get($connectionName)
     {
-        if (self::exists($sConnectionName) === true) {
-            return self::$aroConnectionList[$sConnectionName];
+        if (self::exists($connectionName) === true) {
+            return self::$connectionList[$connectionName];
         } else {
-            throw new Exception('Datasource "' . $sConnectionName . '" isn\'t defined in DatasourceCollection');
+            throw new Exception('Datasource "' . $connectionName . '" isn\'t defined in DatasourceCollection');
             return false;
         }
     }
@@ -98,16 +99,16 @@ class ConnectionCollection
     /**
      * Get default connection
      *
-     * @since   1.0.0
+     * @since   1.0
      * @return  bool|\Pabana\Database\Connection Return default Connection object if exist or return false.
      */
     public static function getDefault()
     {
         if (self::existsDefault()) {
-            $sDefaultConnectionName = self::$sDefaultConnectionName;
-            return self::$aroConnectionList[$sDefaultConnectionName];
+            $defaultConnectionName = self::$defaultConnectionName;
+            return self::$connectionList[$defaultConnectionName];
         } else {
-            throw new Exception('Datasource "' . $sConnectionName . '" isn\'t defined in DatasourceCollection');
+            throw new Exception('Datasource "' . $defaultConnectionName . '" isn\'t defined in DatasourceCollection');
             return false;
         }
     }
@@ -115,12 +116,12 @@ class ConnectionCollection
     /**
      * Get connection collection array
      *
-     * @since   1.0.0
+     * @since   1.0
      * @return  array Return connection collection array.
      */
     public static function getAll()
     {
-        return self::$aroConnectionList;
+        return self::$connectionList;
     }
 
     /**
@@ -128,18 +129,18 @@ class ConnectionCollection
      *
      * Set default connection name and can force it set
      *
-     * @since   1.0.0
-     * @param   string $sConnectionName Connection name who will be set by default.
-     * @param   bool $bForce Force change of default connection.
+     * @since   1.0
+     * @param   string $connectionName Connection name who will be set by default.
+     * @param   bool $force Force change of default connection.
      * @return  bool Return true if success or false if error.
      */
-    public static function setDefault($sConnectionName, $bForce = true)
+    public static function setDefault($connectionName, $force = true)
     {
-        if ($bForce === false && self::existsDefault() === true) {
+        if ($force === false && self::existsDefault() === true) {
             throw new Exception('A default Datasource is already defined.');
             return false;
         } else {
-            self::$sDefaultConnectionName = $sConnectionName;
+            self::$defaultConnectionName = $connectionName;
             return true;
         }
     }

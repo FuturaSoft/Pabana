@@ -9,10 +9,12 @@
  *
  * @copyright     Copyright (c) FuturaSoft (https://futurasoft.fr)
  * @link          https://pabana.futurasoft.fr Pabana Project
- * @since         1.0.0
+ * @since         1.0
  * @license       https://opensource.org/licenses/BSD-3-Clause BSD-3-Clause License
  */
 namespace Pabana\Html\Head;
+
+use Pabana\Type\ArrayType;
 
 /**
  * Title class
@@ -22,17 +24,25 @@ namespace Pabana\Html\Head;
 class Title
 {
     /**
-     * @var     array Title of page.
-     * @since   1.0.0
+     * @var     Pabana\Type\ArrayType List of defined title
+     * @since   1.0
      */
-    private static $_arsTitle = array();
+    private static $titleList;
 
     /**
-     * toString
+     * Constructor
      *
+     * @since   1.1
+     */
+    public function __construct()
+    {
+        self::$titleList = new ArrayType();
+    }
+
+    /**
      * Activate the render method
      *
-     * @since   1.0.0
+     * @since   1.0
      * @return  string Html code for Title
      */
     public function __toString()
@@ -41,78 +51,67 @@ class Title
     }
 
     /**
-     * Append
-     *
      * Append string to title value
      *
-     * @since   1.0.0
-     * @param   string $sTitle Title of page
+     * @since   1.0
+     * @param   string $title Title of page
      * @return  $this
      */
-    public function append($sTitle)
+    public function append($title)
     {
-        self::$_arsTitle[] = $sTitle;
+        self::$titleList->append($title);
         return $this;
     }
 
     /**
-     * Clean
-     *
      * Clean all element define in title
      *
-     * @since   1.0.0
-     * @return  $this
+     * @since   1.0
+     * @return  void
      */
     public function clean()
     {
-        self::$_arsTitle = array();
-        return $this;
+        self::$titleList->clean();
     }
 
     /**
-     * Prepend
-     *
      * Prepend string to title value
      *
-     * @since   1.0.0
-     * @param   string $sTitle Title of page
+     * @since   1.0
+     * @param   string $title Title of page
      * @return  $this
      */
-    public function prepend($sTitle)
+    public function prepend($title)
     {
-        array_unshift(self::$_arsTitle, $sTitle);
+        self::$titleList->prepend($title);
         return $this;
     }
 
     /**
-     * Render
-     *
      * Return HTML code for Title
      *
-     * @since   1.0.0
+     * @since   1.0
      * @return  string|boolean Html code for Title or false is empty
      */
     public function render()
     {
-        if (!empty(self::$_arsTitle)) {
-            return '<title>' . implode('', self::$_arsTitle) . '</title>' . PHP_EOL;
+        if (!empty(self::$titleList->toArray())) {
+            return '<title>' . implode('', self::$titleList->toArray()) . '</title>' . PHP_EOL;
         } else {
             return false;
         }
     }
 
     /**
-     * Set
-     *
      * Set title tag value
      *
-     * @since   1.0.0
-     * @param   string $sTitle Title of page
+     * @since   1.0
+     * @param   string $title Title of page
      * @return  $this
      */
-    public function set($sTitle)
+    public function set($title)
     {
         $this->clean();
-        return $this->append($sTitle);
+        return $this->append($title);
     }
 }

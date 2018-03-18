@@ -9,7 +9,7 @@
  *
  * @copyright     Copyright (c) FuturaSoft (https://futurasoft.fr)
  * @link          https://pabana.futurasoft.fr Pabana Project
- * @since         1.0.0
+ * @since         1.0
  * @license       https://opensource.org/licenses/BSD-3-Clause BSD-3-Clause License
  */
 namespace Pabana\Core;
@@ -24,16 +24,28 @@ use \Pabana\Network\Http\Request;
 class Bootstrap
 {
     /**
-     * @var \Pabana\Network\Http\Request Request helper to access to Request class
+     * @var     \Pabana\Network\Http\Request Request helper to access to Request class
+     * @since   1.1
+     */
+    public $request;
+
+    /**
+     * @var     Redirection to $request var
+     * @since   1.0
+     * @deprecated deprecated since version 1.1
      */
     public $Request;
 
     /**
      * Constructor
+     *
+     * @since   1.0
      */
     public function __construct()
     {
         // Create an object Request for usage in Bootstrap page
-        $this->Request = new Request();
+        $this->request = new Request();
+        // To maintain compatibility with version 1.0
+        $this->Request = $this->request;
     }
 }

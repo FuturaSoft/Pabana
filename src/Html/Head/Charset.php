@@ -9,7 +9,7 @@
  *
  * @copyright     Copyright (c) FuturaSoft (https://futurasoft.fr)
  * @link          https://pabana.futurasoft.fr Pabana Project
- * @since         1.0.0
+ * @since         1.0
  * @license       https://opensource.org/licenses/BSD-3-Clause BSD-3-Clause License
  */
 namespace Pabana\Html\Head;
@@ -25,16 +25,16 @@ class Charset
 {
     /**
      * @var     string Charset (by default UTF-8).
-     * @since   1.0.0
+     * @since   1.0
      */
-    private static $_sCharset = 'UTF-8';
+    private static $charset = 'UTF-8';
 
     /**
      * toString
      *
      * Activate the render method
      *
-     * @since   1.0.0
+     * @since   1.0
      * @return  string Html code for Charset
      */
     public function __toString()
@@ -47,12 +47,12 @@ class Charset
      *
      * Reinitialize Charset value to UTF-8
      *
-     * @since   1.0.0
+     * @since   1.0
      * @return  void
      */
     public function clean()
     {
-        self::$_sCharset = 'UTF-8';
+        self::$charset = 'UTF-8';
     }
 
     /**
@@ -60,13 +60,13 @@ class Charset
      *
      * Return HTML code for Charset
      *
-     * @since   1.0.0
+     * @since   1.0
      * @return  string Html code for Charset
      */
     public function render()
     {
-        $oDoctype = new Doctype();
-        $arsCharset = array(
+        $doctype = new Doctype();
+        $charsetList = array(
             'UTF-8' => 'utf-8',
             'UTF-16' => 'utf-16',
             'ISO-8859-1' => 'iso-8859-1',
@@ -82,18 +82,18 @@ class Charset
             'EUC-JP' => 'euc-jp',
             'MACROMAN' => 'x-mac-roman'
         );
-        $arsKeyCharset = array_keys($arsCharset);
-        if (!in_array(self::$_sCharset, $arsKeyCharset)) {
-            $sErrorMessage = 'Charset ' . self::$_sCharset . ' isn\'t defined';
+        $charsetKeyList = array_keys($charsetList);
+        if (!in_array(self::$charset, $charsetKeyList)) {
+            $sErrorMessage = 'Charset ' . self::$charset . ' isn\'t defined';
             throw new \Exception($sErrorMessage);
         } else {
-            if ($oDoctype->get() == 'HTML5') {
-                return '<meta charset="' . $arsCharset[self::$_sCharset] . '">' . PHP_EOL;
+            if ($doctype->get() == 'HTML5') {
+                return '<meta charset="' . $charsetList[self::$charset] . '">' . PHP_EOL;
             } else {
-                if (substr($oDoctype->get(), 0, 1) == 'X') {
-                    return '<meta http-equiv="Content-Type" content="text/html; charset=' . $arsCharset[self::$_sCharset] . '" />' . PHP_EOL;
+                if (substr($doctype->get(), 0, 1) == 'X') {
+                    return '<meta http-equiv="Content-Type" content="text/html; charset=' . $charsetList[self::$charset] . '" />' . PHP_EOL;
                 } else {
-                    return '<meta http-equiv="Content-Type" content="text/html; charset=' . $arsCharset[self::$_sCharset] . '">' . PHP_EOL;
+                    return '<meta http-equiv="Content-Type" content="text/html; charset=' . $charsetList[self::$charset] . '">' . PHP_EOL;
                 }
             }
         }
@@ -104,13 +104,13 @@ class Charset
      *
      * Set charset
      *
-     * @since   1.0.0
-     * @param   string $sCharset Charset
+     * @since   1.0
+     * @param   string $charset Charset
      * @return  $this
      */
-    public function set($sCharset)
+    public function set($charset)
     {
-        self::$_sCharset = $sCharset;
+        self::$charset = $charset;
         return $this;
     }
 }

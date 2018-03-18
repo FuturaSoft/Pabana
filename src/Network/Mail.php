@@ -9,7 +9,7 @@
  *
  * @copyright     Copyright (c) FuturaSoft (https://futurasoft.fr)
  * @link          https://pabana.futurasoft.fr Pabana Project
- * @since         1.0.0
+ * @since         1.0
  * @license       https://opensource.org/licenses/BSD-3-Clause BSD-3-Clause License
  */
 namespace Pabana\Network;
@@ -26,9 +26,9 @@ class Mail
 {
     /**
      * @var    Array List of recipent of mail
-     * @since   1.0.0
+     * @since   1.0
      */
-    private $armRecipient = array(
+    private $recipientList = array(
         'to' => array(),
         'cc' => array(),
         'bcc' => array()
@@ -36,282 +36,288 @@ class Mail
 
     /**
      * @var    Array List of attachement
-     * @since   1.0.0
+     * @since   1.0
      */
-    private $armAttachment = array();
+    private $attachmentList = array();
 
     /**
      * @var    Array Sender of mail
-     * @since   1.0.0
+     * @since   1.0
      */
-    private $armSender = array();
+    private $sender = array();
 
     /**
      * @var    Array Reply adresse of mail
-     * @since   1.0.0
+     * @since   1.0
      */
-    private $armReply = array();
+    private $reply = array();
 
     /**
      * @var     string Subject of mail (by default "No title")
-     * @since   1.0.0
+     * @since   1.0
      */
-    private $sSubject = 'No title';
+    private $subject = 'No title';
 
     /**
      * @var     string HTML content of mail
-     * @since   1.0.0
+     * @since   1.0
      */
-    private $sHtmlContent = '';
+    private $htmlContent = '';
 
     /**
      * @var     string Texte content of mail
-     * @since   1.0.0
+     * @since   1.0
      */
-    private $sTextContent = '';
+    private $textContent = '';
 
     /**
      * @var     string Mailer (by default "Pabana")
-     * @since   1.0.0
+     * @since   1.0
      */
-    private $sMailer = 'Pabana';
+    private $mailer = 'Pabana';
 
     /**
      * @var     integer Priority of mail (1 to 3)
-     * @since   1.0.0
+     * @since   1.0
      */
-    private $nPriority = 1;
+    private $priority = 1;
 
     /**
      * @var     string Boundary of mail
-     * @since   1.0.0
+     * @since   1.0
      */
-    private $sBoundary;
+    private $boundary;
+
+    /**
+     * @var     string Boundary Alt of mail
+     * @since   1.0
+     */
+    private $boundaryAlt;
 
     /**
      * @var     string Charset of mail
-     * @since   1.0.0
+     * @since   1.0
      */
-    private $sCharset;
+    private $charset;
     
     /**
      * Constructor
      *
      * Set Boundary and charset (by default application encoding)
      *
-     * @since   1.0.0
+     * @since   1.0
      * @param   string $sCnxName Connection name.
      */
     public function __construct()
     {
         $this->setBoundary();
-        $this->sCharset = strtolower(Configuration::read('application.encoding'));
+        $this->charset = strtolower(Configuration::read('application.encoding'));
     }
     
     /**
      * Add an attachment to mail
      *
-     * @since   1.0.0
-     * @param   string $sAttachmentPath Attachement path.
+     * @since   1.0
+     * @param   string $attachmentPath Attachement path.
      * @return  void
      */
-    public function addAttachment($sAttachmentPath)
+    public function addAttachment($attachmentPath)
     {
-        $this->armAttachment[] = array($sAttachmentPath);
+        $this->attachmentList[] = array($attachmentPath);
     }
 
     /**
      * Add encode tag
      *
-     * @since   1.0.0
-     * @param   string $sValue Value to encapsulate in encode tag.
+     * @since   1.0
+     * @param   string $value Value to encapsulate in encode tag.
      * @return  void
      */
-    private function addEncodeTag($sValue)
+    private function addEncodeTag($value)
     {
-        return '=?' . $this->sCharset . '?Q?' . $sValue . '?=';
+        return '=?' . $this->charset . '?Q?' . $value . '?=';
     }
     
     /**
      * Add a recipient of mail
      *
-     * @since   1.0.0
-     * @param   string $sRecipientType Type of recipient (to, cc, bcc).
-     * @param   string $sRecipientAddress Email address of recipient.
-     * @param   string $sRecipientName Name of recipient (optional).
+     * @since   1.0
+     * @param   string $recipientType Type of recipient (to, cc, bcc).
+     * @param   string $recipientAddress Email address of recipient.
+     * @param   string $recipientName Name of recipient (optional).
      * @return  void
      */
-    private function addRecipient($sRecipientType, $sRecipientAddress, $sRecipientName = '')
+    private function addRecipient($recipientType, $recipientAddress, $recipientName = '')
     {
-        if (filter_var($sRecipientAddress, FILTER_VALIDATE_EMAIL)) {
-            $this->armRecipient[$sRecipientType][] = array($sRecipientAddress, $sRecipientName);
+        if (filter_var($recipientAddress, FILTER_VALIDATE_EMAIL)) {
+            $this->recipientList[$recipientType][] = array($recipientAddress, $recipientName);
         }
     }
     
     /**
      * Add a recipient "to" of mail
      *
-     * @since   1.0.0
-     * @param   string $sRecipientAddress Email address of recipient.
-     * @param   string $sRecipientName Name of recipient (optional).
+     * @since   1.0
+     * @param   string $recipientAddress Email address of recipient.
+     * @param   string $recipientName Name of recipient (optional).
      * @return  void
      */
-    public function addRecipientTo($sRecipientAddress, $sRecipientName = '')
+    public function addRecipientTo($recipientAddress, $recipientName = '')
     {
-        $this->addRecipient('to', $sRecipientAddress, $sRecipientName);
+        $this->addRecipient('to', $recipientAddress, $recipientName);
     }
     
     /**
      * Add a recipient "cc" of mail
      *
-     * @since   1.0.0
-     * @param   string $sRecipientAddress Email address of recipient.
-     * @param   string $sRecipientName Name of recipient (optional).
+     * @since   1.0
+     * @param   string $recipientAddress Email address of recipient.
+     * @param   string $recipientName Name of recipient (optional).
      * @return  void
      */
-    public function addRecipientCc($sRecipientAddress, $sRecipientName = '')
+    public function addRecipientCc($recipientAddress, $recipientName = '')
     {
-        $this->addRecipient('cc', $sRecipientAddress, $sRecipientName);
+        $this->addRecipient('cc', $recipientAddress, $recipientName);
     }
     
     /**
      * Add a recipient "bcc" of mail
      *
-     * @since   1.0.0
-     * @param   string $sRecipientAddress Email address of recipient.
-     * @param   string $sRecipientName Name of recipient (optional).
+     * @since   1.0
+     * @param   string $recipientAddress Email address of recipient.
+     * @param   string $recipientName Name of recipient (optional).
      * @return  void
      */
-    public function addRecipientBcc($sRecipientAddress, $sRecipientName = '')
+    public function addRecipientBcc($recipientAddress, $recipientName = '')
     {
-        $this->addRecipient('bcc', $sRecipientAddress, $sRecipientName);
+        $this->addRecipient('bcc', $recipientAddress, $recipientName);
     }
     
     /**
      * Set charset use in mail
      *
-     * @since   1.0.0
-     * @param   string $sCharset Charset use.
+     * @since   1.0
+     * @param   string $charset Charset use.
      * @return  void
      */
-    public function setCharset($sCharset)
+    public function setCharset($charset)
     {
-        $this->sCharset = $sCharset;
+        $this->charset = $charset;
     }
     
     /**
      * Set sender of mail
      *
-     * @since   1.0.0
-     * @param   string $sSenderAddress Email address of sender.
-     * @param   string $sSenderName Name of sender (optional).
+     * @since   1.0
+     * @param   string $senderAddress Email address of sender.
+     * @param   string $senderName Name of sender (optional).
      * @return  void
      */
-    public function setSender($sSenderAddress, $sSenderName = '')
+    public function setSender($senderAddress, $senderName = '')
     {
-        $this->armSender = array($sSenderAddress, $sSenderName);
+        $this->sender = array($senderAddress, $senderName);
     }
     
     /**
      * Set reply of mail
      *
-     * @since   1.0.0
-     * @param   string $sReplyAddress Email address of reply.
-     * @param   string $sReplyName Name of reply (optional).
+     * @since   1.0
+     * @param   string $replyAddress Email address of reply.
+     * @param   string $replyName Name of reply (optional).
      * @return  void
      */
-    public function setReply($sReplyAddress, $sReplyName = '')
+    public function setReply($replyAddress, $replyName = '')
     {
-        $this->armReply = array($sReplyAddress, $sReplyName);
+        $this->reply = array($replyAddress, $replyName);
     }
     
     /**
      * Set subject of mail
      *
-     * @since   1.0.0
-     * @param   string $sSubject Subject of mail.
+     * @since   1.0
+     * @param   string $subject Subject of mail.
      * @return  void
      */
-    public function setSubject($sSubject)
+    public function setSubject($subject)
     {
-        $this->sSubject = $sSubject;
+        $this->subject = $subject;
     }
     
     /**
      * Set HTML content of mail
      *
-     * @since   1.0.0
-     * @param   string $sHtmlContent HTML content of mail.
+     * @since   1.0
+     * @param   string $htmlContent HTML content of mail.
      * @return  void
      */
-    public function setHtmlContent($sHtmlContent)
+    public function setHtmlContent($htmlContent)
     {
-        $this->sHtmlContent = $sHtmlContent;
+        $this->htmlContent = $htmlContent;
     }
     
     /**
      * Set text content of mail
      *
-     * @since   1.0.0
-     * @param   string $sTextContent Text content of mail.
+     * @since   1.0
+     * @param   string $textContent Text content of mail.
      * @return  void
      */
-    public function setTextContent($sTextContent)
+    public function setTextContent($textContent)
     {
-        $this->sTextContent = $sTextContent;
+        $this->textContent = $textContent;
     }
     
     /**
      * Set mailer of mail
      *
-     * @since   1.0.0
-     * @param   string $sMailer Mailer of mail.
+     * @since   1.0
+     * @param   string $mailer Mailer of mail.
      * @return  void
      */
-    public function setMailer($sMailer)
+    public function setMailer($mailer)
     {
-        $this->sMailer = $sMailer;
+        $this->mailer = $mailer;
     }
     
     /**
      * Set priority of mail
      *
-     * @since   1.0.0
-     * @param   integer $nPriority Priority of mail.
+     * @since   1.0
+     * @param   integer $priority Priority of mail.
      * @return  void
      */
-    public function setPriority($nPriority)
+    public function setPriority($priority)
     {
-        $this->nPriority = $nPriority;
+        $this->priority = $priority;
     }
     
     /**
      * Generate boundary of mail
      *
-     * @since   1.0.0
+     * @since   1.0
      * @return  void
      */
     private function setBoundary()
     {
-        $this->sBoundary = uniqid('Pabana') . '-' . md5(rand());
-        $this->sBoundaryAlt = uniqid('Pabana-alt') . '-' . md5(rand());
+        $this->boundary = uniqid('Pabana') . '-' . md5(rand());
+        $this->boundaryAlt = uniqid('Pabana-alt') . '-' . md5(rand());
     }
     
     /**
      * Get sender of mail
      *
-     * @since   1.0.0
+     * @since   1.0
      * @return  string|bool Return sender of mail or false if not defined
      */
     public function getSender()
     {
-        if (!empty($this->armSender)) {
-            $sSender = '';
-            if (!empty($this->armSender[1])) {
-                $sSender .= $this->addEncodeTag('"' . $this->armSender[1] . '"') . ' ';
+        if (!empty($this->sender)) {
+            $sender = '';
+            if (!empty($this->sender[1])) {
+                $sender .= $this->addEncodeTag('"' . $this->sender[1] . '"') . ' ';
             }
-            $sSender .= '<' . $this->armSender[0] . '>';
-            return $sSender;
+            $sender .= '<' . $this->sender[0] . '>';
+            return $sender;
         } else {
             return false;
         }
@@ -320,18 +326,18 @@ class Mail
     /**
      * Get reply of mail
      *
-     * @since   1.0.0
+     * @since   1.0
      * @return  string|bool Return reply of mail or false if not defined
      */
     public function getReply()
     {
-        if (!empty($this->armReply)) {
-            $sReply = '';
-            if (!empty($this->armReply[1])) {
-                $sReply .= $this->addEncodeTag('"' . $this->armReply[1] . '"') . ' ';
+        if (!empty($this->reply)) {
+            $reply = '';
+            if (!empty($this->reply[1])) {
+                $reply .= $this->addEncodeTag('"' . $this->reply[1] . '"') . ' ';
             }
-            $sReply .= '<' . $this->armReply[0] . '>';
-            return $sReply;
+            $reply .= '<' . $this->reply[0] . '>';
+            return $reply;
         } else {
             return false;
         }
@@ -340,7 +346,7 @@ class Mail
     /**
      * Get recipident "to" of mail
      *
-     * @since   1.0.0
+     * @since   1.0
      * @return  string Return recipident "to" of mail
      */
     public function getRecipientTo()
@@ -351,7 +357,7 @@ class Mail
     /**
      * Get recipident "cc" of mail
      *
-     * @since   1.0.0
+     * @since   1.0
      * @return  string Return recipident "cc" of mail
      */
     public function getRecipientCc()
@@ -362,7 +368,7 @@ class Mail
     /**
      * Get recipident "bcc" of mail
      *
-     * @since   1.0.0
+     * @since   1.0
      * @return  string Return recipident "bcc" of mail
      */
     public function getRecipientBcc()
@@ -373,110 +379,110 @@ class Mail
     /**
      * Get recipident of mail
      *
-     * @since   1.0.0
-     * @param   string $sRecipientArray Type of recipient (to, cc, bcc)
+     * @since   1.0
+     * @param   string $recipientType Type of recipient (to, cc, bcc)
      * @return  string Return recipident of mail
      */
-    private function getRecipient($sRecipientArray)
+    private function getRecipient($recipientType)
     {
-        $armRecipientList = array();
-        if (!empty($this->armRecipient[$sRecipientArray])) {
-            $armRecipientList = '';
-            foreach ($this->armRecipient[$sRecipientArray] as $armRecipient) {
-                $sRecipient = '';
-                if (!empty($armRecipient[1])) {
-                    $sRecipient .= $this->addEncodeTag('"' . $this->armRecipient[1] . '"') . ' ';
+        $returnList = array();
+        if (!empty($this->recipientList[$recipientType])) {
+            foreach ($this->recipientList[$recipientType] as $recipientItem) {
+                $recipient = '';
+                if (!empty($recipientItem[1])) {
+                    $recipient .= $this->addEncodeTag('"' . $this->recipientItem[1] . '"') . ' ';
                 }
-                $sRecipient .= '<' . $armRecipient[0] . '>';
-                $armRecipientList[] = $sRecipient;
+                $recipient .= '<' . $recipientItem[0] . '>';
+                $returnList[] = $recipient;
             }
         }
-        return implode(', ', $armRecipientList);
+        return implode(', ', $returnList);
     }
     
     /**
      * Generate header content
      *
-     * @since   1.0.0
+     * @since   1.0
      * @return  string Return header content of mail
      */
     public function getHeaderContent()
     {
-        $sHeaderContent = '';
-        $sSender = $this->getSender();
-        if (!empty($sSender)) {
-            $sHeaderContent .= 'From: ' . $sSender . PHP_EOL;
+        $headerContent = '';
+        $sender = $this->getSender();
+        if (!empty($sender)) {
+            $headerContent .= 'From: ' . $sender . PHP_EOL;
         }
-        $sReply = $this->getReply();
-        if (!empty($sReply)) {
-            $sHeaderContent .= 'Reply-to: ' . $sReply . PHP_EOL;
+        $reply = $this->getReply();
+        if (!empty($reply)) {
+            $headerContent .= 'Reply-to: ' . $reply . PHP_EOL;
         }
-        $sRecipientCc = $this->getRecipientCc();
-        if (!empty($sRecipientCc)) {
-            $sHeaderContent .= 'Cc: ' . $sRecipientCc . PHP_EOL;
+        $recipientCc = $this->getRecipientCc();
+        if (!empty($recipientCc)) {
+            $headerContent .= 'Cc: ' . $recipientCc . PHP_EOL;
         }
-        $sRecipientBcc = $this->getRecipientBcc();
-        if (!empty($sRecipientBcc)) {
-            $sHeaderContent .= 'Bcc: ' . $sRecipientBcc . PHP_EOL;
+        $recipientBcc = $this->getRecipientBcc();
+        if (!empty($recipientBcc)) {
+            $headerContent .= 'Bcc: ' . $recipientBcc . PHP_EOL;
         }
-        if (!empty($this->sMailer)) {
-            $sHeaderContent .= 'X-Mailer: ' . $this->sMailer . PHP_EOL;
+        if (!empty($this->mailer)) {
+            $headerContent .= 'X-Mailer: ' . $this->mailer . PHP_EOL;
         }
-        $sHeaderContent .= 'MIME-Version: 1.0' . PHP_EOL;
-        if (!empty($this->armAttachment)) {
-            $sContentType = 'multipart/mixed';
+        $headerContent .= 'MIME-Version: 1.0' . PHP_EOL;
+        if (!empty($this->attachmentList)) {
+            $contentType = 'multipart/mixed';
         } else {
-            $sContentType = 'multipart/alternative';
+            $contentType = 'multipart/alternative';
         }
-        $sHeaderContent .= 'Content-Type: ' . $sContentType . '; boundary="' . $this->sBoundary . '"' . PHP_EOL . PHP_EOL;
-        return $sHeaderContent;
+        $headerContent .= 'Content-Type: ' . $contentType . '; boundary="' . $this->boundary . '"';
+        $headerContent .= PHP_EOL . PHP_EOL;
+        return $headerContent;
     }
     
     /**
      * Generate email content
      *
-     * @since   1.0.0
+     * @since   1.0
      * @return  string Return email content
      */
     public function getEmailContent()
     {
-        $sMailContent = '';
+        $mailContent = '';
         // Text content
-        if (!empty($this->sTextContent)) {
-            $sMailContent .= '--' . $this->sBoundary . PHP_EOL;
-            $sMailContent .= 'Content-Type: text/plain; charset="' . $this->sCharset . '"' . PHP_EOL;
-            $sMailContent .= 'Content-Transfer-Encoding: 8bit' . PHP_EOL . PHP_EOL;
-            $sMailContent .= $this->sTextContent . PHP_EOL . PHP_EOL;
+        if (!empty($this->textContent)) {
+            $mailContent .= '--' . $this->boundary . PHP_EOL;
+            $mailContent .= 'Content-Type: text/plain; charset="' . $this->charset . '"' . PHP_EOL;
+            $mailContent .= 'Content-Transfer-Encoding: 8bit' . PHP_EOL . PHP_EOL;
+            $mailContent .= $this->textContent . PHP_EOL . PHP_EOL;
         }
         // Html content
-        if (!empty($this->sHtmlContent)) {
-            $sMailContent .= '--' . $this->sBoundary . PHP_EOL;
-            $sMailContent .= 'Content-Type: text/html; charset="' . $this->sCharset . '"' . PHP_EOL;
-            $sMailContent .= 'Content-Transfer-Encoding: 8bit' . PHP_EOL . PHP_EOL;
-            $sMailContent .= $this->sHtmlContent . PHP_EOL . PHP_EOL;
+        if (!empty($this->htmlContent)) {
+            $mailContent .= '--' . $this->boundary . PHP_EOL;
+            $mailContent .= 'Content-Type: text/html; charset="' . $this->charset . '"' . PHP_EOL;
+            $mailContent .= 'Content-Transfer-Encoding: 8bit' . PHP_EOL . PHP_EOL;
+            $mailContent .= $this->htmlContent . PHP_EOL . PHP_EOL;
         }
-        $sMailContent .= '--' . $this->sBoundary . '--';
-        return $sMailContent;
+        $mailContent .= '--' . $this->boundary . '--';
+        return $mailContent;
     }
     
     /**
      * Send email
      *
-     * @since   1.0.0
+     * @since   1.0
      * @return  bool Return true if email is send with success else return false
      */
     public function send()
     {
-        $sAppEncoding = Configuration::read('application.encoding');
-        $oEncoding = new Encoding();
-        $sSubject = $this->addEncodeTag($this->sSubject);
-        $sHeaderContent = $this->getHeaderContent();
-        $sMailContent = $this->getEmailContent();
-        if ($sAppEncoding != $this->sCharset) {
-            $sSubject = $oEncoding->convert($sSubject, $sAppEncoding, $this->sCharset);
-            $sHeaderContent = $oEncoding->convert($sHeaderContent, $sAppEncoding, $this->sCharset);
-            $sMailContent = $oEncoding->convert($sMailContent, $sAppEncoding, $this->sCharset);
+        $appEncoding = Configuration::read('application.encoding');
+        $encoding = new Encoding();
+        $subject = $this->addEncodeTag($this->subject);
+        $headerContent = $this->getHeaderContent();
+        $mailContent = $this->getEmailContent();
+        if ($appEncoding != $this->charset) {
+            $subject = $encoding->convert($subject, $appEncoding, $this->charset);
+            $headerContent = $encoding->convert($headerContent, $appEncoding, $this->charset);
+            $mailContent = $encoding->convert($mailContent, $appEncoding, $this->charset);
         }
-        return mail($this->getRecipientTo(), $this->sSubject, $sMailContent, $sHeaderContent);
+        return mail($this->getRecipientTo(), $this->subject, $mailContent, $headerContent);
     }
 }

@@ -9,7 +9,7 @@
  *
  * @copyright     Copyright (c) FuturaSoft (https://futurasoft.fr)
  * @link          https://pabana.futurasoft.fr Pabana Project
- * @since         1.0.0
+ * @since         1.0
  * @license       https://opensource.org/licenses/BSD-3-Clause BSD-3-Clause License
  */
 namespace Pabana\Routing;
@@ -28,26 +28,26 @@ class Router
 {
     /**
      * @var     string Controller defined by Router
-     * @since   1.0.0
+     * @since   1.0
      */
     private static $sController;
 
     /**
      * @var     string Action defined by Router
-     * @since   1.0.0
+     * @since   1.0
      */
     private static $sAction;
 
     /**
      * @var     array Parameters defined by Router
-     * @since   1.0.0
+     * @since   1.0
      */
     private static $arsParameter;
 
     /**
      * Auto resolve a Route from URL by separator
      *
-     * @since   1.0.0
+     * @since   1.0
      * @param   string $arsUrlValueList Liste of url part.
      * @return  void
      */
@@ -83,7 +83,7 @@ class Router
     /**
      * Check if Route exist in RouterCollection who can match to current url
      *
-     * @since   1.0.0
+     * @since   1.0
      * @param   array $arcUrlSeparator List of separator of URL.
      * @param   array $arsUrlValue List of part of URL.
      * @return  bool True if Route match, else false
@@ -147,7 +147,7 @@ class Router
     /**
      * Check if controller and action exist, else change to fallback controller and action
      *
-     * @since   1.0.0
+     * @since   1.0
      * @return  void
      */
     private static function checkController()
@@ -176,7 +176,7 @@ class Router
     /**
      * Get action defined by Router.
      *
-     * @since   1.0.0
+     * @since   1.0
      * @return  string Action defined by Router.
      */
     public static function getAction()
@@ -187,7 +187,7 @@ class Router
     /**
      * Get controller defined by Router.
      *
-     * @since   1.0.0
+     * @since   1.0
      * @return  string Controller defined by Router.
      */
     public static function getController()
@@ -198,7 +198,7 @@ class Router
     /**
      * Get parameter defined by Router.
      *
-     * @since   1.0.0
+     * @since   1.0
      * @return  array Parameter defined by Router.
      */
     public static function getParameter()
@@ -209,7 +209,7 @@ class Router
     /**
      * List of separator defined in URL.
      *
-     * @since   1.0.0
+     * @since   1.0
      * @param   string $sUrl Current URL.
      * @return  array List of separator defined in URL.
      */
@@ -230,7 +230,7 @@ class Router
     /**
      * List of value defined in URL.
      *
-     * @since   1.0.0
+     * @since   1.0
      * @param   string $sUrl Current URL.
      * @return  array List of value defined in URL.
      */
@@ -246,7 +246,7 @@ class Router
     /**
      * Remove last separtor in URL.
      *
-     * @since   1.0.0
+     * @since   1.0
      * @param   string $sUrl Current URL.
      * @return  string $Url without last separator.
      */
@@ -262,7 +262,7 @@ class Router
     /**
      * Call differnant action in Router to resolve road from URL.
      *
-     * @since   1.0.0
+     * @since   1.0
      * @return  void
      */
     public static function resolve()
@@ -293,7 +293,7 @@ class Router
     /**
      * Set action defined by Router from URL.
      *
-     * @since   1.0.0
+     * @since   1.0
      * @param   string $sAction Action.
      * @return  void
      */
@@ -305,7 +305,7 @@ class Router
     /**
      * Set controller defined by Router from URL.
      *
-     * @since   1.0.0
+     * @since   1.0
      * @param   string $sController Controller.
      * @return  void
      */
@@ -317,7 +317,7 @@ class Router
     /**
      * Set parameter defined by Router from URL.
      *
-     * @since   1.0.0
+     * @since   1.0
      * @param   string $arsParameter Parameter.
      * @return  void
      */
@@ -329,7 +329,7 @@ class Router
     /**
      * Transfert GET parameter to $_GET global array.
      *
-     * @since   1.0.0
+     * @since   1.0
      * @return  void
      */
     private static function setParameterInGlobal()

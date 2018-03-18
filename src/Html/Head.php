@@ -9,7 +9,7 @@
  *
  * @copyright     Copyright (c) FuturaSoft (https://futurasoft.fr)
  * @link          https://pabana.futurasoft.fr Pabana Project
- * @since         1.0.0
+ * @since         1.0
  * @license       https://opensource.org/licenses/BSD-3-Clause BSD-3-Clause License
  */
 namespace Pabana\Html;
@@ -30,37 +30,79 @@ class Head
 {
     /**
      * @var     \Pabana\Html\Head\Charset Charset object
-     * @since   1.0.0
+     * @since   1.1
+     */
+    public $charset;
+
+    /**
+     * @var     \Pabana\Html\Head\Css Css object
+     * @since   1.1
+     */
+    public $css;
+
+    /**
+     * @var     \Pabana\Html\Head\Icon Icon object
+     * @since   1.1
+     */
+    public $icon;
+
+    /**
+     * @var     \Pabana\Html\Head\Link Link object
+     * @since   1.1
+     */
+    public $link;
+
+    /**
+     * @var     \Pabana\Html\Head\Meta Meta object
+     * @since   1.1
+     */
+    public $meta;
+
+    /**
+     * @var     \Pabana\Html\Head\Title Title object
+     * @since   1.1
+     */
+    public $title;
+
+    /**
+     * @var     \Pabana\Html\Head\Charset Charset object
+     * @since   1.0
+     * @deprecated deprecated since version 1.1
      */
     public $Charset;
 
     /**
      * @var     \Pabana\Html\Head\Css Css object
-     * @since   1.0.0
+     * @since   1.0
+     * @deprecated deprecated since version 1.1
      */
     public $Css;
 
     /**
      * @var     \Pabana\Html\Head\Icon Icon object
-     * @since   1.0.0
+     * @since   1.0
+     * @deprecated deprecated since version 1.1
      */
     public $Icon;
 
     /**
      * @var     \Pabana\Html\Head\Link Link object
-     * @since   1.0.0
+     * @since   1.0
+     * @deprecated deprecated since version 1.1
      */
     public $Link;
 
     /**
      * @var     \Pabana\Html\Head\Meta Meta object
-     * @since   1.0.0
+     * @since   1.0
+     * @deprecated deprecated since version 1.1
      */
     public $Meta;
 
     /**
      * @var     \Pabana\Html\Head\Title Title object
-     * @since   1.0.0
+     * @since   1.0
+     * @deprecated deprecated since version 1.1
      */
     public $Title;
 
@@ -69,16 +111,23 @@ class Head
      *
      * Initialize Charset, Css, Icon, Link, Meta and Title Object
      *
-     * @since   1.0.0
+     * @since   1.0
      */
     public function __construct()
     {
-        $this->Charset = new Charset();
-        $this->Css = new Css();
-        $this->Icon = new Icon();
-        $this->Link = new Link();
-        $this->Meta = new Meta();
-        $this->Title = new Title();
+        $this->charset = new Charset();
+        $this->css = new Css();
+        $this->icon = new Icon();
+        $this->link = new Link();
+        $this->meta = new Meta();
+        $this->title = new Title();
+        // To maintain compatibility with version 1.0
+        $this->Charset = $this->charset;
+        $this->Css = $this->css;
+        $this->Icon = $this->icon;
+        $this->Link = $this->link;
+        $this->Meta = $this->meta;
+        $this->Title = $this->title;
     }
 
     /**
@@ -86,7 +135,7 @@ class Head
      *
      * Activate the render method
      *
-     * @since   1.0.0
+     * @since   1.0
      * @return  string Html code to initialize all head's object
      */
     public function __toString()
@@ -99,17 +148,17 @@ class Head
      *
      * Clean previous configuration in Charset, Css, Icon, Link, Meta and Title Object
      *
-     * @since   1.0.0
+     * @since   1.0
      * @return void
      */
     public function clean()
     {
-        $this->Charset->clean();
-        $this->Css->clean();
-        $this->Icon->clean();
-        $this->Link->clean();
-        $this->Meta->clean();
-        $this->Title->clean();
+        $this->charset->clean();
+        $this->css->clean();
+        $this->icon->clean();
+        $this->link->clean();
+        $this->meta->clean();
+        $this->title->clean();
     }
 
     /**
@@ -117,18 +166,18 @@ class Head
      *
      * Return HTML code for initialize all head's object
      *
-     * @since   1.0.0
+     * @since   1.0
      * @return  string Html code to initialize all head's object
      */
     public function render()
     {
-        $sHtml = '';
-        $sHtml .= $this->Charset->render();
-        $sHtml .= $this->Meta->render();
-        $sHtml .= $this->Title->render();
-        $sHtml .= $this->Link->render();
-        $sHtml .= $this->Css->render();
-        $sHtml .= $this->Icon->render();
-        return $sHtml;
+        $htmlContent = '';
+        $htmlContent .= $this->charset->render();
+        $htmlContent .= $this->meta->render();
+        $htmlContent .= $this->title->render();
+        $htmlContent .= $this->link->render();
+        $htmlContent .= $this->css->render();
+        $htmlContent .= $this->icon->render();
+        return $htmlContent;
     }
 }
