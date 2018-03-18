@@ -150,7 +150,7 @@ class Mail
     private function addRecipient($recipientType, $recipientAddress, $recipientName = '')
     {
         if (filter_var($recipientAddress, FILTER_VALIDATE_EMAIL)) {
-            $this->recipientList[$recipientType][] = array($recipientAddress, $sRecipientName);
+            $this->recipientList[$recipientType][] = array($recipientAddress, $recipientName);
         }
     }
     

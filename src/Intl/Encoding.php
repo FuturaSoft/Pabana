@@ -51,9 +51,9 @@ class Encoding
     public function convert($value, $inCharset = 'auto', $outCharset = 'auto', $translit = true, $ignore = true)
     {
         $return = $value;
-        if (is_string($mValue)) {
+        if (is_string($value)) {
             if ($inCharset == 'auto') {
-                $inCharset = $this->detect($mValue);
+                $inCharset = $this->detect($value);
             }
             if ($outCharset == 'auto') {
                 $outCharset = Configuration::read('application.encoding');
@@ -67,7 +67,7 @@ class Encoding
             if ($return === false) {
                 $return = $value;
             }
-        } elseif (is_array($mValue)) {
+        } elseif (is_array($value)) {
             $return = array();
             foreach ($value as $arrayKey => $arrayValue) {
                 $arrayKeyConvert = $this->convert($arrayKey, $inCharset, $outCharset, $translit, $ignore);
