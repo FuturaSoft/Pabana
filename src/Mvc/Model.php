@@ -66,9 +66,25 @@ class Model
         $modelNamespace = Configuration::read('mvc.model.namespace');
         $modelNamespace = $modelNamespace . '\\' . ucFirst($modelName);
         if (!class_exists($modelNamespace)) {
-            trigger_error('Model "' . $modelNamespace . '" doesn\'t exist.', E_USER_ERROR);
+            throw new \Exception('Model "' . $modelNamespace . '" doesn\'t exist.');
             return false;
         }
         return new $modelNamespace();
+    }
+
+    /**
+     * Insert a record in database
+     *
+     * @since   1.2
+     * @param   array $data Array of column => value
+     * @return  bool
+     */
+    public function insert($data)
+    {
+        if (!isset($this->table)) {
+            throw new \Exception("Table isn't defined");
+            return false;
+        }
+        return $this->connection->insert($this->table, $data);
     }
 }

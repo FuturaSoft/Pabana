@@ -276,11 +276,14 @@ class Css
             if ($css[0] == 'css') {
                 $htmlContent .= '<style type="text/css">' . $css[1] . '</script>' . PHP_EOL;
             } else {
+                $cssPath = APP_ROOT . '/public' . $css[1];
                 if (Configuration::read('html.css.test_file_existance') === true) {
-                    $cssPath = APP_ROOT . '/public' . $css[1];
                     if (!file_exists($cssPath)) {
                         trigger_error('Css file "' . $cssPath . '" doesn\'t exist.', E_USER_WARNING);
                     }
+                }
+                if (Configuration::read('html.css.version') === true) {
+                    $css[1] .= '?v=' . filemtime($cssPath);
                 }
                 $htmlContent .= '<link href="' . $css[1] . '" rel="stylesheet" type="text/css">' . PHP_EOL;
             }

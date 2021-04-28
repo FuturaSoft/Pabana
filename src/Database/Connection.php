@@ -90,7 +90,7 @@ class Connection
                 $this->datasource->getOption()
             );
             return true;
-        } catch (PDOException $e) {
+        } catch (\PDOException $e) {
             throw new \Exception($e->getMessage());
             return false;
         }
@@ -131,6 +131,36 @@ class Connection
     }
 
     /**
+     * Delete a record in table
+     *
+     * @since   1.2
+     * @param   string $table     Table of database
+     * @param   array  $dataWhere Array of column => value for where
+     * @return  bool
+     */
+    public function delete($table, $dataWhere = [])
+    {
+        if ($this->isConnected()) {
+            $query = "DELETE FROM `" . $table . "`";
+            if (!empty($dataWhere)) {
+                foreach ($dataWhere as $column => $value) {
+                    $dataProcessedWhere[] = "`" . $column . "`='" . $value . "'";
+                }
+                $query .= ' WHERE ' . implode(',', $dataProcessedWhere);
+            }
+            $query .= ';';
+            try {
+                return $this->pdo->exec($query);
+            } catch (\PDOException $e) {
+                throw new \Exception($e->getMessage());
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
+
+    /**
      * Close a connection
      *
      * Close a connection to a database and destroy PDO object
@@ -164,7 +194,7 @@ class Connection
         if ($this->isConnected()) {
             try {
                 return $this->pdo->exec($query);
-            } catch (PDOException $e) {
+            } catch (\PDOException $e) {
                 throw new \Exception($e->getMessage());
                 return false;
             }
@@ -201,6 +231,35 @@ class Connection
     public function getName()
     {
         return $this->name;
+    }
+
+    /**
+     * Insert a record in table
+     *
+     * @since   1.2
+     * @param   string $table Table of database
+     * @param   array  $data  Array of column => value
+     * @return  bool
+     */
+    public function insert($table, $data)
+    {
+        if ($this->isConnected()) {
+            $query = "INSERT INTO `" . $table . "` SET ";
+            $dataProcessed = [];
+            foreach ($data as $column => $value) {
+                $dataProcessed[] = "`" . $column . "`='" . $value . "'";
+            }
+            $query .= implode(',', $dataProcessed);
+            $query .= ';';
+            try {
+                return $this->pdo->exec($query);
+            } catch (\PDOException $e) {
+                throw new \Exception($e->getMessage());
+                return false;
+            }
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -242,7 +301,7 @@ class Connection
         if ($this->isConnected()) {
             try {
                 return $this->pdo->lastInsertId();
-            } catch (PDOException $e) {
+            } catch (\PDOException $e) {
                 throw new \Exception($e->getMessage());
                 return false;
             }
@@ -257,16 +316,25 @@ class Connection
      * Executes an SQL statement, returning a result set as a \Pabana\Database\Statement object
      *
      * @since   1.0
-     * @param   string $query SQL Statement.
+     *
+     * @param   string $query       SQL Statement
+     * @param   array  $dataPrepare Array of data prepare
+     *
      * @return  bool|\Pabana\Database\Statement Returns Statement object or false if error
      */
-    public function query($query)
+    public function query($query, $dataPrepare = [])
     {
         if ($this->isConnected()) {
             try {
-                $statement = $this->pdo->query($query);
-                return new Statement($statement);
-            } catch (PDOException $e) {
+                if (!empty($dataPrepare)) {
+                    $statement = $this->pdo->prepare($query);
+                    $statement->execute($dataPrepare);
+                    return new Statement($statement);
+                } else {
+                    $statement = $this->pdo->query($query);
+                    return new Statement($statement);
+                }
+            } catch (\PDOException $e) {
                 throw new \Exception($e->getMessage());
                 return false;
             }
@@ -276,9 +344,74 @@ class Connection
     }
 
     /**
+     * Execute a query and return all result
+     *
+     * @since   1.2
+     *
+     * @param   string $query       SQL Statement
+     * @param   array  $dataPrepare Array of data prepare
+     * @param   string $fetchType   Type de retour
+     *
+     * @return  bool|mixed Returns all result or false if error
+     */
+    public function queryAll($query, $dataPrepare = [], $fetchType = 'assoc')
+    {
+        if ($this->isConnected()) {
+            $statement = $this->query($query, $dataPrepare);
+            return $statement->fetchAll($fetchType);
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Execute a query and return one line
+     *
+     * @since   1.2
+     *
+     * @param   string $query       SQL Statement
+     * @param   array  $dataPrepare Array of data prepare
+     * @param   string $fetchType   Type de retour
+     *
+     * @return  bool|mixed Returns a line or false if error
+     */
+    public function queryOne($query, $dataPrepare = [], $fetchType = 'assoc')
+    {
+        if ($this->isConnected()) {
+            $statement = $this->query($query, $dataPrepare);
+            return $statement->fetch($fetchType);
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Execute a query and return one column
+     *
+     * @since   1.2
+     *
+     * @param   string $query       SQL Statement
+     * @param   array  $dataPrepare Array of data prepare
+     * @param   string $fetchType   Type de retour
+     *
+     * @return  bool|mixed Return one column value or false if error
+     */
+    public function queryOneColumn($query, $dataPrepare = [])
+    {
+        if ($this->isConnected()) {
+            $statement = $this->query($query, $dataPrepare);
+            $mResult = $statement->fetch('num');
+            return $mResult[0];
+        } else {
+            return false;
+        }
+    }
+
+    /**
      * Rolls back a transaction
      *
      * @since   1.1
+     *
      * @return  bool True if success or false.
      */
     public function rollBack()
@@ -296,11 +429,51 @@ class Connection
      * Set Connection name
      *
      * @since   1.0
+     *
      * @param   string $name Connection name.
+     *
      * @return  void
      */
     public function setName($name)
     {
         $this->name = $name;
+    }
+
+    /**
+     * Update a record in table
+     *
+     * @since   1.2
+     *
+     * @param   string $table     Table of database
+     * @param   array  $data      Array of column => value
+     * @param   array  $dataWhere Array of column => value for where
+     *
+     * @return  bool
+     */
+    public function update($table, $data, $dataWhere = [])
+    {
+        if ($this->isConnected()) {
+            $query = "UPDATE `" . $table . "` SET ";
+            $dataProcessed = [];
+            foreach ($data as $column => $value) {
+                $dataProcessed[] = "`" . $column . "`='" . $value . "'";
+            }
+            $query .= implode(',', $dataProcessed);
+            if (!empty($dataWhere)) {
+                foreach ($dataWhere as $column => $value) {
+                    $dataProcessedWhere[] = "`" . $column . "`='" . $value . "'";
+                }
+                $query .= ' WHERE ' . implode(',', $dataProcessedWhere);
+            }
+            $query .= ';';
+            try {
+                return $this->pdo->exec($query);
+            } catch (\PDOException $e) {
+                throw new \Exception($e->getMessage());
+                return false;
+            }
+        } else {
+            return false;
+        }
     }
 }

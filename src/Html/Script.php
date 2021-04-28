@@ -274,11 +274,14 @@ class Script
             if ($script[0] == 'script') {
                 $htmlContent .= '<script type="text/javascript">' . $script[1] . '</script>' . PHP_EOL;
             } else {
+                $scriptPath = APP_ROOT . '/public' . $script[1];
                 if (Configuration::read('html.script.test_file_existance') === true) {
-                    $scriptPath = APP_ROOT . '/public' . $script[1];
                     if (!file_exists($scriptPath)) {
                         trigger_error('Script file "' . $scriptPath . '" doesn\'t exist.', E_USER_WARNING);
                     }
+                }
+                if (Configuration::read('html.script.version') === true) {
+                    $script[1] .= '?v=' . filemtime($scriptPath);
                 }
                 $htmlContent .= '<script src="' . $script[1] . '" type="text/javascript"></script>' . PHP_EOL;
             }

@@ -59,8 +59,12 @@ class Configuration
         self::write('debug.level', E_ALL);
         // Define if script file existence is tested
         self::write('html.script.test_file_existance', true);
+        // Define if script version is automaticated add
+        self::write('html.script.version', true);
         // Define if css file existence is tested
         self::write('html.css.test_file_existance', true);
+        // Define if css version is automaticated add
+        self::write('html.css.version', true);
         // Set autoloading of shared var between componant
         self::write('mvc.autoload_shared_var', true);
         // Set namespace for controller
