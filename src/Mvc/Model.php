@@ -87,4 +87,37 @@ class Model
         }
         return $this->connection->insert($this->table, $data);
     }
+
+    /**
+     * Update a record in database
+     *
+     * @since   1.2
+     * @param   array $data Array of column => value
+     * @param   array $dataWhere Array of column => value
+     * @return  bool
+     */
+    public function update($data, $dataWhere = [])
+    {
+        if (!isset($this->table)) {
+            throw new \Exception("Table isn't defined");
+            return false;
+        }
+        return $this->connection->update($this->table, $data, $dataWhere);
+    }
+
+    /**
+     * Delete a record in database
+     *
+     * @since   1.2
+     * @param   array $dataWhere Array of column => value
+     * @return  bool
+     */
+    public function delete($dataWhere = [])
+    {
+        if (!isset($this->table)) {
+            throw new \Exception("Table isn't defined");
+            return false;
+        }
+        return $this->connection->delete($this->table, $dataWhere);
+    }
 }
