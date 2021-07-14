@@ -152,9 +152,9 @@ class Request
      */
     public function getClientIp()
     {
-        if (!empty($this->getHeader('X-Forwarded-For'))) {
-            $ip = preg_replace('/(?:,.*)/', '', $this->hasHeader('X-Forwarded-For'));
-        } elseif (!empty($this->getHeader('Client-Ip'))) {
+        if ($this->hasHeader('X-Forwarded-For')) {
+            $ip = preg_replace('/(?:,.*)/', '', $this->getHeader('X-Forwarded-For'));
+        } elseif ($this->hasHeader('Client-Ip')) {
             $ip = $this->getHeader('Client-Ip');
         } else {
             $ip = $_SERVER['REMOTE_ADDR'];
