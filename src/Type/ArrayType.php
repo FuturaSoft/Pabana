@@ -84,7 +84,7 @@ class ArrayType
      * @since   1.1
      */
     private $arrayVar;
-    
+
     /**
      * Constructor
      *
@@ -159,7 +159,7 @@ class ArrayType
      */
     public function insert($index, $value)
     {
-        array_splice($this->arrayVar, $index, 0, $value);
+        array_splice($this->arrayVar, $index, 0, [$value]);
     }
 
     /**
