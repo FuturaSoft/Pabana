@@ -109,6 +109,35 @@ class View
     }
 
     /**
+     * Load part of Layout
+     *
+     * Load Html code of part
+     *
+     * @since   1.2
+     * @param   string $elementName Element or part name
+     * @return  string|bool Return Element content if success or false if error
+     */
+    public function element($elementName)
+    {
+        if (Configuration::read('mvc.autoload_shared_var') === true && empty($this->variableList) === false) {
+            foreach ($this->variableList as $varName => $varValue) {
+                ${$varName} = $varValue;
+            }
+        }
+        $layoutDirectory = $this->getDirectory() . '/element';
+        $elementPath = $layoutDirectory . '/' . $elementName . '.' . $this->getExtension();
+        if (!file_exists($elementPath)) {
+            trigger_error('Element file "' . $elementPath . '" doesn\'t exist.', E_USER_ERROR);
+            return false;
+        }
+        ob_start();
+        require($elementPath);
+        echo PHP_EOL;
+        $content = ob_get_clean();
+        return $content;
+    }
+
+    /**
      * Get autorender state
      *
      * @since   1.0
