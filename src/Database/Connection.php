@@ -14,6 +14,8 @@
  */
 namespace Pabana\Database;
 
+use Illuminate\Database\Capsule\Manager as Capsule;
+use Pabana\Core\Configuration;
 use Pabana\Database\Statement;
 
 /**
@@ -49,6 +51,12 @@ class Connection
     private $name;
 
     /**
+     * @var     integer Fetch mode
+     * @since   1.2
+     */
+    private $fetchMode = 'assoc';
+
+    /**
      * Constructor
      *
      * Store Datasource object, define connection name and do connection
@@ -82,6 +90,7 @@ class Connection
      */
     public function connect()
     {
+        $bResult = true;
         try {
             $this->pdo = new \PDO(
                 $this->datasource->getDsn(),
@@ -89,11 +98,35 @@ class Connection
                 $this->datasource->getPassword(),
                 $this->datasource->getOption()
             );
-            return true;
         } catch (\PDOException $e) {
             throw new \Exception($e->getMessage());
             return false;
         }
+        if (Configuration::read('database.eloquant.enable') === true) {
+            $bResult = $this->connectEloquant();
+        }
+        return $bResult;
+    }
+
+    /**
+     * Do a connection to Eloquant
+     *
+     * Do a connection to a database from datasource parameter to Eloquant
+     *
+     * @since   1.2
+     * @return  bool True if success or false.
+     */
+    private function connectEloquant() {
+        $capsule = new Capsule;
+        $capsule->addConnection([
+            'driver' => strtolower($this->datasource->getDbms()),
+            'host' => $this->datasource->getHost() . ':' . $this->datasource->getPort(),
+            'database' => $this->datasource->getDatabase(),
+            'username' => $this->datasource->getUser(),
+            'password' => $this->datasource->getPassword(),
+            'charset' => $this->datasource->getCharset()
+        ]);
+        return $capsule->bootEloquent();
     }
 
     /**
@@ -351,15 +384,19 @@ class Connection
      *
      * @param   string $query       SQL Statement
      * @param   array  $dataPrepare Array of data prepare
-     * @param   string $fetchType   Type de retour
+     * @param   string $fetchModeForce   Type de retour
      *
      * @return  bool|mixed Returns all result or false if error
      */
-    public function queryAll($query, $dataPrepare = [], $fetchType = 'assoc')
+    public function queryAll($query, $dataPrepare = [], $fetchModeForce = '')
     {
         if ($this->isConnected()) {
             $statement = $this->query($query, $dataPrepare);
-            return $statement->fetchAll($fetchType);
+            $fetchMode = $this->fetchMode;
+            if (!empty($fetchModeForce)) {
+                $fetchMode = $fetchModeForce;
+            }
+            return $statement->fetchAll($fetchMode);
         } else {
             return false;
         }
@@ -376,11 +413,15 @@ class Connection
      *
      * @return  bool|mixed Returns a line or false if error
      */
-    public function queryOne($query, $dataPrepare = [], $fetchType = 'assoc')
+    public function queryOne($query, $dataPrepare = [], $fetchModeForce = '')
     {
         if ($this->isConnected()) {
             $statement = $this->query($query, $dataPrepare);
-            return $statement->fetch($fetchType);
+            $fetchMode = $this->fetchMode;
+            if (!empty($fetchModeForce)) {
+                $fetchMode = $fetchModeForce;
+            }
+            return $statement->fetch($fetchMode);
         } else {
             return false;
         }
@@ -438,6 +479,19 @@ class Connection
     public function setName($name)
     {
         $this->name = $name;
+    }
+
+    /**
+     * Set Fetch Mode
+     *
+     * @since   1.2
+     * @param   string $fetchMode Fetch mode (assoc, num, obj)
+     *
+     * @return  void
+     */
+    public function setFetchMode($fetchMode)
+    {
+        $this->fetchMode = $fetchMode;
     }
 
     /**

@@ -87,6 +87,19 @@ class Datasource
     }
 
     /**
+     * Getter for Datasource dbms
+     *
+     * This method can get dbms value.
+     *
+     * @since   1.0
+     * @return  string Dbms defined.
+     */
+    public function getDbms()
+    {
+        return $this->dbms;
+    }
+
+    /**
      * Getter for Datasource option
      *
      * This method can get datasource option value.
@@ -98,7 +111,7 @@ class Datasource
     {
         return array();
     }
-    
+
     /**
      * Getter for Datasource name
      *
@@ -197,7 +210,7 @@ class Datasource
         $this->name = $name;
         return $this;
     }
-    
+
     /**
      * Setter for Datasource password
      *

@@ -215,8 +215,11 @@ class Layout
      * @param   string $varName Name of var send to Layout
      * @return  string|bool Value of var send to Layout if exist else false
      */
-    public function getVar($varName)
+    public function getVar($varName = '')
     {
+        if (empty($varName)) {
+            return $this->variableList;
+        }
         if (!isset($this->variableList[$varName])) {
             trigger_error('Variable "' . $varName . '" isn\'t defined in Layout.', E_USER_WARNING);
             return false;

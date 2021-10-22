@@ -312,6 +312,9 @@ class Router
     private static function setController($sController)
     {
         self::$sController = ucfirst($sController);
+        if (!empty(Configuration::read('mvc.controller.suffix'))) {
+            self::$sController = self::$sController . Configuration::read('mvc.controller.suffix');
+        }
     }
 
     /**

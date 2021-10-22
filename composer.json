@@ -2,12 +2,12 @@
     "name": "pabana/pabana",
     "description": "The Pabana framework",
     "type": "library",
-	"version": "1.1.0",
+	"version": "1.2.0",
     "keywords": [
         "framework",
         "mvc"
     ],
-    "homepage": "https://pabana.futurasoft.fr/",
+    "homepage": "https://github.com/FuturaSoft/Pabana",
     "license": "BSD-3-Clause",
     "authors": [
         {
@@ -21,11 +21,12 @@
         "source": "https://github.com/FuturaSoft/Pabana"
     },
     "require": {
-        "php": "^5.6 || ^7.0"
+        "php": "^7.3",
+        "illuminate/database": "^8.66",
+        "jenssegers/blade": "^1.4"
     },
 	"require-dev": {
-		"phpdocumentor/phpdocumentor": "2.*",
-		"phpunit/phpunit": "^5",
+		"phpunit/phpunit": "^9",
         "squizlabs/php_codesniffer": "3.*"
     },
     "autoload": {

@@ -55,6 +55,8 @@ class Configuration
         self::write('database.config.enable', true);
         // Set config file for route collection
         self::write('database.config.file', 'databases.php');
+        // Set config file for route collection
+        self::write('database.eloquant.enable', true);
         // Set debug level to all
         self::write('debug.level', E_ALL);
         // Define if script file existence is tested
@@ -67,8 +69,16 @@ class Configuration
         self::write('html.css.version', true);
         // Set autoloading of shared var between componant
         self::write('mvc.autoload_shared_var', true);
+        // Set namespace for error controller
+        self::write('mvc.blade.view.path', '/resources/views');
+        // Set namespace for error controller
+        self::write('mvc.blade.cache.path', '/storage/framework/views');
         // Set namespace for controller
         self::write('mvc.controller.namespace', '\App\Controller');
+        // Set namespace for controller
+        self::write('mvc.controller.suffix', 'Controller');
+        // Set namespace for error controller
+        self::write('mvc.error.namespace', '\App\Controller\ErrorController');
         // Set namespace for layout
         self::write('mvc.layout.namespace', '\App\Layout');
         // Set path for Layout
