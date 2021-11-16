@@ -16,11 +16,11 @@ namespace Pabana\Mvc;
 
 use Pabana\Core\Configuration;
 use Pabana\Html\Html;
+use Pabana\Mvc\Layout;
 use Pabana\Mvc\Model;
 use Pabana\Mvc\View;
 use Pabana\Network\Http\Request;
 use Pabana\Type\StringType;
-use Jenssegers\Blade\Blade;
 
 /**
  * Controller class
@@ -101,12 +101,6 @@ class Controller
     private $controller;
 
     /**
-     * @var     string Define render engine.
-     * @since   1.2
-     */
-    private $renderEngine = 'php';
-
-    /**
      * Constructor
      *
      * Initialize Controller helper object (Html, Layout, Model, Request, View)
@@ -151,45 +145,17 @@ class Controller
             $layoutName = Configuration::read('mvc.layout.default');
             $this->setLayout($layoutName);
         }
-        $initializeReturn = true;
         // Call initialize method in Controller if exists
         if (method_exists($this, 'initialize')) {
-            $initializeReturn = $this->initialize();
-        }
-        if ($initializeReturn === false) {
-            return '';
+            $this->initialize();
         }
         // Launch action of controller
         ob_start();
         $actionResult = $this->$action();
         echo PHP_EOL;
         $bodyContent = ob_get_clean();
-        // If Controller's Action return false, return empty value
-        if ($actionResult === false) {
-            if ($this->request->isAjax()) {
-                return $bodyContent;
-            } else {
-                return '';
-            }
-        }
-        if ($this->renderEngine == 'blade' && $this->view->getAutoRender()) {
-            $bladeViewPath = APP_ROOT . Configuration::read('mvc.blade.view.path');
-            $bladeCachePath = APP_ROOT . Configuration::read('mvc.blade.cache.path');
-            $blade = new Blade($bladeViewPath, $bladeCachePath);
-            $layoutVar = $this->layout->getVar();
-            $viewVar = $this->view->getVar();
-            $bladeVar = [
-                'head' => $this->html->head,
-                'script' => $this->html->script
-            ];
-            if (!empty($layoutVar)) {
-                $bladeVar += $layoutVar;
-            }
-            if (!empty($viewVar)) {
-                $bladeVar += $viewVar;
-            }
-            $bodyContent .= $blade->make($this->view->getBladeName(), $bladeVar)->render();
-        } else {
+        // If Controller's Action return false, disable Layout and View
+        if ($actionResult !== false) {
             if (isset($this->layout) && $this->layout->getAutoRender()) {
                 // Get Layout and View if auto render of View enable
                 $bodyContent .= $this->layout->render();
@@ -218,18 +184,6 @@ class Controller
     }
 
     /**
-     * Call Layout object and store it in $this->layout variable
-     *
-     * @since   1.1
-     * @param   string $layoutName Name of Layout
-     * @return  void
-     */
-    final public function setRenderEngine($renderEngine)
-    {
-        $this->renderEngine = $renderEngine;
-    }
-
-    /**
      * Call Layout object and store it in $this->view variable
      * If Layout is already defined, change view of $this->layout
      *
@@ -248,15 +202,5 @@ class Controller
             // To maintain compatibility with version 1.0
             $this->Layout = $this->layout;
         }
-    }
-
-    final public function abort($code)
-    {
-        $_GET['code'] = $code;
-        http_response_code($code);
-        $errorNamespace = Configuration::read('mvc.error.namespace');
-        $oError = new $errorNamespace();
-        echo $oError->render('index');
-        return false;
     }
 }

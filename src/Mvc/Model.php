@@ -49,9 +49,6 @@ class Model
     {
         if (ConnectionCollection::existsDefault() === true) {
             $this->connection = ConnectionCollection::getDefault();
-            if (isset($this->fetchMode)) {
-                $this->connection->setFetchMode($this->fetchMode);
-            }
             // To maintain compatibility with version 1.0
             $this->Connection = $this->connection;
         }

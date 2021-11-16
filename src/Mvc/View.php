@@ -56,12 +56,6 @@ class View
     private $name;
 
     /**
-     * @var     string Define name of controller.
-     * @since   1.2
-     */
-    private $controller;
-
-    /**
      * @var     Redirection to $html var
      * @since   1.0
      * @deprecated deprecated since version 1.1
@@ -95,16 +89,6 @@ class View
         $this->setAutoRender(Configuration::read('mvc.view.auto_render'));
         // Set default directory for view
         $viewRootPath = Configuration::read('application.path') . Configuration::read('mvc.view.path');
-        if (!empty(Configuration::read('mvc.controller.suffix'))) {
-            $controller = str_replace(
-                Configuration::read('mvc.controller.suffix'),
-                '',
-                $controller
-            );
-        }
-        // Define controller name for blade render engine
-        $this->controller = $controller;
-        // Define directory name for php render engine
         $directoryPath = $viewRootPath . '/' . $controller;
         $this->setDirectory($directoryPath);
         // Set extension from configuration
@@ -165,17 +149,6 @@ class View
     }
 
     /**
-     * Get name of view for blade
-     *
-     * @since   1.2
-     * @return  string Name of view for blade
-     */
-    public function getBladeName()
-    {
-        return $this->controller . '.' . $this->name;
-    }
-
-    /**
      * Get directory path
      *
      * @since   1.0
@@ -215,11 +188,8 @@ class View
      * @param   string $varName Name of var send to View
      * @return  string|bool Value of var send to View if exist else false
      */
-    public function getVar($varName = '')
+    public function getVar($varName)
     {
-        if (empty($varName)) {
-            return $this->variableList;
-        }
         if (!isset($this->variableList[$varName])) {
             trigger_error('Variable "' . $varName . '" isn\'t defined in View.', E_USER_WARNING);
             return false;

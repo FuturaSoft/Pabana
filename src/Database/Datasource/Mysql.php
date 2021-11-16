@@ -40,7 +40,7 @@ class Mysql extends Datasource
      * @since   1.0
      */
     private $sUnixSocket;
-
+    
     /**
      * Constructor
      *

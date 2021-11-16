@@ -91,7 +91,7 @@ class ConnectionCollection
         if (self::exists($connectionName) === true) {
             return self::$connectionList[$connectionName];
         } else {
-            throw new \Exception('Datasource "' . $connectionName . '" isn\'t defined in DatasourceCollection');
+            throw new Exception('Datasource "' . $connectionName . '" isn\'t defined in DatasourceCollection');
             return false;
         }
     }
@@ -108,7 +108,7 @@ class ConnectionCollection
             $defaultConnectionName = self::$defaultConnectionName;
             return self::$connectionList[$defaultConnectionName];
         } else {
-            throw new \Exception('Datasource "' . self::$defaultConnectionName . '" isn\'t defined in DatasourceCollection');
+            throw new Exception('Datasource "' . $defaultConnectionName . '" isn\'t defined in DatasourceCollection');
             return false;
         }
     }
@@ -137,7 +137,7 @@ class ConnectionCollection
     public static function setDefault($connectionName, $force = true)
     {
         if ($force === false && self::existsDefault() === true) {
-            throw new \Exception('A default Datasource is already defined.');
+            throw new Exception('A default Datasource is already defined.');
             return false;
         } else {
             self::$defaultConnectionName = $connectionName;

@@ -14,8 +14,6 @@
  */
 namespace Pabana\Database;
 
-use Illuminate\Database\Capsule\Manager as Capsule;
-use Pabana\Core\Configuration;
 use Pabana\Database\Statement;
 
 /**
@@ -51,12 +49,6 @@ class Connection
     private $name;
 
     /**
-     * @var     integer Fetch mode
-     * @since   1.2
-     */
-    private $fetchMode = 'assoc';
-
-    /**
      * Constructor
      *
      * Store Datasource object, define connection name and do connection
@@ -90,7 +82,6 @@ class Connection
      */
     public function connect()
     {
-        $bResult = true;
         try {
             $this->pdo = new \PDO(
                 $this->datasource->getDsn(),
@@ -98,35 +89,12 @@ class Connection
                 $this->datasource->getPassword(),
                 $this->datasource->getOption()
             );
+            $this->pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_WARNING);
+            return true;
         } catch (\PDOException $e) {
             throw new \Exception($e->getMessage());
             return false;
         }
-        if (Configuration::read('database.eloquant.enable') === true) {
-            $bResult = $this->connectEloquant();
-        }
-        return $bResult;
-    }
-
-    /**
-     * Do a connection to Eloquant
-     *
-     * Do a connection to a database from datasource parameter to Eloquant
-     *
-     * @since   1.2
-     * @return  bool True if success or false.
-     */
-    private function connectEloquant() {
-        $capsule = new Capsule;
-        $capsule->addConnection([
-            'driver' => strtolower($this->datasource->getDbms()),
-            'host' => $this->datasource->getHost() . ':' . $this->datasource->getPort(),
-            'database' => $this->datasource->getDatabase(),
-            'username' => $this->datasource->getUser(),
-            'password' => $this->datasource->getPassword(),
-            'charset' => $this->datasource->getCharset()
-        ]);
-        return $capsule->bootEloquent();
     }
 
     /**
@@ -177,7 +145,7 @@ class Connection
             $query = "DELETE FROM `" . $table . "`";
             if (!empty($dataWhere)) {
                 foreach ($dataWhere as $column => $value) {
-                    $dataProcessedWhere[] = "`" . $column . "`='" . $value . "'";
+                    $dataProcessedWhere[] = "`" . $column . "`=" . $this->pdo->quote($value);
                 }
                 $query .= ' WHERE ' . implode(',', $dataProcessedWhere);
             }
@@ -228,7 +196,7 @@ class Connection
             try {
                 return $this->pdo->exec($query);
             } catch (\PDOException $e) {
-                throw new \Exception($e->getMessage());
+                throw new \Error($e->getMessage());
                 return false;
             }
         } else {
@@ -384,19 +352,18 @@ class Connection
      *
      * @param   string $query       SQL Statement
      * @param   array  $dataPrepare Array of data prepare
-     * @param   string $fetchModeForce   Type de retour
+     * @param   string $fetchType   Type de retour
      *
      * @return  bool|mixed Returns all result or false if error
      */
-    public function queryAll($query, $dataPrepare = [], $fetchModeForce = '')
+    public function queryAll($query, $dataPrepare = [], $fetchType = 'assoc')
     {
         if ($this->isConnected()) {
             $statement = $this->query($query, $dataPrepare);
-            $fetchMode = $this->fetchMode;
-            if (!empty($fetchModeForce)) {
-                $fetchMode = $fetchModeForce;
+            if ($statement === false) {
+                return false;
             }
-            return $statement->fetchAll($fetchMode);
+            return $statement->fetchAll($fetchType);
         } else {
             return false;
         }
@@ -413,15 +380,18 @@ class Connection
      *
      * @return  bool|mixed Returns a line or false if error
      */
-    public function queryOne($query, $dataPrepare = [], $fetchModeForce = '')
+    public function queryOne($query, $dataPrepare = [], $fetchType = 'assoc')
     {
         if ($this->isConnected()) {
             $statement = $this->query($query, $dataPrepare);
-            $fetchMode = $this->fetchMode;
-            if (!empty($fetchModeForce)) {
-                $fetchMode = $fetchModeForce;
+            if ($statement === false) {
+                return false;
             }
-            return $statement->fetch($fetchMode);
+            $mResult = $statement->fetch($fetchType);
+            if (empty($mResult)) {
+                return null;
+            }
+            return $mResult;
         } else {
             return false;
         }
@@ -442,7 +412,13 @@ class Connection
     {
         if ($this->isConnected()) {
             $statement = $this->query($query, $dataPrepare);
+            if ($statement === false) {
+                return false;
+            }
             $mResult = $statement->fetch('num');
+            if (empty($mResult)) {
+                return null;
+            }
             return $mResult[0];
         } else {
             return false;
@@ -482,19 +458,6 @@ class Connection
     }
 
     /**
-     * Set Fetch Mode
-     *
-     * @since   1.2
-     * @param   string $fetchMode Fetch mode (assoc, num, obj)
-     *
-     * @return  void
-     */
-    public function setFetchMode($fetchMode)
-    {
-        $this->fetchMode = $fetchMode;
-    }
-
-    /**
      * Update a record in table
      *
      * @since   1.2
@@ -511,12 +474,12 @@ class Connection
             $query = "UPDATE `" . $table . "` SET ";
             $dataProcessed = [];
             foreach ($data as $column => $value) {
-                $dataProcessed[] = "`" . $column . "`='" . $value . "'";
+                $dataProcessed[] = "`" . $column . "`=" . $this->pdo->quote($value);
             }
             $query .= implode(',', $dataProcessed);
             if (!empty($dataWhere)) {
                 foreach ($dataWhere as $column => $value) {
-                    $dataProcessedWhere[] = "`" . $column . "`='" . $value . "'";
+                    $dataProcessedWhere[] = "`" . $column . "`=" . $this->pdo->quote($value);
                 }
                 $query .= ' WHERE ' . implode(',', $dataProcessedWhere);
             }
@@ -524,7 +487,7 @@ class Connection
             try {
                 return $this->pdo->exec($query);
             } catch (\PDOException $e) {
-                throw new \Exception($e->getMessage());
+                new \Exception($e->getMessage());
                 return false;
             }
         } else {

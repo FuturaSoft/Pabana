@@ -35,6 +35,7 @@ class Configuration
      * This method defined default key and value for using Pabana
      *
      * @since   1.0
+     *
      * @return  void
      */
     public static function base()
@@ -55,8 +56,6 @@ class Configuration
         self::write('database.config.enable', true);
         // Set config file for route collection
         self::write('database.config.file', 'databases.php');
-        // Set config file for route collection
-        self::write('database.eloquant.enable', true);
         // Set debug level to all
         self::write('debug.level', E_ALL);
         // Define if script file existence is tested
@@ -69,16 +68,8 @@ class Configuration
         self::write('html.css.version', true);
         // Set autoloading of shared var between componant
         self::write('mvc.autoload_shared_var', true);
-        // Set namespace for error controller
-        self::write('mvc.blade.view.path', '/resources/views');
-        // Set namespace for error controller
-        self::write('mvc.blade.cache.path', '/storage/framework/views');
         // Set namespace for controller
         self::write('mvc.controller.namespace', '\App\Controller');
-        // Set namespace for controller
-        self::write('mvc.controller.suffix', 'Controller');
-        // Set namespace for error controller
-        self::write('mvc.error.namespace', '\App\Controller\ErrorController');
         // Set namespace for layout
         self::write('mvc.layout.namespace', '\App\Layout');
         // Set path for Layout
@@ -118,6 +109,7 @@ class Configuration
      *
      * @since   1.0
      * @param   string $key Key to check.
+     *
      * @return  bool True if key exists else false
      */
     public static function check($key)
@@ -133,6 +125,7 @@ class Configuration
      *
      * @since   1.0
      * @param   bool $reloadBase If true reload base configuration
+     *
      * @return  bool Result of cleaning
      */
     public static function clean($reloadBase = true)
@@ -153,6 +146,7 @@ class Configuration
      *
      * @since   1.0
      * @param   string $key Key to delete.
+     *
      * @return  bool Result of delete Key
      */
     public static function delete($key)
@@ -175,13 +169,14 @@ class Configuration
      * @since   1.0
      * @param   string $filename File path of loaded file.
      * @param   bool $merge If true merge current config to new config.
+     *
      * @return  void
      */
     public static function load($filename, $merge = true)
     {
         // Check if file not exist
         if (!file_exists($filename)) {
-            throw new Exception('Config file "' . $filename . '" doesn\'t exist.');
+            throw new \Exception('Config file "' . $filename . '" doesn\'t exist.');
         }
         // Read extension of config file
         $fileExtension = pathinfo($filename, PATHINFO_EXTENSION);
@@ -189,7 +184,7 @@ class Configuration
         $allowedExtensionList = array('ini', 'json', 'php', 'xml');
         // Check if extension is recognized
         if (!in_array($fileExtension, $allowedExtensionList)) {
-            throw new Exception('Config file "' . $filename . '" is in unrecognize format. Accepted format are ' . implode(', ', $allowedExtensionList) . '.');
+            throw new \Exception('Config file "' . $filename . '" is in unrecognize format. Accepted format are ' . implode(', ', $allowedExtensionList) . '.');
         }
         // Load file and put in array
         if ($fileExtension === 'ini') {
@@ -225,6 +220,7 @@ class Configuration
      * @since   1.0
      * @param   string $key Key to prepare
      * @param   mixed $value Value to prepare.
+     *
      * @return  mixed Value prepared
      */
     public static function prepare($key, $value)
@@ -249,6 +245,7 @@ class Configuration
      *
      * @since   1.0
      * @param   array $configList Array of key and value to prepare
+     *
      * @return  array Array of key and value prepared
      */
     public static function prepareArray($configList)
@@ -267,15 +264,16 @@ class Configuration
      * Key existance is checked first
      *
      * @since   1.0
-     * @param   string $key Key to read.
-     * @return  mixed|bool Value of Configuration parameter or false if configuration key doesn't exist
+     * @param   string  $key Key to read.
+     * @param   mixed   $default Return if key doesn't exist.
+     *
+     * @return  mixed Value of Configuration parameter or default if configuration key doesn't exist
      */
-    public static function read($key)
+    public static function read($key, $default = false)
     {
         // Check key existence
         if (!self::check($key)) {
-            throw new \Exception('Configuration key "' . $key . '" doesn\'t exists');
-            return false;
+            return $default;
         }
         // Get value of key
         return self::$configList[$key];
@@ -287,6 +285,7 @@ class Configuration
      * This method is used to get collection of configuration
      *
      * @since   1.0
+     *
      * @return  array Array of all configuration
      */
     public static function readAll()
@@ -300,6 +299,7 @@ class Configuration
      * This method is used to register constant
      *
      * @since   1.0
+     *
      * @return  void
      */
     public static function registerConstant()
@@ -308,10 +308,10 @@ class Configuration
             define('DS', DIRECTORY_SEPARATOR);
         }
         if (!defined('PAB_NAME')) {
-            define('PAB_NAME', 'Kiwi');
+            define('PAB_NAME', 'Mango');
         }
         if (!defined('PAB_VERSION')) {
-            define('PAB_VERSION', '1.1.0');
+            define('PAB_VERSION', '1.2.0');
         }
         if (self::check('application.path') === true) {
             if (!defined('APP_ROOT')) {
@@ -326,6 +326,7 @@ class Configuration
      * Return current version of Pabana
      *
      * @since   1.0
+     *
      * @return  string Current version of Pabana
      */
     public static function version()
@@ -343,6 +344,7 @@ class Configuration
      * @param   string $key Key to read.
      * @param   string $value Value of key.
      * @param   bool $force Force writing of key even is already defined.
+     *
      * @return  bool Return true if success else return false;.
      */
     public static function write($key, $value, $force = true)
@@ -356,6 +358,31 @@ class Configuration
         $preparedValue = self::prepare($key, $value);
         // Write value content
         self::$configList[$key] = $preparedValue;
+        return true;
+    }
+
+    /**
+     * Write a configuration list
+     *
+     * This method is used to write an array in configuration
+     *
+     * @since   1.2
+     * @param   array $configArray Key to read.
+     * @param   bool $force Replace configuration by given array.
+     *
+     * @return  bool Return true if success else return false;.
+     */
+    public static function writeAll($configArray, $force = false)
+    {
+        if ($force === true) {
+            self::clean(true);
+        }
+        foreach ($configArray as $key => $value) {
+            // Prepare value (transform 'true' to true, etc...)
+            $preparedValue = self::prepare($key, $value);
+            // Write value content
+            self::$configList[$key] = $preparedValue;
+        }
         return true;
     }
 }
