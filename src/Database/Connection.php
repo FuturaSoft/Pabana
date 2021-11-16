@@ -14,6 +14,7 @@
  */
 namespace Pabana\Database;
 
+use Pabana\Core\Configuration;
 use Pabana\Database\Statement;
 
 /**
@@ -89,7 +90,9 @@ class Connection
                 $this->datasource->getPassword(),
                 $this->datasource->getOption()
             );
-            $this->pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_WARNING);
+            if (Configuration::read('debug.level') > 0) {
+                $this->pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_WARNING);
+            }
             return true;
         } catch (\PDOException $e) {
             throw new \Exception($e->getMessage());
