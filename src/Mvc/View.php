@@ -38,6 +38,12 @@ class View
     private $autoRender;
 
     /**
+     * @var     string Define name of controller.
+     * @since   1.2
+     */
+    private $controller;
+
+    /**
      * @var     string Define directory of View.
      * @since   1.0
      */
@@ -89,6 +95,16 @@ class View
         $this->setAutoRender(Configuration::read('mvc.view.auto_render'));
         // Set default directory for view
         $viewRootPath = Configuration::read('application.path') . Configuration::read('mvc.view.path');
+        if (!empty(Configuration::read('mvc.controller.suffix'))) {
+            $controller = str_replace(
+                Configuration::read('mvc.controller.suffix'),
+                '',
+                $controller
+            );
+        }
+        // Define controller name for blade render engine
+        $this->controller = $controller;
+        // Define directory where view are stored
         $directoryPath = $viewRootPath . '/' . $controller;
         $this->setDirectory($directoryPath);
         // Set extension from configuration

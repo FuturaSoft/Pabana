@@ -69,11 +69,15 @@ class Configuration
         // Set autoloading of shared var between componant
         self::write('mvc.autoload_shared_var', true);
         // Set namespace for controller
-        self::write('mvc.controller.namespace', '\App\Controller');
+        self::write('mvc.controller.namespace', '\App\Controllers');
+        // Set namespace for controller
+        self::write('mvc.controller.suffix', 'Controller');
+        // Set namespace for error controller
+        self::write('mvc.error.namespace', '\App\Controllers\ErrorController');
         // Set namespace for layout
-        self::write('mvc.layout.namespace', '\App\Layout');
+        self::write('mvc.layout.namespace', '\App\Layouts');
         // Set path for Layout
-        self::write('mvc.layout.path', '/src/Layout');
+        self::write('mvc.layout.path', '/src/Layouts');
         // Set default layout
         self::write('mvc.layout.default', 'Application');
         // Set extension for layout
@@ -81,13 +85,13 @@ class Configuration
         // Set auto render for layout
         self::write('mvc.layout.auto_render', true);
         // Set namespace for model
-        self::write('mvc.model.namespace', '\App\Model');
+        self::write('mvc.model.namespace', '\App\Models');
         // Set auto render for view
         self::write('mvc.view.auto_render', true);
         // Set extension for view
         self::write('mvc.view.extension', 'php');
         // Set path for view
-        self::write('mvc.view.path', '/src/View');
+        self::write('mvc.view.path', '/resources/view');
         // Set auto routing
         self::write('routing.auto', true);
         // Set config file for route collection
@@ -97,7 +101,7 @@ class Configuration
         // Set error action (if not route is avaiable)
         self::write('routing.fallback.action', 'index');
         // Set error controller (if not route is avaiable)
-        self::write('routing.fallback.controller', 'Error');
+        self::write('routing.fallback.controller', 'ErrorController');
         // Set config file for route collection
         self::write('routing.default_separator', '/');
     }
