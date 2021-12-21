@@ -153,7 +153,7 @@ class Router
     private static function checkController()
     {
         $bSetFallback = false;
-        $sControllerNamespace = Configuration::read('mvc.controller.namespace') . '\\' . self::getController();
+        $sControllerNamespace = Configuration::read('application.namespace') . '\Controller\\' . self::getController();
         if (class_exists($sControllerNamespace) === false) {
             $bSetFallback = true;
         }
@@ -312,9 +312,6 @@ class Router
     private static function setController($sController)
     {
         self::$sController = ucfirst($sController);
-        if (!empty(Configuration::read('mvc.controller.suffix'))) {
-            self::$sController = self::$sController . Configuration::read('mvc.controller.suffix');
-        }
     }
 
     /**

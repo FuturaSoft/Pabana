@@ -124,25 +124,6 @@ class Controller
     }
 
     /**
-     * Abort view of controller
-     *
-     * @since   1.2
-     * @param   string $code Error code
-     *
-     * @return  string Content of error
-     */
-    final public function abort($code)
-    {
-        $errorNamespace = Configuration::read('mvc.error.namespace');
-        if (method_exists($errorNamespace, 'index')) {
-            $_GET['code'] = $code;
-            $oError = new $errorNamespace();
-            echo $oError->render('index');
-        }
-        return false;
-    }
-
-    /**
      * Create the View and the Layout
      * Call initialize method if exist
      * Launch controller
@@ -164,13 +145,9 @@ class Controller
             $layoutName = Configuration::read('mvc.layout.default');
             $this->setLayout($layoutName);
         }
-        $initializeReturn = true;
         // Call initialize method in Controller if exists
         if (method_exists($this, 'initialize')) {
-            $initializeReturn = $this->initialize();
-        }
-        if ($initializeReturn === false) {
-            return '';
+            $this->initialize();
         }
         // Launch action of controller
         ob_start();
@@ -178,19 +155,14 @@ class Controller
         echo PHP_EOL;
         $bodyContent = ob_get_clean();
         // If Controller's Action return false, disable Layout and View
-        if ($actionResult === false) {
-            if ($this->request->isAjax()) {
-                return $bodyContent;
-            } else {
-                return '';
+        if ($actionResult !== false) {
+            if (isset($this->layout) && $this->layout->getAutoRender()) {
+                // Get Layout and View if auto render of View enable
+                $bodyContent .= $this->layout->render();
+            } elseif (isset($this->view) && $this->view->getAutoRender()) {
+                // Get View only
+                $bodyContent .= $this->view->render();
             }
-        }
-        if (isset($this->layout) && $this->layout->getAutoRender()) {
-            // Get Layout and View if auto render of View enable
-            $bodyContent .= $this->layout->render();
-        } elseif (isset($this->view) && $this->view->getAutoRender()) {
-            // Get View only
-            $bodyContent .= $this->view->render();
         }
         return $bodyContent;
     }

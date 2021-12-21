@@ -148,9 +148,15 @@ class Connection
             $query = "DELETE FROM `" . $table . "`";
             if (!empty($dataWhere)) {
                 foreach ($dataWhere as $column => $value) {
-                    $dataProcessedWhere[] = "`" . $column . "`=" . $this->pdo->quote($value);
+                    $dataProcessedWhereQuery = "`" . $column . "`";
+                    if (!empty($value)) {
+                        $dataProcessedWhereQuery .= "=" . $this->pdo->quote($value);
+                    } else {
+                        $dataProcessedWhereQuery .= 'IS NULL';
+                    }
+                    $dataProcessedWhere[] = $dataProcessedWhereQuery;
                 }
-                $query .= ' WHERE ' . implode(',', $dataProcessedWhere);
+                $query .= ' WHERE ' . implode(' AND ', $dataProcessedWhere);
             }
             $query .= ';';
             try {
@@ -251,7 +257,13 @@ class Connection
             $query = "INSERT INTO `" . $table . "` SET ";
             $dataProcessed = [];
             foreach ($data as $column => $value) {
-                $dataProcessed[] = "`" . $column . "`='" . $value . "'";
+                $dataProcessedQuery = "`" . $column . "`=";
+                if (!empty($value)) {
+                    $dataProcessedQuery .= $this->pdo->quote($value);
+                } else {
+                    $dataProcessedQuery .= 'NULL';
+                }
+                $dataProcessed[] = $dataProcessedQuery;
             }
             $query .= implode(',', $dataProcessed);
             $query .= ';';
@@ -477,14 +489,26 @@ class Connection
             $query = "UPDATE `" . $table . "` SET ";
             $dataProcessed = [];
             foreach ($data as $column => $value) {
-                $dataProcessed[] = "`" . $column . "`=" . $this->pdo->quote($value);
+                $dataProcessedQuery = "`" . $column . "`=";
+                if (!empty($value)) {
+                    $dataProcessedQuery .= $this->pdo->quote($value);
+                } else {
+                    $dataProcessedQuery .= 'NULL';
+                }
+                $dataProcessed[] = $dataProcessedQuery;
             }
             $query .= implode(',', $dataProcessed);
             if (!empty($dataWhere)) {
                 foreach ($dataWhere as $column => $value) {
-                    $dataProcessedWhere[] = "`" . $column . "`=" . $this->pdo->quote($value);
+                    $dataProcessedWhereQuery = "`" . $column . "`";
+                    if (!empty($value)) {
+                        $dataProcessedWhereQuery .= "=" . $this->pdo->quote($value);
+                    } else {
+                        $dataProcessedWhereQuery .= 'IS NULL';
+                    }
+                    $dataProcessedWhere[] = $dataProcessedWhereQuery;
                 }
-                $query .= ' WHERE ' . implode(',', $dataProcessedWhere);
+                $query .= ' WHERE ' . implode(' AND ', $dataProcessedWhere);
             }
             $query .= ';';
             try {
