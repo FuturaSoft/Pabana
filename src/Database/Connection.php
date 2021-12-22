@@ -149,7 +149,7 @@ class Connection
             if (!empty($dataWhere)) {
                 foreach ($dataWhere as $column => $value) {
                     $dataProcessedWhereQuery = "`" . $column . "`";
-                    if (!empty($value)) {
+                    if ($value !== '' || $value !== null) {
                         $dataProcessedWhereQuery .= "=" . $this->pdo->quote($value);
                     } else {
                         $dataProcessedWhereQuery .= 'IS NULL';
@@ -258,7 +258,7 @@ class Connection
             $dataProcessed = [];
             foreach ($data as $column => $value) {
                 $dataProcessedQuery = "`" . $column . "`=";
-                if (!empty($value)) {
+                if ($value !== '' || $value !== null) {
                     $dataProcessedQuery .= $this->pdo->quote($value);
                 } else {
                     $dataProcessedQuery .= 'NULL';
@@ -490,7 +490,7 @@ class Connection
             $dataProcessed = [];
             foreach ($data as $column => $value) {
                 $dataProcessedQuery = "`" . $column . "`=";
-                if (!empty($value)) {
+                if ($value !== '' || $value !== null) {
                     $dataProcessedQuery .= $this->pdo->quote($value);
                 } else {
                     $dataProcessedQuery .= 'NULL';
@@ -501,7 +501,7 @@ class Connection
             if (!empty($dataWhere)) {
                 foreach ($dataWhere as $column => $value) {
                     $dataProcessedWhereQuery = "`" . $column . "`";
-                    if (!empty($value)) {
+                    if ($value !== '' || $value !== null) {
                         $dataProcessedWhereQuery .= "=" . $this->pdo->quote($value);
                     } else {
                         $dataProcessedWhereQuery .= 'IS NULL';
