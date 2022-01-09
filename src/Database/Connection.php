@@ -441,6 +441,106 @@ class Connection
     }
 
     /**
+     * Select record in table
+     *
+     * @since   1.2
+     * @param   string $table       Table of database
+     * @param   array  $dataSelect  Array of column => value
+     * @param   array  $dataWhere   Array of column => value
+     * @param   string $sType       Type de retour
+     * @return  bool
+     */
+    private function select($table, $dataSelect, $dataWhere = [], $sType = 'all')
+    {
+        if ($this->isConnected()) {
+            $query = "SELECT ";
+            $dataSelectProcessed = [];
+            foreach ($dataSelect as $column) {
+                if ($column == '*') {
+                    $dataProcessedQuery = "*";
+                } else {
+                    $dataProcessedQuery = "`" . $column . "`";
+                }
+                $dataSelectProcessed[] = $dataProcessedQuery;
+            }
+            $query .= implode(',', $dataSelectProcessed);
+            $query .= " FROM `" . $table . "`";
+            if (!empty($dataWhere)) {
+                $dataWhereProcessed = [];
+                foreach ($dataWhere as $column => $value) {
+                    $dataProcessedQuery = "`" . $column . "`=:" . $column;
+                    $dataWhereProcessed[] = $dataProcessedQuery;
+                }
+                $query .= ' WHERE ' . implode(' AND ', $dataWhereProcessed);
+            }
+            $query .= ';';
+            if ($sType == 'all') {
+                return $this->queryAll($query, $dataWhere);
+            } else if ($sType == 'one') {
+                return $this->queryOne($query, $dataWhere);
+            } else if ($sType == 'column') {
+                return $this->queryOneColumn($query, $dataWhere);
+            }
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Select all record in table
+     *
+     * @since   1.2
+     * @param   string $table       Table of database
+     * @param   array  $dataSelect  Array of column => value
+     * @param   array  $dataWhere   Array of column => value
+     * @return  bool
+     */
+    public function selectAll($table, $dataSelect, $dataWhere = [])
+    {
+        if ($this->isConnected()) {
+            return $this->select($table, $dataSelect, $dataWhere, 'all');
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Select one record in table
+     *
+     * @since   1.2
+     * @param   string $table       Table of database
+     * @param   array  $dataSelect  Array of column => value
+     * @param   array  $dataWhere   Array of column => value
+     * @return  bool
+     */
+    public function selectOne($table, $dataSelect, $dataWhere = [])
+    {
+        if ($this->isConnected()) {
+            return $this->select($table, $dataSelect, $dataWhere, 'one');
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Select one column in table
+     *
+     * @since   1.2
+     * @param   string $table       Table of database
+     * @param   array  $dataSelect  Array of column => value
+     * @param   array  $dataWhere   Array of column => value
+     * @return  bool
+     */
+    public function selectOneColumn($table, $dataSelect, $dataWhere = [])
+    {
+        if ($this->isConnected()) {
+            return $this->select($table, $dataSelect, $dataWhere, 'column');
+        } else {
+            return false;
+        }
+    }
+
+    /**
      * Rolls back a transaction
      *
      * @since   1.1

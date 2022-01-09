@@ -55,6 +55,22 @@ class Model
     }
 
     /**
+     * Delete a record in database
+     *
+     * @since   1.2
+     * @param   array $dataWhere Array of column => value
+     * @return  bool
+     */
+    public function delete($dataWhere = [])
+    {
+        if (!isset($this->table)) {
+            throw new \Exception("Table isn't defined");
+            return false;
+        }
+        return $this->connection->delete($this->table, $dataWhere);
+    }
+
+    /**
      * Call a model class
      *
      * @since   1.0
@@ -89,6 +105,57 @@ class Model
     }
 
     /**
+     * Get all record
+     *
+     * @since   1.2
+     * @param   array $dataSelect Array of column => value
+     * @param   array $dataWhere Array of column => value
+     * @return  bool
+     */
+    public function selectAll($dataSelect, $dataWhere = [])
+    {
+        if (!isset($this->table)) {
+            throw new \Exception("Table isn't defined");
+            return false;
+        }
+        return $this->connection->selectAll($this->table, $dataSelect, $dataWhere);
+    }
+
+    /**
+     * Get one record
+     *
+     * @since   1.2
+     * @param   array $dataSelect Array of column => value
+     * @param   array $dataWhere Array of column => value
+     * @return  bool
+     */
+    public function selectOne($dataSelect, $dataWhere = [])
+    {
+        if (!isset($this->table)) {
+            throw new \Exception("Table isn't defined");
+            return false;
+        }
+        return $this->connection->selectOne($this->table, $dataSelect, $dataWhere);
+    }
+
+    /**
+     * Get one column
+     *
+     * @since   1.2
+     * @param   array $dataSelect Array of column => value
+     * @param   array $dataWhere Array of column => value
+     * @return  bool
+     */
+    public function selectOneColumn($dataSelect, $dataWhere = [])
+    {
+        if (!isset($this->table)) {
+            throw new \Exception("Table isn't defined");
+            return false;
+        }
+        return $this->connection->selectOneColumn($this->table, $dataSelect, $dataWhere);
+    }
+
+    /**
      * Update a record in database
      *
      * @since   1.2
@@ -103,21 +170,5 @@ class Model
             return false;
         }
         return $this->connection->update($this->table, $data, $dataWhere);
-    }
-
-    /**
-     * Delete a record in database
-     *
-     * @since   1.2
-     * @param   array $dataWhere Array of column => value
-     * @return  bool
-     */
-    public function delete($dataWhere = [])
-    {
-        if (!isset($this->table)) {
-            throw new \Exception("Table isn't defined");
-            return false;
-        }
-        return $this->connection->delete($this->table, $dataWhere);
     }
 }
