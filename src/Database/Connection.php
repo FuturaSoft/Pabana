@@ -49,6 +49,8 @@ class Connection
      */
     private $name;
 
+    private $lastQuery;
+
     /**
      * Constructor
      *
@@ -160,7 +162,7 @@ class Connection
             }
             $query .= ';';
             try {
-                return $this->pdo->exec($query);
+                return $this->exec($query);
             } catch (\PDOException $e) {
                 throw new \Exception($e->getMessage());
                 return false;
@@ -203,6 +205,7 @@ class Connection
     {
         if ($this->isConnected()) {
             try {
+                $this->lastQuery = $query;
                 return $this->pdo->exec($query);
             } catch (\PDOException $e) {
                 throw new \Error($e->getMessage());
@@ -211,6 +214,18 @@ class Connection
         } else {
             return false;
         }
+    }
+
+
+    /**
+     * Get Last query
+     *
+     * @since   1.2
+     * @return  string  Return last query
+     */
+    public function getLastQuery()
+    {
+        return $this->lastQuery;
     }
 
     /**
@@ -258,17 +273,17 @@ class Connection
             $dataProcessed = [];
             foreach ($data as $column => $value) {
                 $dataProcessedQuery = "`" . $column . "`=";
-                if ($value !== '' || $value !== null) {
-                    $dataProcessedQuery .= $this->pdo->quote($value);
-                } else {
+                if ($value === '' || $value === null) {
                     $dataProcessedQuery .= 'NULL';
+                } else {
+                    $dataProcessedQuery .= $this->pdo->quote($value);
                 }
                 $dataProcessed[] = $dataProcessedQuery;
             }
             $query .= implode(',', $dataProcessed);
             $query .= ';';
             try {
-                $this->pdo->exec($query);
+                $this->exec($query);
                 return $this->lastInsertId();
             } catch (\PDOException $e) {
                 throw new \Exception($e->getMessage());
@@ -343,6 +358,7 @@ class Connection
     {
         if ($this->isConnected()) {
             try {
+                $this->lastQuery = $query;
                 if (!empty($dataPrepare)) {
                     $statement = $this->pdo->prepare($query);
                     $statement->execute($dataPrepare);
@@ -590,10 +606,10 @@ class Connection
             $dataProcessed = [];
             foreach ($data as $column => $value) {
                 $dataProcessedQuery = "`" . $column . "`=";
-                if ($value !== '' || $value !== null) {
-                    $dataProcessedQuery .= $this->pdo->quote($value);
-                } else {
+                if ($value === '' || $value === null) {
                     $dataProcessedQuery .= 'NULL';
+                } else {
+                    $dataProcessedQuery .= $this->pdo->quote($value);
                 }
                 $dataProcessed[] = $dataProcessedQuery;
             }
@@ -601,10 +617,10 @@ class Connection
             if (!empty($dataWhere)) {
                 foreach ($dataWhere as $column => $value) {
                     $dataProcessedWhereQuery = "`" . $column . "`";
-                    if ($value !== '' || $value !== null) {
-                        $dataProcessedWhereQuery .= "=" . $this->pdo->quote($value);
-                    } else {
+                    if ($value === '' || $value === null) {
                         $dataProcessedWhereQuery .= 'IS NULL';
+                    } else {
+                        $dataProcessedWhereQuery .= "=" . $this->pdo->quote($value);
                     }
                     $dataProcessedWhere[] = $dataProcessedWhereQuery;
                 }
@@ -612,7 +628,7 @@ class Connection
             }
             $query .= ';';
             try {
-                return $this->pdo->exec($query);
+                return $this->exec($query);
             } catch (\PDOException $e) {
                 new \Exception($e->getMessage());
                 return false;
