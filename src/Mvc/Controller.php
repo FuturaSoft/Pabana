@@ -19,6 +19,7 @@ use Pabana\Html\Html;
 use Pabana\Mvc\Layout;
 use Pabana\Mvc\Model;
 use Pabana\Mvc\View;
+use Pabana\Network\Http\Json;
 use Pabana\Network\Http\Request;
 use Pabana\Type\StringType;
 
@@ -124,6 +125,25 @@ class Controller
     }
 
     /**
+     * Abort view of controller
+     *
+     * @since   1.2
+     * @param   string $code Error code
+     *
+     * @return  string Content of error
+     */
+    public function abort($code)
+    {
+        $errorNamespace = Configuration::read('mvc.error.namespace');
+        if (method_exists($errorNamespace, 'index')) {
+            $_GET['code'] = $code;
+            $oError = new $errorNamespace();
+            echo $oError->render('index');
+        }
+        return false;
+    }
+
+    /**
      * Create the View and the Layout
      * Call initialize method if exist
      * Launch controller
@@ -145,23 +165,77 @@ class Controller
             $layoutName = Configuration::read('mvc.layout.default');
             $this->setLayout($layoutName);
         }
+        // Check if guard is enable
+        if (Configuration::read('mvc.guard.enable') === true) {
+            // Get Guard namespace
+            $guardClass = str_replace('Controller', '', $this->controller) . 'Guard';
+            $guardNamespace = Configuration::read('mvc.guard.namespace') . '\\' . $guardClass;
+            if (class_exists($guardNamespace)) {
+                $guard = new $guardNamespace();
+            }
+        }
+        http_response_code(500);
+        // Call initilize method of guard if exists
+        if (isset($guard) && method_exists($guard, 'initialize')) {
+            $guardResult = $guard->initialize();
+            if ($guardResult === false) {
+                if ($this->request->isAjax()) {
+                    Json::send([
+                        'error' => $guard->getErrorData()
+                    ], $guard->getErrorCode());
+                    return null;
+                } else {
+                    return $this->abort($guard->getErrorCode());
+                }
+            }
+        }
         // Call initialize method in Controller if exists
         if (method_exists($this, 'initialize')) {
-            $this->initialize();
+            $actionReturn = true;
+            $actionReturn = $this->initialize();
+            if ($actionReturn === false) {
+                return '';
+            }
+        }
+        // Call action method of guard if exists
+        if (isset($guard) && method_exists($guard, $action)) {
+            $guardResult = $guard->$action();
+            if ($guardResult === false) {
+                if ($this->request->isAjax()) {
+                    Json::send([
+                        'error' => $guard->getErrorData()
+                    ], $guard->getErrorCode());
+                    return null;
+                } else {
+                    return $this->abort($guard->getErrorCode());
+                }
+            }
         }
         // Launch action of controller
         ob_start();
         $actionResult = $this->$action();
-        echo PHP_EOL;
         $bodyContent = ob_get_clean();
         // If Controller's Action return false, disable Layout and View
-        if ($actionResult !== false) {
-            if (isset($this->layout) && $this->layout->getAutoRender()) {
-                // Get Layout and View if auto render of View enable
-                $bodyContent .= $this->layout->render();
-            } elseif (isset($this->view) && $this->view->getAutoRender()) {
-                // Get View only
-                $bodyContent .= $this->view->render();
+        if ($actionResult === false) {
+            if ($this->request->isAjax()) {
+                return $bodyContent;
+            } else {
+                return '';
+            }
+        }
+        if (isset($this->layout) && $this->layout->getAutoRender()) {
+            // Get Layout and View if auto render of View enable
+            $bodyContent .= $this->layout->render();
+        } elseif (isset($this->view) && $this->view->getAutoRender()) {
+            // Get View only
+            $bodyContent .= $this->view->render();
+        }
+        if (http_response_code() == 500) {
+            $aError = error_get_last();
+            if (empty($aError)) {
+                http_response_code(200);
+            } else if ($aError['type'] != E_ERROR && $aError['type'] != E_WARNING) {
+                http_response_code(200);
             }
         }
         return $bodyContent;
@@ -177,7 +251,7 @@ class Controller
     final public function setLayout($layoutName)
     {
         $layoutNamespace = Configuration::read('mvc.layout.namespace');
-        $layoutNamespace = $layoutNamespace . '\\' . $layoutName;
+        $layoutNamespace = $layoutNamespace . '\\' . $layoutName . 'Layout';
         $this->layout = new $layoutNamespace($this->view);
         // To maintain compatibility with version 1.0
         $this->Layout = $this->layout;

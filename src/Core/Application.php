@@ -153,7 +153,7 @@ class Application
         }
         return false;
     }
-    
+
     /**
      * Run Pabana Framework
      *

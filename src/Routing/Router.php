@@ -48,7 +48,7 @@ class Router
      * Auto resolve a Route from URL by separator
      *
      * @since   1.0
-     * @param   string $arsUrlValueList Liste of url part.
+     * @param   array   $arsUrlValueList Liste of url part.
      * @return  void
      */
     private static function autoResolve($arsUrlValueList)
@@ -153,7 +153,7 @@ class Router
     private static function checkController()
     {
         $bSetFallback = false;
-        $sControllerNamespace = Configuration::read('application.namespace') . '\Controller\\' . self::getController();
+        $sControllerNamespace = Configuration::read('application.namespace') . '\Controllers\\' . self::getController();
         if (class_exists($sControllerNamespace) === false) {
             $bSetFallback = true;
         }
@@ -311,7 +311,7 @@ class Router
      */
     private static function setController($sController)
     {
-        self::$sController = ucfirst($sController);
+        self::$sController = ucfirst($sController) . Configuration::read('mvc.controller.suffix', '');
     }
 
     /**

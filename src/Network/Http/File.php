@@ -15,16 +15,8 @@
 namespace Pabana\Network\Http;
 
 /**
- * Manipulate Json
+ * Manipulate File
  */
-class Json
+class File
 {
-    public static function send($data = [], $code = 200)
-    {
-        http_response_code($code);
-        if (!empty($data)) {
-            header('Content-Type: application/json');
-            echo json_encode($data);
-        }
-    }
 }

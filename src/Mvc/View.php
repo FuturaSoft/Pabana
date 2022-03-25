@@ -16,6 +16,7 @@ namespace Pabana\Mvc;
 
 use Pabana\Core\Configuration;
 use Pabana\Html\Html;
+use Pabana\Network\Http\Request;
 use Pabana\Routing\Router;
 
 /**
@@ -69,6 +70,12 @@ class View
     public $html;
 
     /**
+     * @var     \Pabana\Network\Http\Request Object Request.
+     * @since   1.2
+     */
+    public $request;
+
+    /**
      * Initialize view
      *
      * Load Html object
@@ -85,11 +92,13 @@ class View
         $this->html = new Html();
         // To maintain compatibility with version 1.0
         $this->Html = $this->html;
+        // Load Http\Request helper to $html var
+        $this->request = new Request();
         // Set auto render status from configuration
         $this->setAutoRender(Configuration::read('mvc.view.auto_render'));
         // Set default directory for view
         $viewRootPath = Configuration::read('application.path') . Configuration::read('mvc.view.path');
-        $directoryPath = $viewRootPath . '/' . $controller;
+        $directoryPath = $viewRootPath . DS . str_replace('Controller', '', $controller);
         $this->setDirectory($directoryPath);
         // Set extension from configuration
         $this->setExtension(Configuration::read('mvc.view.extension'));

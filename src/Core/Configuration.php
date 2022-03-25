@@ -24,10 +24,26 @@ use Pabana\Parser\Ini;
 class Configuration
 {
     /**
-     * @var    Array Array to store configuration parameters
+     * @var     Array   Array to store configuration parameters
      * @since   1.0
      */
     private static $configList = array();
+
+    /**
+     * Apply configuration of php parameter
+     *
+     * This method apply php parameter of config
+     *
+     * @since   1.2
+     *
+     * @return  void
+     */
+    public static function apply()
+    {
+        $debugDisplay = self::read('debug.display');
+        ini_set('display_errors', $debugDisplay);
+        ini_set('display_startup_errors', $debugDisplay);
+    }
 
     /**
      * Get base configuration of Pabana
@@ -58,6 +74,8 @@ class Configuration
         self::write('database.config.file', 'databases.php');
         // Set debug level to all
         self::write('debug.level', E_ALL);
+        // Set display of debug
+        self::write('debug.display', true);
         // Define if script file existence is tested
         self::write('html.script.test_file_existance', true);
         // Define if script version is automaticated add
@@ -69,11 +87,21 @@ class Configuration
         // Set autoloading of shared var between componant
         self::write('mvc.autoload_shared_var', true);
         // Set namespace for controller
-        self::write('mvc.controller.namespace', '\App\Controller');
+        self::write('mvc.controller.namespace', '\App\Controllers');
+        // Set suffix for controller
+        self::write('mvc.controller.suffix', 'Controller');
+        // Set namespace for error controller
+        self::write('mvc.error.namespace', '\App\Controllers\ErrorController');
+        // Set namespace for guard
+        self::write('mvc.form.namespace', '\App\Forms');
+        // Enable Guard
+        self::write('mvc.guard.enable', true);
+        // Set namespace for guard
+        self::write('mvc.guard.namespace', '\App\Guards');
         // Set namespace for layout
-        self::write('mvc.layout.namespace', '\App\Layout');
+        self::write('mvc.layout.namespace', '\App\Layouts');
         // Set path for Layout
-        self::write('mvc.layout.path', '/src/Layout');
+        self::write('mvc.layout.path', '/resources/layouts');
         // Set default layout
         self::write('mvc.layout.default', 'Application');
         // Set extension for layout
@@ -81,13 +109,13 @@ class Configuration
         // Set auto render for layout
         self::write('mvc.layout.auto_render', true);
         // Set namespace for model
-        self::write('mvc.model.namespace', '\App\Model');
+        self::write('mvc.model.namespace', '\App\Models');
         // Set auto render for view
         self::write('mvc.view.auto_render', true);
         // Set extension for view
         self::write('mvc.view.extension', 'php');
         // Set path for view
-        self::write('mvc.view.path', '/src/View');
+        self::write('mvc.view.path', '/resources/views');
         // Set auto routing
         self::write('routing.auto', true);
         // Set config file for route collection
@@ -209,6 +237,8 @@ class Configuration
         }
         // Register constant who aren't register by the past
         self::registerConstant();
+        // Apply php parameter
+        self::apply();
     }
 
     /**

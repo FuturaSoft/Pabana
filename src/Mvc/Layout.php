@@ -97,7 +97,7 @@ class Layout
     public function __construct($view, $cleanHtml = false)
     {
         $layoutString = new StringType(get_class($this));
-        // Get controller by current class name
+        // Get layout by current class name
         $layoutName = $layoutString->classBasename();
         $this->setName($layoutName);
         // Load Mvc\Html class to helper var
@@ -111,6 +111,8 @@ class Layout
         $this->setAutoRender(Configuration::read('mvc.layout.auto_render'));
         // Set default directory for layout
         $directory = APP_ROOT . Configuration::read('mvc.layout.path');
+        $layoutDirectoryName = str_replace('Layout', '', $layoutString->classBasename());
+        $directory .= DS . $layoutDirectoryName;
         $this->setDirectory($directory);
         // Set layout file extension from configuration
         $this->setExtension(Configuration::read('mvc.layout.extension'));
@@ -151,8 +153,8 @@ class Layout
                 ${$varName} = $varValue;
             }
         }
-        $layoutDirectory = $this->getDirectory() . '/' . $this->getName();
-        $elementPath = $layoutDirectory . '/' . $elementName . '.' . $this->getExtension();
+        $layoutDirectory = $this->getDirectory();
+        $elementPath = $layoutDirectory . DS . $elementName . '.' . $this->getExtension();
         if (!file_exists($elementPath)) {
             trigger_error('Element file "' . $elementPath . '" doesn\'t exist.', E_USER_ERROR);
             return false;
