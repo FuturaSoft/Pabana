@@ -106,16 +106,20 @@ class Configuration
         self::write('mvc.guard.enable', true);
         // Set namespace for guard
         self::write('mvc.guard.namespace', '\App\Guards');
-        // Set namespace for layout
-        self::write('mvc.layout.namespace', '\App\Layouts');
-        // Set path for Layout
-        self::write('mvc.layout.path', '/resources/layouts');
+        // Set auto render for layout
+        self::write('mvc.layout.auto_render', true);
+        // Define if camel case must be transform to snake case
+        self::write('mvc.layout.camal_to_snake', true);
         // Set default layout
         self::write('mvc.layout.default', 'Application');
         // Set extension for layout
         self::write('mvc.layout.extension', 'php');
-        // Set auto render for layout
-        self::write('mvc.layout.auto_render', true);
+        // Set namespace for layout
+        self::write('mvc.layout.namespace', '\App\Layouts');
+        // Set path for Layout
+        self::write('mvc.layout.path', '/resources/layouts');
+        // Set suffix for Layout
+        self::write('mvc.layout.suffix', 'Layout');
         // Set namespace for model
         self::write('mvc.model.namespace', '\App\Models');
         // Set auto render for view

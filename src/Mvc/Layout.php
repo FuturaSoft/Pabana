@@ -111,7 +111,12 @@ class Layout
         $this->setAutoRender(Configuration::read('mvc.layout.auto_render'));
         // Set default directory for layout
         $directory = APP_ROOT . Configuration::read('mvc.layout.path');
-        $layoutDirectoryName = str_replace('Layout', '', $layoutString->classBasename());
+        $layoutSuffix = Configuration::read('mvc.layout.suffix', '');
+        $layoutDirectoryName = str_replace($layoutSuffix, '', $layoutString->classBasename());
+        if (Configuration::read('mvc.layout.camal_to_snake', false) === true) {
+            $layoutDirectoryNameString = new StringType($layoutDirectoryName);
+            $layoutDirectoryName = $layoutDirectoryNameString->camalToSnake();
+        }
         $directory .= DS . $layoutDirectoryName;
         $this->setDirectory($directory);
         // Set layout file extension from configuration
