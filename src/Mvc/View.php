@@ -18,6 +18,7 @@ use Pabana\Core\Configuration;
 use Pabana\Html\Html;
 use Pabana\Network\Http\Request;
 use Pabana\Routing\Router;
+use Pabana\Type\StringType;
 
 /**
  * View class
@@ -98,8 +99,14 @@ class View
         $this->setAutoRender(Configuration::read('mvc.view.auto_render'));
         // Set default directory for view
         $viewRootPath = Configuration::read('application.path') . Configuration::read('mvc.view.path');
-        $directoryPath = $viewRootPath . DS . str_replace('Controller', '', $controller);
-        $this->setDirectory($directoryPath);
+        $controllerSuffix = Configuration::read('mvc.controller.suffix', '');
+        $directoryPath = str_replace($controllerSuffix, '', $controller);
+        if (Configuration::read('mvc.view.camal_to_snake', false) === true) {
+            $directoryPathString = new StringType($directoryPath);
+            $directoryPath = $directoryPathString->camalToSnake();
+        }
+        $fullDirectoryPath = $viewRootPath . DS . $directoryPath;
+        $this->setDirectory($fullDirectoryPath);
         // Set extension from configuration
         $this->setExtension(Configuration::read('mvc.view.extension'));
         // Set name of View
@@ -275,6 +282,10 @@ class View
      */
     public function setName($name)
     {
+        if (Configuration::read('mvc.view.camal_to_snake', false) === true) {
+            $nameString = new StringType($name);
+            $name = $nameString->camalToSnake();
+        }
         $this->name = $name;
     }
 

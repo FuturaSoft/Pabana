@@ -14,6 +14,8 @@
  */
 namespace Pabana\Intl;
 
+use Pabana\Core\Configuration;
+
 /**
  * Encoding class
  *

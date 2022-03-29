@@ -84,6 +84,14 @@ class Configuration
         self::write('html.css.test_file_existance', true);
         // Define if css version is automaticated add
         self::write('html.css.version', true);
+        // Define if translate file are autoloaded
+        self::write('intl.auto_load', true);
+        // Define intl path
+        self::write('intl.path', '/resources/lang');
+        // Defibne intl fallback language
+        self::write('intl.lang_fallback', 'fr');
+        // Define if camel case must be transform to snake case
+        self::write('intl.camal_to_snake', true);
         // Set autoloading of shared var between componant
         self::write('mvc.autoload_shared_var', true);
         // Set namespace for controller
@@ -112,6 +120,8 @@ class Configuration
         self::write('mvc.model.namespace', '\App\Models');
         // Set auto render for view
         self::write('mvc.view.auto_render', true);
+        // Define if camel case must be transform to snake case
+        self::write('mvc.view.camal_to_snake', true);
         // Set extension for view
         self::write('mvc.view.extension', 'php');
         // Set path for view

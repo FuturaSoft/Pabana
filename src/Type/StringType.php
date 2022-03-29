@@ -24,7 +24,7 @@ class StringType
      * @since   1.1
      */
     private $stringVar;
-    
+
     /**
      * Constructor
      *
@@ -48,6 +48,18 @@ class StringType
     public function __toString()
     {
         return $this->stringVar;
+    }
+
+    /**
+     * Return camal case to snake case string
+     *
+     * @since   1.2
+     * @return  string  String.
+     */
+    public function camalToSnake()
+    {
+        $this->stringVar = strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', $this->stringVar));
+        return $this;
     }
 
     /**

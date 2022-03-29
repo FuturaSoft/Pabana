@@ -16,6 +16,7 @@ namespace Pabana\Mvc;
 
 use Pabana\Core\Configuration;
 use Pabana\Html\Html;
+use Pabana\Intl\Translate;
 use Pabana\Mvc\Layout;
 use Pabana\Mvc\Model;
 use Pabana\Mvc\View;
@@ -122,6 +123,18 @@ class Controller
         $this->Html = $this->html;
         $this->Model = $this->model;
         $this->Request = $this->request;
+        // Initialize translate object if enable
+        if (Configuration::read('intl.auto_load', false) === true) {
+            $controllerSuffix = Configuration::read('mvc.controller.suffix', '');
+            $classBasename = str_replace($controllerSuffix, '', $this->controller);
+            $sTranslateFile = $classBasename;
+            if (Configuration::read('intl.camal_to_snake', false) === true) {
+                $classBasenameString = new StringType($classBasename);
+                $sTranslateFile = $classBasenameString->camalToSnake();
+            }
+            $sTranslateFile .= '.php';
+            Translate::load($sTranslateFile);
+        }
     }
 
     /**
@@ -168,7 +181,8 @@ class Controller
         // Check if guard is enable
         if (Configuration::read('mvc.guard.enable') === true) {
             // Get Guard namespace
-            $guardClass = str_replace('Controller', '', $this->controller) . 'Guard';
+            $controllerSuffix = Configuration::read('mvc.controller.suffix', '');
+            $guardClass = str_replace($controllerSuffix, '', $this->controller) . 'Guard';
             $guardNamespace = Configuration::read('mvc.guard.namespace') . '\\' . $guardClass;
             if (class_exists($guardNamespace)) {
                 $guard = new $guardNamespace();
