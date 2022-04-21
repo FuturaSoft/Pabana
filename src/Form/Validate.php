@@ -653,10 +653,8 @@ class Validate
         return $aReturn;
     }
 
-    public static function validate($aValidRule)
+    public static function validate($aValidRule, $aData)
     {
-        $oRequest = new Request();
-        $aData = $oRequest->all();
         // Parcours les champs a valider
         foreach ($aValidRule as $sField => $aFieldRule) {
             // Parcours les type de validation
@@ -666,7 +664,7 @@ class Validate
                     'message' => $aRuleData['message'],
                     'error' => $sRuleType
                 );
-                if (!$oRequest->has($sField)) {
+                if (!isset($aData[$sField])) {
                     if ($sRuleType == 'required') {
                         return $aReturn;
                     } else {
@@ -752,7 +750,7 @@ class Validate
                     if (isset($aRuleData['maxsize'])) {
                         $maxsize = $aRuleData['maxsize'];
                     }
-                    if (!self::isFile($oRequest->file($sField), $extension, $mimetype, $maxsize)) {
+                    if (!self::isFile($aData[$sField], $extension, $mimetype, $maxsize)) {
                         return $aReturn;
                     }
                 } else if ($sRuleType == 'greaterThan') {

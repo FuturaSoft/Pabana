@@ -9,28 +9,14 @@
  *
  * @copyright     Copyright (c) FuturaSoft (https://futurasoft.fr)
  * @link          https://pabana.futurasoft.fr Pabana Project
- * @since         1.2
+ * @since         1.0
  * @license       https://opensource.org/licenses/BSD-3-Clause BSD-3-Clause License
  */
-namespace Pabana\Network\Http;
+namespace Pabana\Network\Http\Request;
 
 /**
- * Manipulate Json
+ * Uploaded file class
  */
-class Json
+class UploadedFile extends \SplFileInfo
 {
-    public static function send($data = [], $code = 200)
-    {
-        http_response_code($code);
-        header('Content-Type: application/json');
-        if (!empty($data)) {
-            echo json_encode($data);
-        } else {
-            echo '{}';
-        }
-        if ($code == 200) {
-            return true;
-        }
-        return false;
-    }
 }

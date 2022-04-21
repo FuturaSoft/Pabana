@@ -14,8 +14,9 @@
  */
 namespace Pabana\Network\Http;
 
-use Carbon\Carbon;
-use GuzzleHttp\Psr7\UploadedFile;
+use Pabana\Network\Http\Request\File;
+use Pabana\Network\Http\Request\Input;
+use Pabana\Network\Http\Request\Query;
 
 /**
  * Request class
@@ -31,34 +32,35 @@ class Request
     private $headerList = array();
 
     /**
-     * @var    Array List of File Variable
+     * @var     \Pabana\Network\Http\Request\File    Object to file managment
      * @since   1.2
      */
-    private $fileVariableList = [];
+    public $file;
 
     /**
-     * @var    Array List of Input Variable
+     * @var     \Pabana\Network\Http\Request\Input    Object to input managment
      * @since   1.2
      */
-    private $inputVariableList = [];
+    public $input;
 
     /**
-     * @var    Array List of Query Variable
+     * @var     \Pabana\Network\Http\Request\Query    Object to query managment
      * @since   1.2
      */
-    private $queryVariableList = [];
+    public $query;
 
     /**
      * Constructor
      *
      * @since   1.1
+     * @version 1.2
      */
     public function __construct()
     {
         $this->headerList = $this->getHeaderList();
-        $this->fileVariableList = $_FILES;
-        $this->inputVariableList = $_POST;
-        $this->queryVariableList = $_GET;
+        $this->file = new File();
+        $this->input = new Input();
+        $this->query = new Query();
     }
 
     /**
@@ -114,37 +116,6 @@ class Request
     }
 
     /**
-     * Return all input and query
-     *
-     * @since   1.2
-     *
-     * @return  array   All input
-     */
-    public function all()
-    {
-        return array_merge($this->input() + $this->query());
-    }
-
-    /**
-     * Return Boolean
-     *
-     * @since   1.2
-     *
-     * @param   string  $sKey   Key of variable
-     *
-     * @return  boolean
-     */
-    public function boolean($sKey)
-    {
-        $aAll = $this->all();
-        $aTestBoolean = [1, "1", true, "true", "on", "yes"];
-        if (in_array($aAll[$sKey], $aTestBoolean, true)) {
-            return true;
-        }
-        return false;
-    }
-
-    /**
      * Get client IP
      *
      * @since   1.0
@@ -154,24 +125,6 @@ class Request
     public function clientIp()
     {
         return $this->getClientIp();
-    }
-
-    /**
-     * Return Carbon date
-     *
-     * @since   1.2
-     *
-     * @param   string  $sKey   Key of variable
-     *
-     * @return  \Carbon
-     */
-    public function date($sKey, $sFormat = 'Y-m-d')
-    {
-        $aAll = $this->all();
-        if (isset($aAll[$sKey])) {
-            return Carbon::createFromFormat($sFormat, $aAll[$sKey]);
-        }
-        return false;
     }
 
     /**
@@ -185,42 +138,6 @@ class Request
     public function domain($tldLength = 1)
     {
         return $this->getDomain($tldLength);
-    }
-
-    /**
-     * Get $_FILES parameter
-     *
-     * @since   1.2
-     *
-     * @param   string  $sKey           (Optional) Key of file
-     *
-     * @return  mixed   Return file
-     */
-    public function file($sKey)
-    {
-        if (isset($this->fileVariableList[$sKey])) {
-            return new File($this->fileVariableList[$sKey]);
-        }
-        throw new \Exception('File "' . $sKey . "' doesn\'t exist.");
-        return null;
-    }
-
-    /**
-     * Check if variables is filled
-     *
-     * @since   1.2
-     *
-     * @param   string  $sKey           (Optional) Key of file
-     *
-     * @return  mixed   Return file
-     */
-    public function filled($sKey)
-    {
-        $aAll = $this->all();
-        if (isset($aAll[$sKey]) && !empty($aAll[$sKey])) {
-            return true;
-        }
-        return false;
     }
 
     /**
@@ -440,24 +357,6 @@ class Request
     }
 
     /**
-     * Check if variables exist
-     *
-     * @since   1.2
-     *
-     * @param   string  $sKey   Key of variable
-     *
-     * @return  boolean
-     */
-    public function has($sKey)
-    {
-        $aAll = $this->all();
-        if (isset($aAll[$sKey])) {
-            return true;
-        }
-        return false;
-    }
-
-    /**
      * Check if header exist
      *
      * @since   1.1
@@ -479,31 +378,6 @@ class Request
     public function host()
     {
         return $this->getHost();
-    }
-
-    /**
-     * Get $_POST parameter
-     *
-     * @since   1.2
-     *
-     * @param   string  $sKey           (Optional) Key of input
-     * @param   string  $sDefaultValue  (Optional) Default value
-     *
-     * @return  mixed   Return input
-     */
-    public function input($sKey = '', $sDefaultValue = null)
-    {
-        if (empty($sKey)) {
-            return $this->inputVariableList;
-        }
-        if (isset($this->inputVariableList[$sKey])) {
-            return $this->inputVariableList[$sKey];
-        }
-        if ($sDefaultValue !== null) {
-            return $sDefaultValue;
-        }
-        throw new \Exception('Input "' . $sKey . "' doesn\'t exist.");
-        return null;
     }
 
     /**
@@ -660,20 +534,6 @@ class Request
     }
 
     /**
-     * Merge array in input array
-     *
-     * @since   1.2
-     *
-     * @param   array   $aData      Array merge
-     *
-     * @return  void
-     */
-    public function merge($aData)
-    {
-        $this->inputVariableList = array_merge($this->inputVariableList, $aData);
-    }
-
-    /**
      * Get request method
      *
      * @since   1.0
@@ -731,31 +591,6 @@ class Request
     public function port()
     {
         return $this->getPort();
-    }
-
-    /**
-     * Get $_GET parameter
-     *
-     * @since   1.2
-     *
-     * @param   string  $sKey           (Optional) Key of input
-     * @param   string  $sDefaultValue  (Optional) Default value
-     *
-     * @return  mixed   Return input
-     */
-    public function query($sKey = '', $sDefaultValue = null)
-    {
-        if (empty($sKey)) {
-            return $this->queryVariableList;
-        }
-        if (isset($this->queryVariableList[$sKey])) {
-            return $this->queryVariableList[$sKey];
-        }
-        if ($sDefaultValue !== null) {
-            return $sDefaultValue;
-        }
-        throw new \Exception('Query "' . $sKey . "' doesn\'t exist.");
-        return null;
     }
 
     /**

@@ -49,6 +49,10 @@ class Connection
      */
     private $name;
 
+    /**
+     * @var     string  Last query executed
+     * @since   1.2
+     */
     private $lastQuery;
 
     /**

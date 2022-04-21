@@ -1,0 +1,230 @@
+<?php
+/**
+ * Pabana : PHP Framework (https://pabana.futurasoft.fr)
+ * Copyright (c) FuturaSoft (https://futurasoft.fr)
+ *
+ * Licensed under BSD-3-Clause License
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright     Copyright (c) FuturaSoft (https://futurasoft.fr)
+ * @link          https://pabana.futurasoft.fr Pabana Project
+ * @since         1.0
+ * @license       https://opensource.org/licenses/BSD-3-Clause BSD-3-Clause License
+ */
+namespace Pabana\Network\Http\Request;
+
+use Carbon\Carbon;
+
+/**
+ * Input class
+ *
+ * Parse $_POST
+ */
+class Input
+{
+    /**
+     * @var     Array   List of input variable
+     * @since   1.2
+     */
+    private $variableList = [];
+
+    /**
+     * Constructor
+     *
+     * @since   1.2
+     */
+    public function __construct()
+    {
+        // Get variable list
+        $this->variableList = $_POST;
+        // Auto trim all array
+        foreach ($this->variableList as $mKey => $mVariable) {
+            if (is_array($mVariable)) {
+                $this->variableList[$mKey] = array_map('trim', $mVariable);
+            } else {
+                $this->variableList[$mKey] = trim($mVariable);
+            }
+        }
+    }
+
+    /**
+     * Get $_POST parameter
+     *
+     * @since   1.2
+     *
+     * @param   string  $key    Key of input
+     *
+     * @return  mixed   Return input
+     */
+    public function __get(string $key) {
+        return $this->get($key);
+    }
+
+    /**
+     * Return all input
+     *
+     * @since   1.2
+     *
+     * @return  array
+     */
+    public function all()
+    {
+        return $this->get();
+    }
+
+    /**
+     * Return boolean value of a variable
+     *
+     * @since   1.2
+     *
+     * @param   string  $key    Key of variable
+     * @param   boolean $falseIfNotIsset    (Optional) Return false if key doesn't exist
+     *
+     * @return  boolean
+     */
+    public function boolean($key, $falseIfNotIsset = false)
+    {
+        if (
+            $falseIfNotIsset === true
+            && !$this->has($key)
+        ) {
+            return false;
+        }
+        $aTestBoolean = [1, "1", true, "true", "on", "yes"];
+        if (in_array($this->get($key, 0), $aTestBoolean, true)) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Return Carbon date
+     *
+     * @since   1.2
+     *
+     * @param   string  $key    Key of variable
+     * @param   string  $format (Optional) Format of Carbon object (default: Y-m-d)
+     *
+     * @return  \Carbon
+     */
+    public function date($key, $format = 'Y-m-d')
+    {
+        return Carbon::createFromFormat($format, $this->get($key));
+    }
+
+    /**
+     * Check if variables is filled
+     *
+     * @since   1.2
+     *
+     * @param   string  $key    Key of variable
+     *
+     * @return  boolean
+     */
+    public function filled($key)
+    {
+        if (
+            $this->has($key)
+            && !empty($this->variableList[$key])
+        ) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Get $_POST parameter
+     *
+     * @since   1.2
+     *
+     * @param   string  $key           (Optional) Key of input
+     * @param   string  $defaultValue  (Optional) Default value
+     *
+     * @return  mixed   Return input
+     */
+    public function get($key = '', $defaultValue = null)
+    {
+        if (empty($key)) {
+            return $this->variableList;
+        }
+        if (isset($this->variableList[$key])) {
+            return $this->variableList[$key];
+        }
+        if ($defaultValue !== null) {
+            return $defaultValue;
+        }
+        throw new \Exception('Input "' . $key . "' doesn\'t exist.");
+        return null;
+    }
+
+    /**
+     * Check if variables exist
+     *
+     * @since   1.2
+     *
+     * @param   string  $key    Key of variable
+     *
+     * @return  boolean
+     */
+    public function has($key)
+    {
+        if (isset($this->variableList[$key])) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Merge array in input array
+     *
+     * @since   1.2
+     *
+     * @param   array   $data   Array merge
+     *
+     * @return  this
+     */
+    public function merge($data)
+    {
+        $this->variableList = array_merge($this->variableList, $data);
+        return $this;
+    }
+
+    /**
+     * Return old value
+     *
+     * @since   1.2
+     *
+     * @param   string  $key           Key of input
+     * @param   string  $defaultValue  (Optional) Default value
+     *
+     * @return  mixed
+     */
+    public function old($key, $defaultValue = null)
+    {
+        if (isset($_POST[$key])) {
+            return $_POST[$key];
+        }
+        if ($defaultValue !== null) {
+            return $defaultValue;
+        }
+        throw new \Exception('POST variable "' . $key . '" doesn\'t exist.');
+        return null;
+    }
+
+    /**
+     * Replace variable content in input
+     *
+     * @since   1.2
+     *
+     * @param   string  $key    Key of variable
+     * @param   mixed   $value  New value of variable
+     *
+     * @return  this
+     */
+    public function replace($key, $value)
+    {
+        $this->variableList[$key] = $value;
+        return $this;
+    }
+}
