@@ -225,7 +225,11 @@ class Request
      */
     public function getHeaderList()
     {
-        $headers = [];
+        if (!function_exists('apache_request_headers')) {
+            $headers = [];
+        } else {
+            $headers = apache_request_headers();
+        }
         $copy_server = array(
             'CONTENT_TYPE'   => 'Content-Type',
             'CONTENT_LENGTH' => 'Content-Length',
