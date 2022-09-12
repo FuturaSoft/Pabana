@@ -37,16 +37,28 @@ class Query
     public function __construct()
     {
         // Get variable list
-        $this->variableList = $_GET;
-        // Auto trim all array
-        foreach ($this->variableList as $mKey => $mVariable) {
-            if (is_array($mVariable)) {
-                $this->variableList[$mKey] = array_map('trim', $mVariable);
-                $this->variableList[$mKey] = array_map('urldecode', $mVariable);
-            } else {
-                $this->variableList[$mKey] = trim($mVariable);
-                $this->variableList[$mKey] = urldecode($mVariable);
+        $this->variableList = $this->prepareVariable($_GET);
+    }
+
+    /**
+     * Recursively prepare variable
+     *
+     * @since   1.2
+     *
+     * @param   mixed  $variableMixed   Array or string variable
+     *
+     * @return  mixed   Return input
+     */
+    private function prepareVariable($variableMixed)
+    {
+        if (is_array($variableMixed)) {
+            foreach ($variableMixed as $key => $variable) {
+                $variableMixed[$key] = $this->prepareVariable($variable);
             }
+            return $variableMixed;
+        } else {
+            $variableMixed = trim($variableMixed);
+            return urldecode($variableMixed);
         }
     }
 
