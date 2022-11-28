@@ -28,7 +28,7 @@ class Json
         } else {
             echo '{}';
         }
-        if ($code == 200) {
+        if ($code >= 200 && $code < 300) {
             return true;
         }
         return false;

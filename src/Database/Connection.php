@@ -287,7 +287,10 @@ class Connection
             $query .= implode(',', $dataProcessed);
             $query .= ';';
             try {
-                $this->exec($query);
+                $bResult = $this->exec($query);
+                if ($bResult === false) {
+                    return false;
+                }
                 return $this->lastInsertId();
             } catch (\PDOException $e) {
                 throw new \Exception($e->getMessage());
