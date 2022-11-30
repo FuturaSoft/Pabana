@@ -657,20 +657,28 @@ class Validate
     {
         // Parcours les champs a valider
         foreach ($aValidRule as $sField => $aFieldRule) {
-            // Parcours les type de validation
+            // Get rule list for this field
+            $aRuleTypeList = array_keys($aFieldRule);
+            // Check if field is empty
+            if (empty($aData[$sField])) {
+                // If field is empty and isn't required, skip next test
+                if (!in_array('required', $aRuleTypeList)) {
+                    continue;
+                } else { // Return required error
+                    return [
+                        'name' => $sField,
+                        'message' => $aFieldRule['required']['message'],
+                        'error' => 'required'
+                    ];
+                }
+            }
+            // Check all validation rules
             foreach ($aFieldRule as $sRuleType => $aRuleData) {
                 $aReturn = array(
                     'name' => $sField,
                     'message' => $aRuleData['message'],
                     'error' => $sRuleType
                 );
-                if (!isset($aData[$sField])) {
-                    if ($sRuleType == 'required') {
-                        return $aReturn;
-                    } else {
-                        continue;
-                    }
-                }
                 if ($sRuleType == 'base64') {
                     if (!self::isBase64($aRuleData[$sField])) {
                         return $aReturn;
