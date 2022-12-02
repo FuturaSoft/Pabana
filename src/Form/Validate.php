@@ -659,26 +659,31 @@ class Validate
         foreach ($aValidRule as $sField => $aFieldRule) {
             // Get rule list for this field
             $aRuleTypeList = array_keys($aFieldRule);
-            // Check if field is empty
-            if (empty($aData[$sField])) {
-                // If field is empty and isn't required, skip next test
+            // Check if field isn't set
+            if (!isset($aData[$sField])) {
+                // If field isn't set and isn't required, skip next test
                 if (!in_array('required', $aRuleTypeList)) {
                     continue;
                 } else { // Return required error
-                    return [
+                    $aReturnError = [
                         'name' => $sField,
-                        'message' => $aFieldRule['required']['message'],
                         'error' => 'required'
                     ];
+                    if (isset($aFieldRule['required']['message'])) {
+                        $aReturnError['message'] = $aFieldRule['required']['message'];
+                    }
+                    return $aReturnError;
                 }
             }
             // Check all validation rules
             foreach ($aFieldRule as $sRuleType => $aRuleData) {
-                $aReturn = array(
+                $aReturn = [
                     'name' => $sField,
-                    'message' => $aRuleData['message'],
                     'error' => $sRuleType
-                );
+                ];
+                if (isset($aRuleData['message'])) {
+                    $aReturn['message'] = $aRuleData['message'];
+                }
                 if ($sRuleType == 'base64') {
                     if (!self::isBase64($aRuleData[$sField])) {
                         return $aReturn;
