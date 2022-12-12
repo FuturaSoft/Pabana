@@ -661,7 +661,7 @@ class Validate
             $aRuleTypeList = array_keys($aFieldRule);
             // Check if field isn't set
             if (!isset($aData[$sField])) {
-                // If field isn't set and isn't required, skip next test
+                // If field isn't set and isn't required, skip other test
                 if (!in_array('required', $aRuleTypeList)) {
                     continue;
                 } else { // Return required error
@@ -671,6 +671,22 @@ class Validate
                     ];
                     if (isset($aFieldRule['required']['message'])) {
                         $aReturnError['message'] = $aFieldRule['required']['message'];
+                    }
+                    return $aReturnError;
+                }
+            }
+            // Check if field is empty
+            if ($aData[$sField] == '') {
+                // If field is empty but isn't a requirement, skip other test
+                if (!in_array('notEmpty', $aRuleTypeList)) {
+                    continue;
+                } else { // Return required error
+                    $aReturnError = [
+                        'name' => $sField,
+                        'error' => 'notEmpty'
+                    ];
+                    if (isset($aFieldRule['notEmpty']['message'])) {
+                        $aReturnError['message'] = $aFieldRule['notEmpty']['message'];
                     }
                     return $aReturnError;
                 }
