@@ -24,7 +24,7 @@ class Json
         http_response_code($code);
         header('Content-Type: application/json');
         if (!empty($data)) {
-            echo json_encode($data);
+            echo json_encode($data, JSON_THROW_ON_ERROR + JSON_INVALID_UTF8_SUBSTITUTE);
         } else {
             echo '{}';
         }
