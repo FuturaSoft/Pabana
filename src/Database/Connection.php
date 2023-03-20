@@ -350,6 +350,34 @@ class Connection
     }
 
     /**
+     * Ping mysql server
+     *
+     * Check if mysql connection is active
+     *
+     * @since   1.2
+     * 
+     * @param   boolean $autoReconnection   If ping fail, try to reconnect
+     * 
+     * @return  boolean Return success or error
+     */
+    public function ping($autoReconnection = true)
+    {
+        if ($this->isConnected()) {
+            try {
+                $this->pdo->query('SELECT 1');
+                return true;
+            } catch (\PDOException $e) {
+                if ($autoReconnection === true) {
+                    return $this->connect();
+                }
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
+
+    /**
      * Executes an SQL statement and return result
      *
      * Executes an SQL statement, returning a result set as a \Pabana\Database\Statement object
