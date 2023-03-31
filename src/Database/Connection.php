@@ -96,9 +96,7 @@ class Connection
                 $this->datasource->getPassword(),
                 $this->datasource->getOption()
             );
-            if (Configuration::read('debug.level') > 0) {
-                $this->pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_WARNING);
-            }
+            $this->pdo->setAttribute(\PDO::ATTR_ERRMODE, Configuration::read('debug.database', \PDO::ERRMODE_WARNING));
             return true;
         } catch (\PDOException $e) {
             throw new \Exception($e->getMessage());
