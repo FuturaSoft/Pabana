@@ -1,6 +1,7 @@
 # Pabana specific files #
 ##########################
 /vendor/*
+composer.phar
 
 # OS generated files #
 ######################
