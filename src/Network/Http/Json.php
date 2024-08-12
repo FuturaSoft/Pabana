@@ -19,6 +19,14 @@ namespace Pabana\Network\Http;
  */
 class Json
 {
+    public static function error($code, $message = '', $http_code = 500)
+    {
+        return self::send([
+            'code' => $code,
+            'message' => $message
+        ], $http_code);
+    }
+
     public static function send($data = [], $code = 200)
     {
         http_response_code($code);
@@ -32,5 +40,16 @@ class Json
             return true;
         }
         return false;
+    }
+
+    public static function success($data = '', $http_code = 200)
+    {
+        if (!empty($data)) {
+            return self::send([
+                'data' => $data
+            ], $http_code);
+        } else {
+            return self::send('', $http_code);
+        }
     }
 }
