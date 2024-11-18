@@ -167,9 +167,8 @@ class Router
             // Set action to route action
             $sFallbackAction = RouteCollection::getFallbackAction();
             self::setAction($sFallbackAction);
-            // Set action to route action
-            $arsFallbackParameter = array('code' => 404);
-            self::setParameter($arsFallbackParameter);
+            // Define HTTP error code
+            http_response_code(404);
         }
     }
 
