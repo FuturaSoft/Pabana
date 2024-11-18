@@ -145,11 +145,13 @@ class Controller
      *
      * @return  string Content of error
      */
-    public function abort($code)
+    public function abort($code = '')
     {
         $errorNamespace = Configuration::read('mvc.error.namespace');
         if (method_exists($errorNamespace, 'index')) {
-            $_GET['code'] = $code;
+            if (!empty($code)) {
+                http_response_code($code);
+            }
             $oError = new $errorNamespace();
             echo $oError->render('index');
         }
@@ -188,7 +190,6 @@ class Controller
                 $guard = new $guardNamespace();
             }
         }
-        http_response_code(500);
         // Call initilize method of guard if exists
         if (isset($guard) && method_exists($guard, 'initialize')) {
             $guardResult = $guard->initialize();
@@ -208,7 +209,10 @@ class Controller
             $actionReturn = true;
             $actionReturn = $this->initialize();
             if ($actionReturn === false) {
-                return '';
+                if (http_response_code() == 200) {
+                    http_response_code(500);
+                }
+                return $this->abort();
             }
         }
         // Call action method of guard if exists
@@ -234,7 +238,10 @@ class Controller
             if ($this->request->isAjax()) {
                 return $bodyContent;
             } else {
-                return '';
+                if (http_response_code() == 200) {
+                    http_response_code(500);
+                }
+                return $this->abort();
             }
         }
         if (isset($this->layout) && $this->layout->getAutoRender()) {
@@ -243,14 +250,6 @@ class Controller
         } elseif (isset($this->view) && $this->view->getAutoRender()) {
             // Get View only
             $bodyContent .= $this->view->render();
-        }
-        if (http_response_code() == 500) {
-            $aError = error_get_last();
-            if (empty($aError)) {
-                http_response_code(200);
-            } else if ($aError['type'] != E_ERROR && $aError['type'] != E_WARNING) {
-                http_response_code(200);
-            }
         }
         return $bodyContent;
     }
