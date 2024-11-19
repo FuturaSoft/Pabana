@@ -594,6 +594,18 @@ class Request
     }
 
     /**
+     * Do a redirection
+     *
+     * @since   1.2
+     * 
+     * @return  boolean
+     */
+    public function redirect($sUrl)
+    {
+        return header('Location: ' . $sUrl);
+    }
+
+    /**
      * Get request scheme
      *
      * @since   1.0

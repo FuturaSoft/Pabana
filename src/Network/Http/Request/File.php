@@ -126,7 +126,7 @@ class File
         if (isset($_FILES[$key])) {
             return $_FILES[$key];
         }
-        throw new \Exception('FILES variable "' . $key . '" doesn\'t exist.');
+        throw new \Exception('File variable "' . $key . '" doesn\'t exist.');
         return null;
     }
 }

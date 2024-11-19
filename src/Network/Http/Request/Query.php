@@ -37,11 +37,11 @@ class Query
     public function __construct()
     {
         // Get variable list
-        $this->variableList = $this->prepareVariable($_GET);
+        $this->variableList = $_GET;
     }
 
     /**
-     * Recursively prepare variable
+     * Recursively protect variable
      *
      * @since   1.2
      *
@@ -49,16 +49,19 @@ class Query
      *
      * @return  mixed   Return input
      */
-    private function prepareVariable($variableMixed)
+    private function protectVariable($variableMixed)
     {
         if (is_array($variableMixed)) {
             foreach ($variableMixed as $key => $variable) {
-                $variableMixed[$key] = $this->prepareVariable($variable);
+                $variableMixed[$key] = $this->protectVariable($variable);
             }
             return $variableMixed;
         } else {
-            $variableMixed = trim($variableMixed);
-            return urldecode($variableMixed);
+            if ($variableMixed == '') {
+                return null;
+            } else {
+                return htmlspecialchars(urldecode(trim($variableMixed)));
+            }
         }
     }
 
@@ -162,10 +165,10 @@ class Query
     public function get($key = '', $defaultValue = null)
     {
         if (empty($key)) {
-            return $this->variableList;
+            return $this->protectVariable($this->variableList);
         }
         if (isset($this->variableList[$key])) {
-            return $this->variableList[$key];
+            return $this->protectVariable($this->variableList[$key]);
         }
         if ($defaultValue !== null) {
             return $defaultValue;
@@ -242,5 +245,32 @@ class Query
     {
         $this->variableList[$key] = $value;
         return $this;
+    }
+
+    
+
+    /**
+     * Get unprotected variable in query
+     *
+     * @since   1.2
+     *
+     * @param   string  $key           (Optional) Key of input
+     * @param   string  $defaultValue  (Optional) Default value
+     *
+     * @return  mixed   Return input
+     */
+    public function unprotected($key = '', $defaultValue = null)
+    {
+        if (empty($key)) {
+            return $this->variableList;
+        }
+        if (isset($this->variableList[$key])) {
+            return $this->variableList[$key];
+        }
+        if ($defaultValue !== null) {
+            return $defaultValue;
+        }
+        throw new \Exception('Query "' . $key . "' doesn\'t exist.");
+        return null;
     }
 }
