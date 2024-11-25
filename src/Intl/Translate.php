@@ -24,7 +24,7 @@ use Pabana\Core\Configuration;
 class Translate
 {
     private static $language_code;
-    private static $translateList;
+    private static $translateList = [];
     private static $file;
 
     /**
@@ -81,13 +81,14 @@ class Translate
         self::$file = $file;
         $translatePath = APP_ROOT . DS . Configuration::read('intl.path') . DS . self::getLanguage() . DS . self::$file;
         if (file_exists($translatePath)) {
-            self::$translateList = (include $translatePath);
+            self::$translateList = array_merge(self::$translateList, (include $translatePath));
             return true;
-        }
-        $translatePath = APP_ROOT . DS . Configuration::read('intl.path') . DS . self::getLanguage(true) . DS . self::$file;
-        if (file_exists($translatePath)) {
-            self::$translateList = (include $translatePath);
-            return true;
+        } else {
+            $translatePath = APP_ROOT . DS . Configuration::read('intl.path') . DS . self::getLanguage(true) . DS . self::$file;
+            if (file_exists($translatePath)) {
+                self::$translateList = (include $translatePath);
+                return true;
+            }
         }
         self::$file = '';
         return false;
