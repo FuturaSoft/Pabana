@@ -7,10 +7,11 @@
  * For full copyright and license information, please see the LICENSE.txt
  * Redistributions of files must retain the above copyright notice.
  *
- * @copyright     Copyright (c) FuturaSoft (https://futurasoft.fr)
- * @link          https://pabana.futurasoft.fr Pabana Project
- * @since         1.2
- * @license       https://opensource.org/licenses/BSD-3-Clause BSD-3-Clause License
+ * @copyright   Copyright (c) FuturaSoft (https://futurasoft.fr)
+ * @link        https://pabana.futurasoft.fr Pabana Project
+ * @license     https://opensource.org/licenses/BSD-3-Clause BSD-3-Clause License
+ * @since       1.2.0
+ * @version     1.3.0
  */
 namespace Pabana\Intl;
 
@@ -28,11 +29,11 @@ class Translate
     private static $file;
 
     /**
-     * Get language
-     *
      * Get defined language
      *
-     * @since   1.2
+     * @since   1.2.0
+     * @version 1.2.0
+     * 
      * @return  string  Define language by code
      */
     public static function getLanguage($bFallback = false)
@@ -48,11 +49,11 @@ class Translate
     }
 
     /**
-     * Set language
-     *
      * Set language by code
      *
-     * @since   1.2
+     * @since   1.2.0
+     * @version 1.2.0
+     * 
      * @param   string  $language   Define language by code
      */
     public static function setLanguage($language)
@@ -71,10 +72,12 @@ class Translate
     /**
      * Load language configuration file
      *
-     * Load language configuration file
-     *
-     * @since   1.2
+     * @since   1.2.0
+     * @version 1.3.0
+     * 
      * @param   string  $file   Language configuration file
+     * 
+     * @return  boolean Return state of translation file loading
      */
     public static function load($file)
     {
@@ -95,24 +98,43 @@ class Translate
     }
 
     /**
-     * Do translate
+     * Define key/value of translate
      *
-     * Get defined language
-     *
-     * @since   1.2
-     * @return  string  Define language by code
+     * @since   1.3.0
+     * @version 1.3.0
+     * 
+     * @param   string  $key    Key of translation
+     * @param   string  $value  Value of translation
+     * 
+     * @return  void
      */
-    public static function translate($keyOrValue, $optionList = [])
+    public static function set($key, $value)
     {
-        if (isset(self::$translateList[$keyOrValue])) {
-            $returnString = self::$translateList[$keyOrValue];
-            if (!empty($optionList)) {
-                foreach ($optionList as $key => $value) {
-                    $returnString = str_replace(':' . $key, $value, $returnString);
+        self::$translateList[$key] = $value;
+    }
+
+    /**
+     * Do translation
+     *
+     * @since   1.2.0
+     * @version 1.3.0
+     * 
+     * @param   string  $key        Key of translation
+     * @param   array   $options    Array of options
+     * 
+     * @return  string  Translate string or key if not found
+     */
+    public static function translate($key, $options = [])
+    {
+        if (isset(self::$translateList[$key])) {
+            $returnString = self::$translateList[$key];
+            if (!empty($options)) {
+                foreach ($options as $optionKey => $optionValue) {
+                    $returnString = str_replace(':' . $optionKey, $optionValue, $returnString);
                 }
             }
             return $returnString;
         }
-        return $keyOrValue;
+        return $key;
     }
 }
