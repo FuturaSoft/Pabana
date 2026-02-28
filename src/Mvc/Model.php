@@ -59,7 +59,7 @@ class Model
      *
      * @since   1.2
      * @param   array $dataWhere Array of column => value
-     * @return  bool
+     * @return  mixed
      */
     public function delete($dataWhere = [])
     {
@@ -93,7 +93,7 @@ class Model
      *
      * @since   1.2
      * @param   array $data Array of column => value
-     * @return  bool
+     * @return  mixed
      */
     public function insert($data)
     {
@@ -110,7 +110,7 @@ class Model
      * @since   1.2
      * @param   array $dataSelect Array of column => value
      * @param   array $dataWhere Array of column => value
-     * @return  bool
+     * @return  array|false
      */
     public function selectAll($dataSelect, $dataWhere = [])
     {
@@ -127,7 +127,7 @@ class Model
      * @since   1.2
      * @param   array $dataSelect Array of column => value
      * @param   array $dataWhere Array of column => value
-     * @return  bool
+     * @return  mixed
      */
     public function selectOne($dataSelect, $dataWhere = [])
     {
@@ -144,7 +144,7 @@ class Model
      * @since   1.2
      * @param   array $dataSelect Array of column => value
      * @param   array $dataWhere Array of column => value
-     * @return  bool
+     * @return  mixed
      */
     public function selectOneColumn($dataSelect, $dataWhere = [])
     {
@@ -161,7 +161,7 @@ class Model
      * @since   1.2
      * @param   array $data Array of column => value
      * @param   array $dataWhere Array of column => value
-     * @return  bool
+     * @return  mixed
      */
     public function update($data, $dataWhere = [])
     {

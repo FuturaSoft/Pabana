@@ -24,7 +24,7 @@ use Pabana\Parser\Ini;
 class Configuration
 {
     /**
-     * @var     Array   Array to store configuration parameters
+     * @var     array   Array to store configuration parameters
      * @since   1.0
      */
     private static $configList = array();
@@ -168,7 +168,7 @@ class Configuration
      * @since   1.0
      * @param   bool $reloadBase If true reload base configuration
      *
-     * @return  bool Result of cleaning
+     * @return  void
      */
     public static function clean($reloadBase = true)
     {
@@ -385,8 +385,8 @@ class Configuration
      * First value is prepare by prepare method
      *
      * @since   1.0
-     * @param   string $key Key to read.
-     * @param   string $value Value of key.
+     * @param   string $key Key to write.
+     * @param   mixed $value Value of key.
      * @param   bool $force Force writing of key even is already defined.
      *
      * @return  bool Return true if success else return false;.
@@ -411,7 +411,7 @@ class Configuration
      * This method is used to write an array in configuration
      *
      * @since   1.2
-     * @param   array $configArray Key to read.
+     * @param   array $configArray Array of key and value to write.
      * @param   bool $force Replace configuration by given array.
      *
      * @return  bool Return true if success else return false;.

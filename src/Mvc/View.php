@@ -83,8 +83,8 @@ class View
      * Define autorender, directory, extension, name from configuration
      *
      * @since   1.0
-     * @param   string $action Name of Action
      * @param   string $controller Name of Controller
+     * @param   string $action Name of Action
      * @return  void
      */
     public function __construct($controller, $action)
@@ -202,7 +202,7 @@ class View
      *
      * @since   1.0
      * @param   string $varName Name of var send to View
-     * @return  string|bool Value of var send to View if exist else false
+     * @return  mixed Value of var send to View if exist else false
      */
     public function getVar($varName)
     {
@@ -294,9 +294,9 @@ class View
      *
      * @since   1.0
      * @param   string $varName Name of var send to View
-     * @param   string $varValue Value of var send to View
+     * @param   mixed $varValue Value of var send to View
      * @param   bool $force Force change of var value if var already exist
-     * @return  bool Return true
+     * @return  bool Return true if success else false
      */
     public function setVar($varName, $varValue, $force = false)
     {

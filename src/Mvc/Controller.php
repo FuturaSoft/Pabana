@@ -143,7 +143,7 @@ class Controller
      * @since   1.2
      * @param   string $code Error code
      *
-     * @return  string Content of error
+     * @return  false
      */
     public function abort($code)
     {
@@ -272,10 +272,11 @@ class Controller
     }
 
     /**
-     * Call Layout object and store it in $this->view variable
+     * Call View object and store it in $this->view variable
      * If Layout is already defined, change view of $this->layout
      *
      * @since   1.1
+     * @param   string $controller Target controller name
      * @param   string $action Target action name
      * @return  void
      */

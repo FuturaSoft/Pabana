@@ -59,7 +59,7 @@ class Application
      * By default this will load \App\Bootstrap class.
      *
      * @since   1.0
-     * @return  bool True is file is loaded else false.
+     * @return  bool True if file is loaded else false.
      */
     private function bootstrap()
     {
@@ -89,7 +89,7 @@ class Application
      * By default this will load `config/databases.php`.
      *
      * @since   1.1
-     * @return  bool True is file is loaded else false.
+     * @return  bool True if file is loaded else false.
      */
     private function databases()
     {
@@ -138,7 +138,7 @@ class Application
      * By default this will load `config/routes.php`.
      *
      * @since   1.0
-     * @return  bool True is file is loaded else false.
+     * @return  bool True if file is loaded else false.
      */
     private function routes()
     {

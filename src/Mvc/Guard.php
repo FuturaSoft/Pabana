@@ -53,7 +53,7 @@ class Guard
      * Get error code
      *
      * @since   1.2
-     * @return  void
+     * @return  integer HTTP error code
      */
     public function getErrorCode()
     {
@@ -64,7 +64,7 @@ class Guard
      * Get error data
      *
      * @since   1.2
-     * @return  void
+     * @return  array Error data
      */
     public function getErrorData()
     {
@@ -75,6 +75,8 @@ class Guard
      * Define Guard error
      *
      * @since   1.2
+     * @param   array|null $aErrorData Error data array.
+     * @param   integer $iErrorCode HTTP error code.
      * @return  void
      */
     public function setError($aErrorData = null, $iErrorCode = 500)

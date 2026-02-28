@@ -40,7 +40,7 @@ class Route
     private $_sAction = 'index';
 
     /**
-     * @var    string Redirect param list
+     * @var    array|null Redirect param list
      * @since   1.0
      */
     private $_arsParamList = null;
@@ -103,7 +103,7 @@ class Route
      * Get param list.
      *
      * @since   1.0
-     * @return  string Param list.
+     * @return  array|null Param list.
      */
     public function getParamList()
     {

@@ -318,7 +318,7 @@ class Router
      * Set parameter defined by Router from URL.
      *
      * @since   1.0
-     * @param   string $arsParameter Parameter.
+     * @param   array $arsParameter Parameter.
      * @return  void
      */
     private static function setParameter($arsParameter)

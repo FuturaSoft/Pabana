@@ -84,7 +84,7 @@ class Layout
     public $View;
 
     /**
-     * Initialize controller
+     * Initialize layout
      *
      * Load Html and View object
      * Define autorender, directory, extension, name from configuration
@@ -220,7 +220,7 @@ class Layout
      *
      * @since   1.0
      * @param   string $varName Name of var send to Layout
-     * @return  string|bool Value of var send to Layout if exist else false
+     * @return  mixed Value of var send to Layout if exist else false
      */
     public function getVar($varName)
     {
@@ -235,7 +235,7 @@ class Layout
      * Render layout from index part
      *
      * @since   1.0
-     * @return  string Html code render
+     * @return  string|bool Html code render or false if error
      */
     public function render()
     {
@@ -294,10 +294,10 @@ class Layout
      * Set var to Layout
      *
      * @since   1.0
-     * @param   string $varName Name of var send to View
-     * @param   string $varValue Value of var send to View
+     * @param   string $varName Name of var send to Layout
+     * @param   mixed $varValue Value of var send to Layout
      * @param   bool $force Force change of var value if var already exist
-     * @return  bool Return true
+     * @return  bool Return true if success else false
      */
     public function setVar($varName, $varValue, $force = false)
     {

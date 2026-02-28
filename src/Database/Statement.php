@@ -48,7 +48,7 @@ class Statement
      * @param   int $valueLength Length of the data type.
      * @return  bool Returns TRUE on success or FALSE on failure.
      */
-    public function bindParam($parameter, $value, $dataType = PDO::PARAM_STR, $valueLength = null)
+    public function bindParam($parameter, $value, $dataType = \PDO::PARAM_STR, $valueLength = null)
     {
         return $this->statement->bindParam($parameter, $value, $dataType, $valueLength);
     }
@@ -62,7 +62,7 @@ class Statement
      * @param   int $dataType Explicit data type for the parameter using the PDO::PARAM_* constants.
      * @return  bool Returns TRUE on success or FALSE on failure.
      */
-    public function bindValue($parameter, $value, $dataType = PDO::PARAM_STR)
+    public function bindValue($parameter, $value, $dataType = \PDO::PARAM_STR)
     {
         return $this->statement->bindValue($parameter, $value, $dataType);
     }
