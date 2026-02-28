@@ -83,7 +83,7 @@ class ArrayType
      * @var     array Array manipulate by this class.
      * @since   1.1
      */
-    private $arrayVar;
+    private array $arrayVar;
 
     /**
      * Constructor
@@ -94,7 +94,7 @@ class ArrayType
      * @param   array $arrayVar Array who will be transform in ArrayType (by default empty Array)
      * @return  void
      */
-    public function __construct($arrayVar = array())
+    public function __construct(array $arrayVar = [])
     {
         $this->arrayVar = $arrayVar;
     }
@@ -106,7 +106,7 @@ class ArrayType
      * @param   mixed $value Value of item
      * @return  void
      */
-    public function append($value)
+    public function append(mixed $value): void
     {
         $this->arrayVar[] = $value;
     }
@@ -117,9 +117,9 @@ class ArrayType
      * @since   1.1
      * @return  void
      */
-    public function clean()
+    public function clean(): void
     {
-        $this->arrayVar = array();
+        $this->arrayVar = [];
     }
 
     /**
@@ -129,7 +129,7 @@ class ArrayType
      * @param   int|string $indexOrName Index or name of key
      * @return  mixed|bool Value of array's item or false if not exist
      */
-    public function get($indexOrName)
+    public function get(int|string $indexOrName): mixed
     {
         if (isset($this->arrayVar[$indexOrName])) {
             return $this->arrayVar[$indexOrName];
@@ -144,7 +144,7 @@ class ArrayType
      * @param   int $itemNumber Number of item return by method
      * @return  mixed if $itemNumber = 1 return only one key, else return an array of key.
      */
-    public function getRand($itemNumber = 1)
+    public function getRand(int $itemNumber = 1): mixed
     {
         return array_rand($this->arrayVar, $itemNumber);
     }
@@ -155,9 +155,9 @@ class ArrayType
      * @since   1.1
      * @param   int $index Index of key
      * @param   mixed $value Value of item
-     * @return  bool True if success or false if not exist
+     * @return  void
      */
-    public function insert($index, $value)
+    public function insert(int $index, mixed $value): void
     {
         array_splice($this->arrayVar, $index, 0, [$value]);
     }
@@ -168,7 +168,7 @@ class ArrayType
      * @since   1.1
      * @return  bool True if associative or false if not
      */
-    public function isAssociative()
+    public function isAssociative(): bool
     {
         return count(array_filter(array_keys($this->arrayVar), 'is_string')) > 0;
     }
@@ -179,7 +179,7 @@ class ArrayType
      * @since   1.1
      * @return  bool True if sequential or false if not
      */
-    public function isSequential()
+    public function isSequential(): bool
     {
         return array_keys($this->arrayVar) !== range(0, count($this->arrayVar) - 1);
     }
@@ -192,7 +192,7 @@ class ArrayType
      * @param   int $priority Merge priority
      * @return  void
      */
-    public function merge($arrayOrObjectVar, $priority = self::MERGE_ARGUMENT)
+    public function merge(array|self $arrayOrObjectVar, int $priority = self::MERGE_ARGUMENT): void
     {
         if (is_object($arrayOrObjectVar)) {
             $arrayVar = $arrayOrObjectVar->toArray();
@@ -204,7 +204,7 @@ class ArrayType
         } else if ($priority == 2) {
             $this->arrayVar = array_merge($arrayOrObjectVar, $this->arrayVar);
         } else if ($priority == 3) {
-            $arrayMerge = array();
+            $arrayMerge = [];
             $arrayIndex = 0;
             foreach ($this->arrayVar as $value) {
                 $arrayMerge[$arrayIndex] = $value;
@@ -225,7 +225,7 @@ class ArrayType
      * @param   mixed $value Value of item
      * @return  void
      */
-    public function prepend($value)
+    public function prepend(mixed $value): void
     {
         array_unshift($this->arrayVar, $value);
     }
@@ -237,7 +237,7 @@ class ArrayType
      * @param   int|string $indexOrName Index or name of key
      * @return  bool True if success or false if not exist
      */
-    public function remove($indexOrName)
+    public function remove(int|string $indexOrName): bool
     {
         if (isset($this->arrayVar[$indexOrName])) {
             unset($this->arrayVar[$indexOrName]);
@@ -255,7 +255,7 @@ class ArrayType
      * @param   bool $force Force change of value if key already exist
      * @return  bool True if success or false if not exist
      */
-    public function set($indexOrName, $value, $force = true)
+    public function set(int|string $indexOrName, mixed $value, bool $force = true): bool
     {
         if (isset($this->arrayVar[$indexOrName]) && $force === false) {
             return false;
@@ -273,7 +273,7 @@ class ArrayType
      * @param   bool $caseSensitive Define if sort is case sensitive
      * @return  $this Return current object
      */
-    public function sort($order = self::SORT_ASC, $type = self::SORT_REGULAR, $caseSensitive = true)
+    public function sort(int $order = self::SORT_ASC, int $type = self::SORT_REGULAR, bool $caseSensitive = true): static
     {
         if ($caseSensitive === false) {
             $type = $type + SORT_FLAG_CASE;
@@ -304,7 +304,7 @@ class ArrayType
      * @param   bool $caseSensitive Define if sort is case sensitive
      * @return  $this Return current object
      */
-    public function sortByKey($order = self::SORT_ASC, $type = self::SORT_REGULAR, $caseSensitive = true)
+    public function sortByKey(int $order = self::SORT_ASC, int $type = self::SORT_REGULAR, bool $caseSensitive = true): static
     {
         if ($caseSensitive === false) {
             $type = $type + SORT_FLAG_CASE;
@@ -327,7 +327,7 @@ class ArrayType
      * @since   1.1
      * @return  $this Return current object
      */
-    public function shuffle()
+    public function shuffle(): static
     {
         shuffle($this->arrayVar);
         return $this;
@@ -339,7 +339,7 @@ class ArrayType
      * @since   1.1
      * @return  array Array.
      */
-    public function toArray()
+    public function toArray(): array
     {
         return $this->arrayVar;
     }

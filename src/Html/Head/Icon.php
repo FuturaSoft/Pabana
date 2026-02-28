@@ -27,7 +27,7 @@ class Icon
      * @var     Pabana\Type\ArrayType List of defined icon
      * @since   1.0
      */
-    private static $iconList;
+    private static ArrayType $iconList;
 
     /**
      * Constructor
@@ -47,7 +47,7 @@ class Icon
      * @since   1.0
      * @return  string Html code to initialize icon
      */
-    public function __toString()
+    public function __toString(): string
     {
         return $this->render();
     }
@@ -61,10 +61,10 @@ class Icon
      * @param   string $href Icon path.
      * @return  $this
      */
-    public function append($href)
+    public function append(string $href): static
     {
         $href = '/img/' . $href;
-        self::$iconList->append(array($href));
+        self::$iconList->append([$href]);
         return $this;
     }
 
@@ -74,7 +74,7 @@ class Icon
      * @since   1.0
      * @return  $this
      */
-    public function clean()
+    public function clean(): static
     {
         self::$iconList->clean();
         return $this;
@@ -87,7 +87,7 @@ class Icon
      * @param   int $index Index of item position
      * @return  array Return a value of icon list
      */
-    public function get($index)
+    public function get(int $index): mixed
     {
         return self::$iconList->get($index);
     }
@@ -100,10 +100,10 @@ class Icon
      * @param   string $href Path of icon.
      * @return  $this
      */
-    private function insert($index, $href)
+    private function insert(int $index, string $href): static
     {
         $href = '/img/' . $href;
-        self::$iconList->insert($index, array($href));
+        self::$iconList->insert($index, [$href]);
         return $this;
     }
 
@@ -114,10 +114,10 @@ class Icon
      * @param   string $href Icon name.
      * @return  $this
      */
-    public function prepend($href)
+    public function prepend(string $href): static
     {
         $href = '/img/' . $href;
-        self::$iconList->prepend(array($href));
+        self::$iconList->prepend([$href]);
         return $this;
     }
 
@@ -128,7 +128,7 @@ class Icon
      * @param   int $index Index of icon
      * @return  bool True if remove success, else false.
      */
-    public function remove($index)
+    public function remove(int $index): bool
     {
         return self::$iconList->remove($index);
     }
@@ -141,7 +141,7 @@ class Icon
      * @since   1.0
      * @return  string Html code to initialize icon
      */
-    public function render()
+    public function render(): string
     {
         $htmlContent = '';
         foreach (self::$iconList->toArray() as $icon) {

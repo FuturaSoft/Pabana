@@ -25,7 +25,7 @@ class Statement
      * @var     \PDOStatement Object created by PDO query.
      * @since   1.0
      */
-    private $statement;
+    private \PDOStatement $statement;
 
     /**
      * Constructor
@@ -33,11 +33,11 @@ class Statement
      * @since   1.0
      * @param   \PDOStatement $statement Object created by PDO->query().
      */
-    public function __construct($statement)
+    public function __construct(\PDOStatement $statement)
     {
         $this->statement = $statement;
     }
-    
+
     /**
      * Binds a parameter to the specified variable name
      *
@@ -48,11 +48,11 @@ class Statement
      * @param   int $valueLength Length of the data type.
      * @return  bool Returns TRUE on success or FALSE on failure.
      */
-    public function bindParam($parameter, $value, $dataType = \PDO::PARAM_STR, $valueLength = null)
+    public function bindParam(mixed $parameter, mixed $value, int $dataType = \PDO::PARAM_STR, ?int $valueLength = null): bool
     {
         return $this->statement->bindParam($parameter, $value, $dataType, $valueLength);
     }
-    
+
     /**
      * Binds a value to a parameter
      *
@@ -62,22 +62,22 @@ class Statement
      * @param   int $dataType Explicit data type for the parameter using the PDO::PARAM_* constants.
      * @return  bool Returns TRUE on success or FALSE on failure.
      */
-    public function bindValue($parameter, $value, $dataType = \PDO::PARAM_STR)
+    public function bindValue(mixed $parameter, mixed $value, int $dataType = \PDO::PARAM_STR): bool
     {
         return $this->statement->bindValue($parameter, $value, $dataType);
     }
-    
+
     /**
      * Returns the number of columns in the result set
      *
      * @since   1.0
      * @return  int Returns the number of columns in the result.
      */
-    public function columnCount()
+    public function columnCount(): int
     {
         return $this->statement->columnCount();
     }
-    
+
     /**
      * Executes a prepared statement
      *
@@ -85,44 +85,42 @@ class Statement
      * @param   mixed $valueList An array of values.
      * @return  bool Returns TRUE on success or FALSE on failure.
      */
-    public function execute($valueList = null)
+    public function execute(?array $valueList = null): bool
     {
         return $this->statement->execute($valueList);
     }
-    
+
     /**
      * Fetches the next row from a result set
      *
      * @since   1.0
-     * @param   int $fetchType Controls how the next row will be returned to the caller.
-     * @return  bool Return value of this function depends on the fetch type. FALSE is returned on failure.
+     * @param   string $fetchType Controls how the next row will be returned to the caller.
+     * @return  array|object|false Return value depends on the fetch type. FALSE is returned on failure.
      */
-    public function fetch($fetchType = 'assoc')
+    public function fetch(string $fetchType = 'assoc'): array|object|false
     {
-        if ($fetchType === 'num') {
-            return $this->statement->fetch(\PDO::FETCH_NUM);
-        } elseif ($fetchType === 'assoc') {
-            return $this->statement->fetch(\PDO::FETCH_ASSOC);
-        } elseif ($fetchType === 'obj') {
-            return $this->statement->fetch(\PDO::FETCH_OBJ);
-        }
+        $pdoFetchType = match ($fetchType) {
+            'num' => \PDO::FETCH_NUM,
+            'assoc' => \PDO::FETCH_ASSOC,
+            'obj' => \PDO::FETCH_OBJ,
+        };
+        return $this->statement->fetch($pdoFetchType);
     }
-    
+
     /**
      * Returns an array containing all of the result set rows
      *
      * @since   1.0
-     * @param   int $fetchType Controls how the next row will be returned to the caller.
-     * @return  bool Return value of this function depends on the fetch type. FALSE is returned on failure.
+     * @param   string $fetchType Controls how the next row will be returned to the caller.
+     * @return  array|false Return value depends on the fetch type. FALSE is returned on failure.
      */
-    public function fetchAll($fetchType = 'assoc')
+    public function fetchAll(string $fetchType = 'assoc'): array|false
     {
-        if ($fetchType === 'num') {
-            return $this->statement->fetchAll(\PDO::FETCH_NUM);
-        } elseif ($fetchType === 'assoc') {
-            return $this->statement->fetchAll(\PDO::FETCH_ASSOC);
-        } elseif ($fetchType === 'obj') {
-            return $this->statement->fetchAll(\PDO::FETCH_OBJ);
-        }
+        $pdoFetchType = match ($fetchType) {
+            'num' => \PDO::FETCH_NUM,
+            'assoc' => \PDO::FETCH_ASSOC,
+            'obj' => \PDO::FETCH_OBJ,
+        };
+        return $this->statement->fetchAll($pdoFetchType);
     }
 }

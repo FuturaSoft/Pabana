@@ -27,7 +27,7 @@ class Title
      * @var     Pabana\Type\ArrayType List of defined title
      * @since   1.0
      */
-    private static $titleList;
+    private static ArrayType $titleList;
 
     /**
      * Constructor
@@ -45,9 +45,9 @@ class Title
      * @since   1.0
      * @return  string Html code for Title
      */
-    public function __toString()
+    public function __toString(): string
     {
-        return $this->render();
+        return $this->render() ?: '';
     }
 
     /**
@@ -57,7 +57,7 @@ class Title
      * @param   string $title Title of page
      * @return  $this
      */
-    public function append($title)
+    public function append(string $title): static
     {
         self::$titleList->append($title);
         return $this;
@@ -69,7 +69,7 @@ class Title
      * @since   1.0
      * @return  void
      */
-    public function clean()
+    public function clean(): void
     {
         self::$titleList->clean();
     }
@@ -81,7 +81,7 @@ class Title
      * @param   string $title Title of page
      * @return  $this
      */
-    public function prepend($title)
+    public function prepend(string $title): static
     {
         self::$titleList->prepend($title);
         return $this;
@@ -93,7 +93,7 @@ class Title
      * @since   1.0
      * @return  string|boolean Html code for Title or false is empty
      */
-    public function render()
+    public function render(): string|false
     {
         if (!empty(self::$titleList->toArray())) {
             return '<title>' . implode('', self::$titleList->toArray()) . '</title>' . PHP_EOL;
@@ -109,7 +109,7 @@ class Title
      * @param   string $title Title of page
      * @return  $this
      */
-    public function set($title)
+    public function set(string $title): static
     {
         $this->clean();
         return $this->append($title);

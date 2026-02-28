@@ -27,7 +27,7 @@ class Charset
      * @var     string Charset (by default UTF-8).
      * @since   1.0
      */
-    private static $charset = 'UTF-8';
+    private static string $charset = 'UTF-8';
 
     /**
      * toString
@@ -37,7 +37,7 @@ class Charset
      * @since   1.0
      * @return  string Html code for Charset
      */
-    public function __toString()
+    public function __toString(): string
     {
         return $this->render();
     }
@@ -50,7 +50,7 @@ class Charset
      * @since   1.0
      * @return  void
      */
-    public function clean()
+    public function clean(): void
     {
         self::$charset = 'UTF-8';
     }
@@ -63,10 +63,10 @@ class Charset
      * @since   1.0
      * @return  string Html code for Charset
      */
-    public function render()
+    public function render(): string
     {
         $doctype = new Doctype();
-        $charsetList = array(
+        $charsetList = [
             'UTF-8' => 'utf-8',
             'UTF-16' => 'utf-16',
             'ISO-8859-1' => 'iso-8859-1',
@@ -81,7 +81,7 @@ class Charset
             'SHIFT_JIS' => 'shift_jis',
             'EUC-JP' => 'euc-jp',
             'MACROMAN' => 'x-mac-roman'
-        );
+        ];
         $charsetKeyList = array_keys($charsetList);
         if (!in_array(self::$charset, $charsetKeyList)) {
             $sErrorMessage = 'Charset ' . self::$charset . ' isn\'t defined';
@@ -108,7 +108,7 @@ class Charset
      * @param   string $charset Charset
      * @return  $this
      */
-    public function set($charset)
+    public function set(string $charset): static
     {
         self::$charset = $charset;
         return $this;

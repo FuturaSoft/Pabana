@@ -24,10 +24,10 @@ use Carbon\Carbon;
 class Query
 {
     /**
-     * @var     Array   List of query variable
+     * @var     array   List of query variable
      * @since   1.2
      */
-    private $variableList = [];
+    private array $variableList = [];
 
     /**
      * Constructor
@@ -49,7 +49,7 @@ class Query
      *
      * @return  mixed   Return input
      */
-    private function prepareVariable($variableMixed)
+    private function prepareVariable(mixed $variableMixed): mixed
     {
         if (is_array($variableMixed)) {
             foreach ($variableMixed as $key => $variable) {
@@ -71,7 +71,8 @@ class Query
      *
      * @return  mixed   Return input
      */
-    public function __get(string $key) {
+    public function __get(string $key): mixed
+    {
         return $this->get($key);
     }
 
@@ -84,7 +85,7 @@ class Query
      *
      * @return  array
      */
-    public function all()
+    public function all(): array
     {
         return $this->get();
     }
@@ -95,11 +96,11 @@ class Query
      * @since   1.2
      *
      * @param   string  $key    Key of variable
-     * @param   boolean $falseIfNotIsset    (Optional) Return false if key doesn't exist
+     * @param   bool $falseIfNotIsset    (Optional) Return false if key doesn't exist
      *
-     * @return  boolean
+     * @return  bool
      */
-    public function boolean($key, $falseIfNotIsset = false)
+    public function boolean(string $key, bool $falseIfNotIsset = false): bool
     {
         if (
             $falseIfNotIsset === true
@@ -122,9 +123,9 @@ class Query
      * @param   string  $key    Key of variable
      * @param   string  $format (Optional) Format of Carbon object (default: Y-m-d)
      *
-     * @return  \Carbon
+     * @return  \Carbon\Carbon
      */
-    public function date($key, $format = 'Y-m-d')
+    public function date(string $key, string $format = 'Y-m-d'): Carbon
     {
         return Carbon::createFromFormat($format, $this->get($key));
     }
@@ -136,9 +137,9 @@ class Query
      *
      * @param   string  $key    Key of variable
      *
-     * @return  boolean
+     * @return  bool
      */
-    public function filled($key)
+    public function filled(string $key): bool
     {
         if (
             $this->has($key)
@@ -155,11 +156,11 @@ class Query
      * @since   1.2
      *
      * @param   string  $key           (Optional) Key of query
-     * @param   string  $defaultValue  (Optional) Default value
+     * @param   mixed   $defaultValue  (Optional) Default value
      *
      * @return  mixed   Return query
      */
-    public function get($key = '', $defaultValue = null)
+    public function get(string $key = '', mixed $defaultValue = null): mixed
     {
         if (empty($key)) {
             return $this->variableList;
@@ -171,7 +172,6 @@ class Query
             return $defaultValue;
         }
         throw new \Exception('Query "' . $key . "' doesn\'t exist.");
-        return null;
     }
 
     /**
@@ -181,9 +181,9 @@ class Query
      *
      * @param   string  $key    Key of variable
      *
-     * @return  boolean
+     * @return  bool
      */
-    public function has($key)
+    public function has(string $key): bool
     {
         if (isset($this->variableList[$key])) {
             return true;
@@ -198,9 +198,9 @@ class Query
      *
      * @param   array   $data   Array merge
      *
-     * @return  this
+     * @return  static
      */
-    public function merge($data)
+    public function merge(array $data): static
     {
         $this->variableList = array_merge($this->variableList, $data);
         return $this;
@@ -212,11 +212,11 @@ class Query
      * @since   1.2
      *
      * @param   string  $key           Key of input
-     * @param   string  $defaultValue  (Optional) Default value
+     * @param   mixed   $defaultValue  (Optional) Default value
      *
      * @return  mixed
      */
-    public function old($key, $defaultValue = null)
+    public function old(string $key, mixed $defaultValue = null): mixed
     {
         if (isset($_GET[$key])) {
             return $_GET[$key];
@@ -225,7 +225,6 @@ class Query
             return $defaultValue;
         }
         throw new \Exception('GET variable "' . $key . '" doesn\'t exist.');
-        return null;
     }
 
     /**
@@ -236,9 +235,9 @@ class Query
      * @param   string  $key    Key of variable
      * @param   mixed   $value  New value of variable
      *
-     * @return  this
+     * @return  static
      */
-    public function replace($key, $value)
+    public function replace(string $key, mixed $value): static
     {
         $this->variableList[$key] = $value;
         return $this;

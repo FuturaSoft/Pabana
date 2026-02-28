@@ -29,7 +29,7 @@ class Application
      * @var     string Contains the path of the config directory
      * @since   1.0
      */
-    protected $configDir;
+    protected string $configDir;
 
     /**
      * Constructor
@@ -38,7 +38,7 @@ class Application
      * @param   string $configDir The directory of pabana config files.
      * @param   string $configFile Name of config file (by default "app.php").
      */
-    public function __construct($configDir, $configFile = 'app.php')
+    public function __construct(string $configDir, string $configFile = 'app.php')
     {
         $this->configDir = $configDir;
         $applicationConfigPath = $configDir . '/' . $configFile;
@@ -61,7 +61,7 @@ class Application
      * @since   1.0
      * @return  bool True if file is loaded else false.
      */
-    private function bootstrap()
+    private function bootstrap(): bool
     {
         if (Configuration::read('bootstrap.enable') === true) {
             $applicationNamespace = Configuration::read('application.namespace');
@@ -91,7 +91,7 @@ class Application
      * @since   1.1
      * @return  bool True if file is loaded else false.
      */
-    private function databases()
+    private function databases(): bool
     {
         if (Configuration::read('database.config.enable') === true) {
             $databaseConfigPath = $this->configDir . DS . Configuration::read('database.config.file');
@@ -111,7 +111,7 @@ class Application
      * @since   1.0
      * @return  string|bool Return body content or false if controller can't be loaded.
      */
-    private function controller()
+    private function controller(): string|false
     {
         $controllerName = Router::getController();
         $actionName = Router::getAction();
@@ -140,7 +140,7 @@ class Application
      * @since   1.0
      * @return  bool True if file is loaded else false.
      */
-    private function routes()
+    private function routes(): bool
     {
         if (Configuration::read('routing.config.enable') === true) {
             $routingConfigPath = $this->configDir . DS . Configuration::read('routing.config.file');
@@ -163,7 +163,7 @@ class Application
      * @since   1.0
      * @return  void
      */
-    public function run()
+    public function run(): void
     {
         // Load routing user config file
         $this->routes();

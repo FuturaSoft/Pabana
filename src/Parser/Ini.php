@@ -25,7 +25,7 @@ class Ini
      * @var    string Path of ini file
      * @since   1.0
      */
-    private $filename;
+    private string $filename = '';
 
     /**
      * Load INI file
@@ -34,7 +34,7 @@ class Ini
      * @param   string $filename File path.
      * @return  bool|$this
      */
-    public function load($filename)
+    public function load(string $filename): static
     {
         if (!file_exists($filename)) {
             throw new \Exception('Ini file "' . $filename . '" doesn\'t exist.');
@@ -51,7 +51,7 @@ class Ini
      * @param   bool $processSection Process to array with section.
      * @return  array|bool Array of content of INI or false if error
      */
-    public function toArray($processSection = false)
+    public function toArray(bool $processSection = false): array|false
     {
         return parse_ini_file($this->filename, $processSection, INI_SCANNER_TYPED);
     }

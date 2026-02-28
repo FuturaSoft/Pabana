@@ -28,7 +28,7 @@ class Css
      * @var     Pabana\Type\ArrayType List of defined css
      * @since   1.0
      */
-    private static $cssList;
+    private static ArrayType $cssList;
 
     /**
      * Constructor
@@ -48,7 +48,7 @@ class Css
      * @since   1.0
      * @return  string Html code to initialize css
      */
-    public function __toString()
+    public function __toString(): string
     {
         return $this->render();
     }
@@ -61,9 +61,9 @@ class Css
      * @param   string $hrefOrCss Path of css from /public or css content.
      * @return  $this
      */
-    private function append($type, $hrefOrCss)
+    private function append(string $type, string $hrefOrCss): static
     {
-        self::$cssList->append(array($type, $hrefOrCss));
+        self::$cssList->append([$type, $hrefOrCss]);
         return $this;
     }
 
@@ -74,7 +74,7 @@ class Css
      * @param   string $css Css code.
      * @return  $this
      */
-    public function appendCss($css)
+    public function appendCss(string $css): static
     {
         $this->append('css', $css);
         return $this;
@@ -87,7 +87,7 @@ class Css
      * @param   string $href Css file name.
      * @return  $this
      */
-    public function appendFile($href)
+    public function appendFile(string $href): static
     {
         $href = '/css/' . $href;
         $this->append('file', $href);
@@ -102,7 +102,7 @@ class Css
      * @param   string $href Css file name.
      * @return  $this
      */
-    public function appendLibrary($library, $href)
+    public function appendLibrary(string $library, string $href): static
     {
         $href = '/lib/' . $library . '/css/' . $href;
         $this->append('library', $href);
@@ -115,7 +115,7 @@ class Css
      * @since   1.0
      * @return  $this
      */
-    public function clean()
+    public function clean(): static
     {
         self::$cssList->clean();
         return $this;
@@ -128,7 +128,7 @@ class Css
      * @param   int $index Index of insert position
      * @return  array Return a value of cssList
      */
-    public function get($index)
+    public function get(int $index): mixed
     {
         return self::$cssList->get($index);
     }
@@ -142,9 +142,9 @@ class Css
      * @param   string $hrefOrCss Path of css from /public or css content.
      * @return  $this
      */
-    private function insert($index, $type, $hrefOrCss)
+    private function insert(int $index, string $type, string $hrefOrCss): static
     {
-        self::$cssList->insert($index, array($type, $hrefOrCss));
+        self::$cssList->insert($index, [$type, $hrefOrCss]);
         return $this;
     }
 
@@ -156,7 +156,7 @@ class Css
      * @param   string $css css code.
      * @return  $this
      */
-    public function insertCss($index, $css)
+    public function insertCss(int $index, string $css): static
     {
         $this->insert($index, 'css', $css);
         return $this;
@@ -170,7 +170,7 @@ class Css
      * @param   string $href css name.
      * @return  $this
      */
-    public function insertFile($index, $href)
+    public function insertFile(int $index, string $href): static
     {
         $href = '/css/' . $href;
         $this->insert($index, 'file', $href);
@@ -186,7 +186,7 @@ class Css
      * @param   string $href css name.
      * @return  $this
      */
-    public function insertLibrary($index, $library, $href)
+    public function insertLibrary(int $index, string $library, string $href): static
     {
         $href = '/lib/' . $library . '/css/' . $href;
         $this->insert($index, 'library', $href);
@@ -201,9 +201,9 @@ class Css
      * @param   string $hrefOrCss Path of css from /public or css content.
      * @return  $this
      */
-    private function prepend($type, $hrefOrCss)
+    private function prepend(string $type, string $hrefOrCss): static
     {
-        self::$cssList->prepend(array($type, $hrefOrCss));
+        self::$cssList->prepend([$type, $hrefOrCss]);
         return $this;
     }
 
@@ -214,7 +214,7 @@ class Css
      * @param   string $css css code.
      * @return  $this
      */
-    public function prependCss($css)
+    public function prependCss(string $css): static
     {
         $this->prepend('css', $css);
         return $this;
@@ -227,7 +227,7 @@ class Css
      * @param   string $href css name.
      * @return  $this
      */
-    public function prependFile($href)
+    public function prependFile(string $href): static
     {
         $href = '/css/' . $href;
         $this->prepend('file', $href);
@@ -242,7 +242,7 @@ class Css
      * @param   string $href css name.
      * @return  $this
      */
-    public function prependLibrary($library, $href)
+    public function prependLibrary(string $library, string $href): static
     {
         $href = '/lib/' . $library . '/css/' . $href;
         $this->prepend('library', $href);
@@ -256,7 +256,7 @@ class Css
      * @param   int $index Index of css
      * @return  bool True if remove success, else false.
      */
-    public function remove($index)
+    public function remove(int $index): bool
     {
         return self::$cssList->remove($index);
     }
@@ -269,7 +269,7 @@ class Css
      * @since   1.0
      * @return  string Html code to initialize css file
      */
-    public function render()
+    public function render(): string
     {
         $htmlContent = '';
         foreach (self::$cssList->toArray() as $css) {

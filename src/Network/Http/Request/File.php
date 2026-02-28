@@ -14,8 +14,6 @@
  */
 namespace Pabana\Network\Http\Request;
 
-use Carbon\Carbon;
-
 /**
  * File class
  *
@@ -24,10 +22,10 @@ use Carbon\Carbon;
 class File
 {
     /**
-     * @var     Array   List of input variable
+     * @var     array   List of input variable
      * @since   1.2
      */
-    private $variableList = [];
+    private array $variableList = [];
 
     /**
      * Constructor
@@ -49,7 +47,7 @@ class File
      *
      * @return  mixed   Return input
      */
-    public function __get(string $key) {
+    public function __get(string $key): mixed {
         return $this->get($key);
     }
 
@@ -62,15 +60,13 @@ class File
      *
      * @return  mixed   Return input
      */
-    public function get($key)
+    public function get(string $key): UploadedFile
     {
         if (!$this->has($key)) {
             throw new \Exception('File "' . $key . "' doesn\'t exist.");
-            return null;
         }
         if (!$this->isValid($key)) {
             throw new \Exception('File upload "' . $key . "' failed.");
-            return null;
         }
         return new UploadedFile($this->variableList[$key]['tmp_name']);
     }
@@ -84,7 +80,7 @@ class File
      *
      * @return  boolean
      */
-    public function has($key)
+    public function has(string $key): bool
     {
         if (isset($this->variableList[$key])) {
             return true;
@@ -101,7 +97,7 @@ class File
      *
      * @return  mixed   Return input
      */
-    public function isValid($key)
+    public function isValid(string $key): bool
     {
         if (!$this->has($key)) {
             return false;
@@ -121,12 +117,11 @@ class File
      *
      * @return  mixed
      */
-    public function old($key)
+    public function old(string $key): mixed
     {
         if (isset($_FILES[$key])) {
             return $_FILES[$key];
         }
         throw new \Exception('FILES variable "' . $key . '" doesn\'t exist.');
-        return null;
     }
 }

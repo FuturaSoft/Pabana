@@ -23,9 +23,9 @@ use Pabana\Database\Datasource;
  */
 class Pgsql extends Datasource
 {
-    private $host;
-    private $port = 5432;
-    
+    private string $host = '';
+    private int $port = 5432;
+
     /**
      * Constructor
      *
@@ -34,7 +34,7 @@ class Pgsql extends Datasource
      * @since   1.0
      * @param   string $connectionName Connection name.
      */
-    public function __construct($connectionName)
+    public function __construct(string $connectionName)
     {
         $this->setName($connectionName);
         $this->setDbms('Pgsql');
@@ -48,7 +48,7 @@ class Pgsql extends Datasource
      * @since   1.0
      * @return  bool True if success or false.
      */
-    protected function checkParam()
+    protected function checkParam(): bool
     {
         if (empty($this->getHost())) {
             $errorMessage = 'Connexion to PostgreSQL must have an host defined';
@@ -58,7 +58,7 @@ class Pgsql extends Datasource
             return true;
         }
     }
-    
+
     /**
      * Get DSN string
      *
@@ -67,7 +67,7 @@ class Pgsql extends Datasource
      * @since   1.0
      * @return  string|bool Return DSN string if success or false else.
      */
-    public function getDsn()
+    public function getDsn(): string|false
     {
         if ($this->checkParam()) {
             $dsn = 'pgsql:host=' . $this->getHost() . ';';
@@ -82,24 +82,26 @@ class Pgsql extends Datasource
             return false;
         }
     }
-    
-    public function getHost()
+
+    public function getHost(): string
     {
         return $this->host;
     }
-    
-    public function getPort()
+
+    public function getPort(): int
     {
         return $this->port;
     }
-    
-    public function setHost($host)
+
+    public function setHost(string $host): static
     {
         $this->host = $host;
+        return $this;
     }
-    
-    public function setPort($port)
+
+    public function setPort(int $port): static
     {
         $this->port = $port;
+        return $this;
     }
 }

@@ -24,6 +24,90 @@ use Pabana\Database\Datasource;
 class Sqlserver extends Datasource
 {
     /**
+     * @var     string Hostname or IP address
+     * @since   1.0
+     */
+    private string $host = '';
+
+    /**
+     * @var     int Port number
+     * @since   1.0
+     */
+    private int $port = 1433;
+
+    /**
+     * @var     string Application name
+     * @since   1.0
+     */
+    private string $application = '';
+
+    /**
+     * @var     string Connection pooling
+     * @since   1.0
+     */
+    private string $connectionPooling = '';
+
+    /**
+     * @var     string Encrypt connection
+     * @since   1.0
+     */
+    private string $encrypt = '';
+
+    /**
+     * @var     string Failover partner
+     * @since   1.0
+     */
+    private string $failoverPartner = '';
+
+    /**
+     * @var     int Login timeout
+     * @since   1.0
+     */
+    private int $loginTimeout = 0;
+
+    /**
+     * @var     string Multiple active result sets
+     * @since   1.0
+     */
+    private string $multipleActiveResultSets = '';
+
+    /**
+     * @var     int Quoted identifier
+     * @since   1.0
+     */
+    private int $quotedId = 0;
+
+    /**
+     * @var     string Trace file path
+     * @since   1.0
+     */
+    private string $traceFile = '';
+
+    /**
+     * @var     string Trace on
+     * @since   1.0
+     */
+    private string $traceOn = '';
+
+    /**
+     * @var     int Transaction isolation level
+     * @since   1.0
+     */
+    private int $transactionIsolation = 0;
+
+    /**
+     * @var     string Trust server certificate
+     * @since   1.0
+     */
+    private string $trustServerCertificate = '';
+
+    /**
+     * @var     string Workstation ID
+     * @since   1.0
+     */
+    private string $wsid = '';
+
+    /**
      * Constructor
      *
      * Set Connection name and define DBMS to Sqlserver
@@ -31,21 +115,21 @@ class Sqlserver extends Datasource
      * @since   1.0
      * @param   string $sCnxName Connection name.
      */
-    public function __construct($sCnxName)
+    public function __construct(string $sCnxName)
     {
         $this->setName($sCnxName);
         $this->setDbms('sqlsrv');
     }
-    
+
     /**
      * Get DSN string
      *
      * Return DSN string build from connection parameters
      *
      * @since   1.0
-     * @return  string|bool Return DSN string if success or false else.
+     * @return  string|false Return DSN string if success or false else.
      */
-    public function getDsn()
+    public function getDsn(): string|false
     {
         if ($this->checkParam()) {
             $sDsn = 'sqlsrv:';
@@ -68,7 +152,7 @@ class Sqlserver extends Datasource
                 $sDsn .= 'LoginTimeout=' . $this->getLoginTimeout() . ';';
             }
             if (!empty($this->getMultipleActiveResultSets())) {
-                $sDsn .= ' MultipleActiveResultSets=' . $this->getMultipleActiveResultSets() . ';';
+                $sDsn .= 'MultipleActiveResultSets=' . $this->getMultipleActiveResultSets() . ';';
             }
             if (!empty($this->getQuotedId())) {
                 $sDsn .= 'QuotedId=' . $this->getQuotedId() . ';';
@@ -100,146 +184,158 @@ class Sqlserver extends Datasource
             return false;
         }
     }
-    
-    public function getApplication()
+
+    public function getApplication(): string
     {
-        return $this->getDsnParam('APP');
-    }
-    
-    public function getConnectionPooling()
-    {
-        return $this->getDsnParam('ConnectionPooling');
+        return $this->application;
     }
 
-    public function getDatabase()
+    public function getConnectionPooling(): string
     {
-        return $this->getDsnParam('Database');
-    }
-    
-    public function getEncrypt()
-    {
-        return $this->getDsnParam('Encrypt');
-    }
-    
-    public function getFailoverPartner()
-    {
-        return $this->getDsnParam('Failover_Partner');
-    }
-    
-    public function getLoginTimeout()
-    {
-        return $this->getDsnParam('LoginTimeout');
-    }
-    
-    public function getMultipleActiveResultSets()
-    {
-        return $this->getDsnParam('MultipleActiveResultSets');
-    }
-    
-    public function getQuotedId()
-    {
-        return $this->getDsnParam('QuotedId');
+        return $this->connectionPooling;
     }
 
-    public function getServer()
+    public function getEncrypt(): string
     {
-        return $this->getDsnParam('Server');
+        return $this->encrypt;
     }
-    
-    public function getTraceFile()
+
+    public function getFailoverPartner(): string
     {
-        return $this->getDsnParam('TraceFile');
+        return $this->failoverPartner;
     }
-    
-    public function getTraceOn()
+
+    public function getHost(): string
     {
-        return $this->getDsnParam('TraceOn');
+        return $this->host;
     }
-    
-    public function getTransactionIsolation()
+
+    public function getLoginTimeout(): int
     {
-        return $this->getDsnParam('TransactionIsolation');
+        return $this->loginTimeout;
     }
-    
-    public function getTrustServerCertificate()
+
+    public function getMultipleActiveResultSets(): string
     {
-        return $this->getDsnParam('TrustServerCertificate');
+        return $this->multipleActiveResultSets;
     }
-    
-    public function getWsid()
+
+    public function getPort(): int
     {
-        return $this->getDsnParam('WSID');
+        return $this->port;
     }
-    
-    public function setApplication($application)
+
+    public function getQuotedId(): int
     {
-        $this->setDsnParam('APP', $application);
+        return $this->quotedId;
+    }
+
+    public function getTraceFile(): string
+    {
+        return $this->traceFile;
+    }
+
+    public function getTraceOn(): string
+    {
+        return $this->traceOn;
+    }
+
+    public function getTransactionIsolation(): int
+    {
+        return $this->transactionIsolation;
+    }
+
+    public function getTrustServerCertificate(): string
+    {
+        return $this->trustServerCertificate;
+    }
+
+    public function getWsid(): string
+    {
+        return $this->wsid;
+    }
+
+    public function setApplication(string $application): static
+    {
+        $this->application = $application;
         return $this;
     }
-    
-    public function setConnectionPooling($sConnectionPooling)
+
+    public function setConnectionPooling(string $connectionPooling): static
     {
-        $this->sConnectionPooling = $sConnectionPooling;
+        $this->connectionPooling = $connectionPooling;
         return $this;
     }
-    
-    public function setEncrypt($sEncrypt)
+
+    public function setEncrypt(string $encrypt): static
     {
-        $this->sEncrypt = $sEncrypt;
+        $this->encrypt = $encrypt;
         return $this;
     }
-    
-    public function setFailoverPartner($sFailoverPartner)
+
+    public function setFailoverPartner(string $failoverPartner): static
     {
-        $this->sFailoverPartner = $sFailoverPartner;
+        $this->failoverPartner = $failoverPartner;
         return $this;
     }
-    
-    public function setLoginTimeout($nLoginTimeout)
+
+    public function setHost(string $host): static
     {
-        $this->nLoginTimeout = $nLoginTimeout;
+        $this->host = $host;
         return $this;
     }
-    
-    public function setMultipleActiveResultSets($sMultipleActiveResultSets)
+
+    public function setLoginTimeout(int $loginTimeout): static
     {
-        $this->sMultipleActiveResultSets = $sMultipleActiveResultSets;
+        $this->loginTimeout = $loginTimeout;
         return $this;
     }
-    
-    public function setQuotedId($nQuotedId)
+
+    public function setMultipleActiveResultSets(string $multipleActiveResultSets): static
     {
-        $this->nQuotedId = $nQuotedId;
+        $this->multipleActiveResultSets = $multipleActiveResultSets;
         return $this;
     }
-    
-    public function setTraceFile($sTraceFile)
+
+    public function setPort(int $port): static
     {
-        $this->sTraceFile = $sTraceFile;
+        $this->port = $port;
         return $this;
     }
-    
-    public function setTraceOn($sTraceOn)
+
+    public function setQuotedId(int $quotedId): static
     {
-        $this->sTraceOn = $sTraceOn;
+        $this->quotedId = $quotedId;
         return $this;
     }
-    
-    public function setTransactionIsolation($nTransactionIsolation)
+
+    public function setTraceFile(string $traceFile): static
     {
-        $this->nTransactionIsolation = $nTransactionIsolation;
+        $this->traceFile = $traceFile;
         return $this;
     }
-    
-    public function setTrustServerCertificate($sTrustServerCertificate)
+
+    public function setTraceOn(string $traceOn): static
     {
-        $this->sTrustServerCertificate = $sTrustServerCertificate;
+        $this->traceOn = $traceOn;
         return $this;
     }
-    
-    public function setWsid($sWsid)
+
+    public function setTransactionIsolation(int $transactionIsolation): static
     {
-        $this->sWsid = $sWsid;
+        $this->transactionIsolation = $transactionIsolation;
+        return $this;
+    }
+
+    public function setTrustServerCertificate(string $trustServerCertificate): static
+    {
+        $this->trustServerCertificate = $trustServerCertificate;
+        return $this;
+    }
+
+    public function setWsid(string $wsid): static
+    {
+        $this->wsid = $wsid;
         return $this;
     }
 }

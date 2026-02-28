@@ -15,6 +15,7 @@
 namespace Pabana\Mvc;
 
 use Pabana\Core\Configuration;
+use Pabana\Database\Connection;
 use Pabana\Database\ConnectionCollection;
 
 /**
@@ -29,13 +30,13 @@ class Model
      * @since   1.0
      * @deprecated deprecated since version 1.1
      */
-    public $Connection;
+    public ?Connection $Connection = null;
 
     /**
      * @var     \Pabana\Database\Connection Object Connection (default connection).
      * @since   1.1
      */
-    public $connection;
+    public ?Connection $connection = null;
 
     /**
      * Initialize model
@@ -61,7 +62,7 @@ class Model
      * @param   array $dataWhere Array of column => value
      * @return  mixed
      */
-    public function delete($dataWhere = [])
+    public function delete(array $dataWhere = []): mixed
     {
         if (!isset($this->table)) {
             throw new \Exception("Table isn't defined");
@@ -77,7 +78,7 @@ class Model
      * @param   string $modelName Model class name
      * @return  object|bool Return model defined in $modelName or false if error
      */
-    public function get($modelName)
+    public function get(string $modelName): object|false
     {
         $modelNamespace = Configuration::read('mvc.model.namespace');
         $modelNamespace = $modelNamespace . '\\' . ucFirst($modelName);
@@ -95,7 +96,7 @@ class Model
      * @param   array $data Array of column => value
      * @return  mixed
      */
-    public function insert($data)
+    public function insert(array $data): mixed
     {
         if (!isset($this->table)) {
             throw new \Exception("Table isn't defined");
@@ -112,7 +113,7 @@ class Model
      * @param   array $dataWhere Array of column => value
      * @return  array|false
      */
-    public function selectAll($dataSelect, $dataWhere = [])
+    public function selectAll(array $dataSelect, array $dataWhere = []): array|false
     {
         if (!isset($this->table)) {
             throw new \Exception("Table isn't defined");
@@ -129,7 +130,7 @@ class Model
      * @param   array $dataWhere Array of column => value
      * @return  mixed
      */
-    public function selectOne($dataSelect, $dataWhere = [])
+    public function selectOne(array $dataSelect, array $dataWhere = []): mixed
     {
         if (!isset($this->table)) {
             throw new \Exception("Table isn't defined");
@@ -146,7 +147,7 @@ class Model
      * @param   array $dataWhere Array of column => value
      * @return  mixed
      */
-    public function selectOneColumn($dataSelect, $dataWhere = [])
+    public function selectOneColumn(array $dataSelect, array $dataWhere = []): mixed
     {
         if (!isset($this->table)) {
             throw new \Exception("Table isn't defined");
@@ -163,7 +164,7 @@ class Model
      * @param   array $dataWhere Array of column => value
      * @return  mixed
      */
-    public function update($data, $dataWhere = [])
+    public function update(array $data, array $dataWhere = []): mixed
     {
         if (!isset($this->table)) {
             throw new \Exception("Table isn't defined");

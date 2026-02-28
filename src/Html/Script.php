@@ -28,7 +28,7 @@ class Script
      * @var     Pabana\Type\ArrayType List of defined script
      * @since   1.0
      */
-    private static $scriptList;
+    private static ArrayType $scriptList;
 
     /**
      * Constructor
@@ -48,7 +48,7 @@ class Script
      * @since   1.0
      * @return  string Html code to initialize scripts
      */
-    public function __toString()
+    public function __toString(): string
     {
         return $this->render();
     }
@@ -61,9 +61,9 @@ class Script
      * @param   string $hrefOrScript Path of script from /public or script content.
      * @return  $this
      */
-    private function append($type, $hrefOrScript)
+    private function append(string $type, string $hrefOrScript): static
     {
-        self::$scriptList->append(array($type, $hrefOrScript));
+        self::$scriptList->append([$type, $hrefOrScript]);
         return $this;
     }
 
@@ -74,7 +74,7 @@ class Script
      * @param   string $href Script name.
      * @return  $this
      */
-    public function appendFile($href)
+    public function appendFile(string $href): static
     {
         $href = '/js/' . $href;
         $this->append('file', $href);
@@ -89,7 +89,7 @@ class Script
      * @param   string $href Script name.
      * @return  $this
      */
-    public function appendLibrary($library, $href)
+    public function appendLibrary(string $library, string $href): static
     {
         $href = '/lib/' . $library . '/js/' . $href;
         $this->append('library', $href);
@@ -103,7 +103,7 @@ class Script
      * @param   string $script Script code.
      * @return  $this
      */
-    public function appendScript($script)
+    public function appendScript(string $script): static
     {
         $this->append('script', $script);
         return $this;
@@ -115,7 +115,7 @@ class Script
      * @since   1.0
      * @return  $this
      */
-    public function clean()
+    public function clean(): static
     {
         self::$scriptList->clean();
         return $this;
@@ -128,7 +128,7 @@ class Script
      * @param   int $index Index of insert position
      * @return  array Return a value of scriptList
      */
-    public function get($index)
+    public function get(int $index): mixed
     {
         return self::$scriptList->get($index);
     }
@@ -142,9 +142,9 @@ class Script
      * @param   string $hrefOrScript Path of script from /public or script content.
      * @return  $this
      */
-    private function insert($index, $type, $hrefOrScript)
+    private function insert(int $index, string $type, string $hrefOrScript): static
     {
-        self::$scriptList->insert($index, array($type, $hrefOrScript));
+        self::$scriptList->insert($index, [$type, $hrefOrScript]);
         return $this;
     }
 
@@ -156,7 +156,7 @@ class Script
      * @param   string $href Script name.
      * @return  $this
      */
-    public function insertFile($index, $href)
+    public function insertFile(int $index, string $href): static
     {
         $href = '/js/' . $href;
         $this->insert($index, 'file', $href);
@@ -172,7 +172,7 @@ class Script
      * @param   string $href Script name.
      * @return  $this
      */
-    public function insertLibrary($index, $library, $href)
+    public function insertLibrary(int $index, string $library, string $href): static
     {
         $href = '/lib/' . $library . '/js/' . $href;
         $this->insert($index, 'library', $href);
@@ -187,7 +187,7 @@ class Script
      * @param   string $script Script code.
      * @return  $this
      */
-    public function insertScript($index, $script)
+    public function insertScript(int $index, string $script): static
     {
         $this->insert($index, 'script', $script);
         return $this;
@@ -201,9 +201,9 @@ class Script
      * @param   string $hrefOrScript Path of script from /public or script content.
      * @return  $this
      */
-    private function prepend($type, $hrefOrScript)
+    private function prepend(string $type, string $hrefOrScript): static
     {
-        self::$scriptList->prepend(array($type, $hrefOrScript));
+        self::$scriptList->prepend([$type, $hrefOrScript]);
         return $this;
     }
 
@@ -214,7 +214,7 @@ class Script
      * @param   string $href Script name.
      * @return  $this
      */
-    public function prependFile($href)
+    public function prependFile(string $href): static
     {
         $href = '/js/' . $href;
         $this->prepend('file', $href);
@@ -229,7 +229,7 @@ class Script
      * @param   string $href Script name.
      * @return  $this
      */
-    public function prependLibrary($library, $href)
+    public function prependLibrary(string $library, string $href): static
     {
         $href = '/lib/' . $library . '/js/' . $href;
         $this->prepend('library', $href);
@@ -243,7 +243,7 @@ class Script
      * @param   string $script Script code.
      * @return  $this
      */
-    public function prependScript($script)
+    public function prependScript(string $script): static
     {
         $this->prepend('script', $script);
         return $this;
@@ -256,7 +256,7 @@ class Script
      * @param   int $index Index of script
      * @return  bool True if remove success, else false.
      */
-    public function remove($index)
+    public function remove(int $index): bool
     {
         return self::$scriptList->remove($index);
     }
@@ -267,7 +267,7 @@ class Script
      * @since   1.0
      * @return  string Html code to initialize scripts
      */
-    public function render()
+    public function render(): string
     {
         $htmlContent = '';
         foreach (self::$scriptList->toArray() as $script) {

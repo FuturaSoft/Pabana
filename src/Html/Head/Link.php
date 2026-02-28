@@ -27,7 +27,7 @@ class Link
      * @var     Pabana\Type\ArrayType List of defined link
      * @since   1.0
      */
-    private static $linkList;
+    private static ArrayType $linkList;
 
     /**
      * Constructor
@@ -45,7 +45,7 @@ class Link
      * @since   1.0
      * @return  string Html code to initialize link
      */
-    public function __toString()
+    public function __toString(): string
     {
         return $this->render();
     }
@@ -60,9 +60,9 @@ class Link
      * @param   string $media Media attribute.
      * @return  $this
      */
-    public function append($href, $rel = null, $type = null, $media = null)
+    public function append(string $href, ?string $rel = null, ?string $type = null, ?string $media = null): static
     {
-        self::$linkList->append(array($sHref, $sRel, $sType, $sMedia));
+        self::$linkList->append([$href, $rel, $type, $media]);
         return $this;
     }
 
@@ -72,7 +72,7 @@ class Link
      * @since   1.0
      * @return  void
      */
-    public function clean()
+    public function clean(): void
     {
         self::$linkList->clean();
     }
@@ -84,7 +84,7 @@ class Link
      * @param   int $index Index of item position
      * @return  array Return a value of link list
      */
-    public function get($index)
+    public function get(int $index): mixed
     {
         return self::$linkList->get($index);
     }
@@ -100,9 +100,9 @@ class Link
      * @param   string $media Media attribute.
      * @return  $this
      */
-    private function insert($index, $href, $rel = null, $type = null, $media = null)
+    private function insert(int $index, string $href, ?string $rel = null, ?string $type = null, ?string $media = null): static
     {
-        self::$linkList->insert($index, array($href, $rel, $type, $media));
+        self::$linkList->insert($index, [$href, $rel, $type, $media]);
         return $this;
     }
 
@@ -116,9 +116,9 @@ class Link
      * @param   string $media Media attribute.
      * @return  $this
      */
-    public function prepend($href, $rel = null, $type = null, $media = null)
+    public function prepend(string $href, ?string $rel = null, ?string $type = null, ?string $media = null): static
     {
-        self::$linkList->prepend(array($href, $rel, $type, $media));
+        self::$linkList->prepend([$href, $rel, $type, $media]);
         return $this;
     }
 
@@ -129,7 +129,7 @@ class Link
      * @param   int $index Index of link
      * @return  bool True if remove success, else false.
      */
-    public function remove($index)
+    public function remove(int $index): bool
     {
         return self::$linkList->remove($index);
     }
@@ -140,7 +140,7 @@ class Link
      * @since   1.0
      * @return  string Html code to initialize link
      */
-    public function render()
+    public function render(): string
     {
         $htmlContent = '';
         foreach (self::$linkList->toArray() as $link) {

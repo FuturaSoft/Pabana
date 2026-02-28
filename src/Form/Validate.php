@@ -21,7 +21,7 @@ use Pabana\Network\Http\Request;
  */
 class Validate
 {
-    public static function cleanPhone($sValue)
+    public static function cleanPhone(string $sValue): string
     {
         if (substr($sValue, 0, 4) === '0033') {
             $sValue = '0' . substr($sValue, 4);
@@ -32,10 +32,10 @@ class Validate
         if (substr($sValue, 0, 5) === '(+33)') {
             $sValue = '0' . substr($sValue, 5);
         }
-        return str_replace(array(' ', '.', '-'), '', $sValue);
+        return str_replace([' ', '.', '-'], '', $sValue);
     }
 
-    private static function checkLuhn($value)
+    private static function checkLuhn(string $value): bool
     {
         $value = preg_replace('/[^\d]/', '', $value);
         $sum = '';
@@ -45,7 +45,7 @@ class Validate
         return array_sum(str_split($sum)) % 10 === 0;
     }
 
-    public static function isBase64($value)
+    public static function isBase64(string $value): bool
     {
         if (base64_encode(base64_decode($value, true)) === $value) {
             return true;
@@ -53,7 +53,7 @@ class Validate
         return false;
     }
 
-    public static function isBetween($value, $min, $max, $strict = false)
+    public static function isBetween(mixed $value, mixed $min, mixed $max, bool $strict = false): bool
     {
         if (is_numeric($value)) {
             if ($strict === false) {
@@ -69,28 +69,28 @@ class Validate
         return false;
     }
 
-    public static function isBic($value)
+    public static function isBic(string $value): bool|int
     {
         return preg_match('/^[a-z]{6}[0-9a-z]{2}([0-9a-z]{3})?\z/i', $value);
     }
 
-    public static function isBoolean($value)
+    public static function isBoolean(mixed $value): bool
     {
         $aAllowValue = [0, 1];
         return in_array($value, $aAllowValue);
     }
 
-    public static function isChar($value)
+    public static function isChar(string $value): bool
     {
         return self::isStringLength($value, 1, 1);
     }
 
-    public static function isColor($value, $type = false)
+    public static function isColor(string $value, array|string|false $type = false): bool
     {
         if ($type === false) {
-            $typeCheck = array('hex', 'hsl', 'hsla', 'keyword', 'rgb', 'rgba');
+            $typeCheck = ['hex', 'hsl', 'hsla', 'keyword', 'rgb', 'rgba'];
         } else if (is_string($type)) {
-            $typeCheck = array($type);
+            $typeCheck = [$type];
         } else {
             $typeCheck = $type;
         }
@@ -122,9 +122,9 @@ class Validate
         return false;
     }
 
-    public static function isCreditCard($value, $type)
+    public static function isCreditCard(string $value, string $type): bool
     {
-        $arsRegexType = array(
+        $arsRegexType = [
             "visa" => "(4\d{12}(?:\d{3})?)",
             "amex" => "(3[47]\d{13})",
             "jcb" => "(35[2-8][89]\d\d\d{10})",
@@ -132,19 +132,19 @@ class Validate
             "solo" => "((?:6334|6767)\d{12}(?:\d\d)?\d?)",
             "mastercard" => "(5[1-5]\d{14})",
             "switch" => "(?:(?:(?:4903|4905|4911|4936|6333|6759)\d{12})|(?:(?:564182|633110)\d{10})(\d\d)?\d?)"
-        );
+        ];
         if (!preg_match($arsRegexType[$type], $value)) {
             return false;
         }
         return self::checkLuhn($value);
     }
 
-    public static function isCcv($value)
+    public static function isCcv(string $value): bool|int
     {
         return preg_match('/^[0-9]{4}$/', $value);
     }
 
-    public static function isDate($value, $format, $min = false, $max = false)
+    public static function isDate(string $value, string $format, string|false $min = false, string|false $max = false): bool
     {
         $date = \DateTime::createFromFormat($format, $value);
         if ($date === false) {
@@ -165,7 +165,7 @@ class Validate
         return true;
     }
 
-    public static function isDifferent($value1, $value2)
+    public static function isDifferent(mixed $value1, mixed $value2): bool
     {
         if ($value1 == $value2) {
             return false;
@@ -173,7 +173,7 @@ class Validate
         return true;
     }
 
-    public static function isEmailAddress($value)
+    public static function isEmailAddress(string $value): bool
     {
         if (!filter_var($value, FILTER_VALIDATE_EMAIL)) {
             return false;
@@ -181,7 +181,7 @@ class Validate
         return true;
     }
 
-    public static function isEqual($value, $valueTest)
+    public static function isEqual(mixed $value, mixed $valueTest): bool
     {
         if ($value == $valueTest) {
             return true;
@@ -189,7 +189,7 @@ class Validate
         return false;
     }
 
-    public static function isFile($value, $extension, $typeMime, $maxsize)
+    public static function isFile(array $value, mixed $extension, mixed $typeMime, int|false $maxsize): bool
     {
         // Vérifie si erreur
         if ($value['error'] != 0) {
@@ -198,7 +198,7 @@ class Validate
         // Check extension
         if ($extension != '*') {
             if (is_string($extension)) {
-                $extension = array($extension);
+                $extension = [$extension];
             }
             $extension = array_map('strtolower', $extension);
             $fileExtension = pathinfo($value['name'], PATHINFO_EXTENSION);
@@ -210,7 +210,7 @@ class Validate
         // Check type mime
         if ($typeMime != '*/*') {
             if (is_string($typeMime)) {
-                $typeMime = array($typeMime);
+                $typeMime = [$typeMime];
             }
             if (!in_array($value['type'], $typeMime)) {
                 return false;
@@ -223,7 +223,7 @@ class Validate
         return true;
     }
 
-    public static function isGreaterThan($value, $min)
+    public static function isGreaterThan(mixed $value, mixed $min): bool
     {
         if ($value < $min) {
             return false;
@@ -231,10 +231,10 @@ class Validate
         return true;
     }
 
-    public static function isIban($value)
+    public static function isIban(string $value): bool
     {
         $iban = strtolower(str_replace(' ', '', $value));
-        $countryCodeList = array(
+        $countryCodeList = [
             'al' => 28,
             'ad' => 24,
             'at' => 20,
@@ -301,8 +301,8 @@ class Validate
             'ae' => 23,
             'gb' => 22,
             'vg' => 24
-        );
-        $charCode = array(
+        ];
+        $charCode = [
             'a' => 10,
             'b' => 11,
             'c' => 12,
@@ -329,7 +329,7 @@ class Validate
             'x' => 33,
             'y' => 34,
             'z' => 35
-        );
+        ];
         $ibanLength = mb_strlen($iban);
         $countryCode = substr($iban, 0, 2);
         if ($ibanLength == $countryCodeList[$countryCode]) {
@@ -352,7 +352,7 @@ class Validate
         }
     }
 
-    public static function isIdentical($value1, $value2)
+    public static function isIdentical(mixed $value1, mixed $value2): bool
     {
         if ($value1 != $value2) {
             return false;
@@ -360,7 +360,7 @@ class Validate
         return true;
     }
 
-    public static function isIne($value)
+    public static function isIne(string $value): bool
     {
         if (!preg_match('#^((\d{9}[a-zA-Z]{2})|(\d{10}[a-zA-Z]{1}))$#', $value)) {
             return false;
@@ -368,7 +368,7 @@ class Validate
         return true;
     }
 
-    public static function isInteger($value)
+    public static function isInteger(mixed $value): bool
     {
         if (is_int($value)) {
             return true;
@@ -376,12 +376,12 @@ class Validate
         return false;
     }
 
-    public static function isInArray($needle, $haystack)
+    public static function isInArray(mixed $needle, array $haystack): bool
     {
         return \in_array($needle, $haystack, true);
     }
 
-    public static function isIp($value, $type = false)
+    public static function isIp(string $value, string|false $type = false): bool
     {
         $filterFlag = null;
         if ($type !== false) {
@@ -397,7 +397,7 @@ class Validate
         return false;
     }
 
-    public static function isLessThan($value, $max)
+    public static function isLessThan(mixed $value, mixed $max): bool
     {
         if ($value > $max) {
             return false;
@@ -405,12 +405,12 @@ class Validate
         return true;
     }
 
-    public static function isMac($value)
+    public static function isMac(string $value): string|false
     {
         return filter_var($value, FILTER_VALIDATE_MAC);
     }
 
-    public static function isNotEmpty($value)
+    public static function isNotEmpty(mixed $value): bool
     {
         if ($value == '') {
             return false;
@@ -418,7 +418,7 @@ class Validate
         return true;
     }
 
-    public static function isNumeric($value)
+    public static function isNumeric(mixed $value): bool
     {
         if (is_numeric($value)) {
             return true;
@@ -426,7 +426,7 @@ class Validate
         return false;
     }
 
-    public static function isPasswordStrength($value, $digit = false, $lower = false, $upper = false, $symbol = false)
+    public static function isPasswordStrength(string $value, bool $digit = false, bool $lower = false, bool $upper = false, bool $symbol = false): bool
     {
         if ($digit !== false) {
             if (!preg_match("#[0-9]+#", $value)) {
@@ -451,7 +451,7 @@ class Validate
         return true;
     }
 
-    public static function isPhone($value, $country)
+    public static function isPhone(string $value, string $country): bool|int
     {
         if ($country == 'FR') {
             return preg_match('#^(0|\\+33|0033|\(\\+33\))([-. ]?)[1-9]([-. ]?\d{2}){4}$#', $value);
@@ -459,12 +459,12 @@ class Validate
         return false;
     }
 
-    public static function isRegexp($value, $regexp)
+    public static function isRegexp(string $value, string $regexp): bool|int
     {
         return preg_match($regexp, $value);
     }
 
-    public static function isSiren($value)
+    public static function isSiren(string $value): bool
     {
         if (mb_strlen($value) != 9) {
             return false;
@@ -475,7 +475,7 @@ class Validate
         return self::checkLuhn($value);
     }
 
-    public static function isSiret($value)
+    public static function isSiret(string $value): bool
     {
         if (mb_strlen($value) != 14) {
             return false;
@@ -486,7 +486,7 @@ class Validate
         return self::checkLuhn($value);
     }
 
-    public static function isStringLength($value, $min = false, $max = false)
+    public static function isStringLength(string $value, int|false $min = false, int|false $max = false): bool
     {
         $value = stripslashes($value);
         if ($min !== false) {
@@ -502,20 +502,20 @@ class Validate
         return true;
     }
 
-    public static function isUri($value)
+    public static function isUri(string $value): string|false
     {
         return filter_var($value, FILTER_VALIDATE_URL);
     }
 
-    public static function isUuid($value, $type = 'v4')
+    public static function isUuid(string $value, string $type = 'v4'): bool|int
     {
-        $uuidList = array(
+        $uuidList = [
             'v4' => '/^[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i'
-        );
+        ];
         return preg_match($uuidList[$type], $value);
     }
 
-    public static function isVat($value)
+    public static function isVat(string $value): bool
     {
         $vatNumber = strtoupper(str_replace(' ', '', $value));
         $countryCode = substr($vatNumber, 0, 2);
@@ -536,9 +536,9 @@ class Validate
         return true;
     }
 
-    public static function isZipCode($value, $country)
+    public static function isZipCode(string $value, string $country): bool|int
     {
-        $armZipRegex = array(
+        $armZipRegex = [
             "US" => "^\d{5}([\-]?\d{4})?$",
             "UK" => "^(GIR|[A-Z]\d[A-Z\d]??|[A-Z]{2}\d[A-Z\d]??)[ ]??(\d[A-Z]{2})$",
             "DE" => "\b((?:0[1-46-9]\d{3})|(?:[1-357-9]\d{4})|(?:[4][0-24-9]\d{3})|(?:[6][013-9]\d{3}))\b",
@@ -551,11 +551,11 @@ class Validate
             "DK" => "^([D-d][K-k])?( |-)?[1-9]{1}[0-9]{3}$",
             "SE" => "^(s-|S-){0,1}[0-9]{3}\s?[0-9]{2}$",
             "BE" => "^[1-9]{1}[0-9]{3}$"
-        );
+        ];
         return preg_match($armZipRegex[$country], $value);
     }
 
-    public static function prepare($aData, $aPrepareRule = [])
+    public static function prepare(array $aData, array $aPrepareRule = []): array
     {
         if (empty($aPrepareRule)) {
 
@@ -629,31 +629,28 @@ class Validate
         return $aData;
     }
 
-    public static function recursivePrepare($sCallback, $aArray)
+    public static function recursivePrepare(string $sCallback, array $aArray): array
     {
-        $aReturn = array();
+        $aReturn = [];
         foreach ($aArray as $mKey => $mValue) {
             if (is_array($mValue)) {
                 $mReturnValue = self::recursivePrepare($sCallback, $mValue);
             } else {
-                if ($sCallback == 'trim') {
-                    $mReturnValue = trim($mValue);
-                } else if ($sCallback == 'strip_tags') {
-                    $mReturnValue = strip_tags($mValue);
-                } else if ($sCallback == 'htmlspecialchars') {
-                    $mReturnValue = htmlspecialchars($mValue);
-                } else if ($sCallback == 'addslashes') {
-                    $mReturnValue = addslashes($mValue);
-                } else if ($sCallback == 'clean_phone') {
-                    $mReturnValue = self::cleanPhone($mValue);
-                }
+                $mReturnValue = match ($sCallback) {
+                    'trim' => trim($mValue),
+                    'strip_tags' => strip_tags($mValue),
+                    'htmlspecialchars' => htmlspecialchars($mValue),
+                    'addslashes' => addslashes($mValue),
+                    'clean_phone' => self::cleanPhone($mValue),
+                    default => $mValue,
+                };
             }
             $aReturn[$mKey] = $mReturnValue;
         }
         return $aReturn;
     }
 
-    public static function validate($aValidRule, $aData)
+    public static function validate(array $aValidRule, array $aData): array|true
     {
         // Parcours les champs a valider
         foreach ($aValidRule as $sField => $aFieldRule) {
@@ -796,7 +793,7 @@ class Validate
                     if (isset($aRuleData['type'])) {
                         $type = $aRuleData['type'];
                     }
-                    if (!self::isIban($aData[$sField], $type)) {
+                    if (!self::isIp($aData[$sField], $type)) {
                         return $aReturn;
                     }
                 } else if ($sRuleType == 'identical') {

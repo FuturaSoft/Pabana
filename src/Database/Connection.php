@@ -29,31 +29,31 @@ class Connection
      * @since   1.1
      * @deprecated deprecated since version 1.1
      */
-    public $Datasource;
+    public Datasource $Datasource;
 
     /**
      * @var     \Pabana\Database\Datasource Object Datasource.
      * @since   1.1
      */
-    public $datasource;
+    public Datasource $datasource;
 
     /**
      * @var     \PDO Object PDO created when connection is effectued
      * @since   1.0
      */
-    private $pdo;
+    private ?\PDO $pdo = null;
 
     /**
      * @var     string Connection name (by default same as Datasource)
      * @since   1.0
      */
-    private $name;
+    private string $name = '';
 
     /**
      * @var     string  Last query executed
      * @since   1.2
      */
-    private $lastQuery;
+    private string $lastQuery = '';
 
     /**
      * Constructor
@@ -65,7 +65,7 @@ class Connection
      * @param   string $name Connection name.
      * @param   bool $autoConnect If defined connection will do.
      */
-    public function __construct($datasource, $name = '', $autoConnect = true)
+    public function __construct(Datasource $datasource, string $name = '', bool $autoConnect = true)
     {
         $this->datasource = $datasource;
         // To maintain compatibility with version 1.0
@@ -87,7 +87,7 @@ class Connection
      * @since   1.0
      * @return  bool True if success or false.
      */
-    public function connect()
+    public function connect(): bool
     {
         try {
             $this->pdo = new \PDO(
@@ -110,7 +110,7 @@ class Connection
      * @since   1.1
      * @return  bool True if success or false.
      */
-    public function beginTransaction()
+    public function beginTransaction(): bool
     {
         // Check if connection is open
         if ($this->isConnected()) {
@@ -127,7 +127,7 @@ class Connection
      * @since   1.1
      * @return  bool True if success or false.
      */
-    public function commit()
+    public function commit(): bool
     {
         // Check if connection is open
         if ($this->isConnected()) {
@@ -144,9 +144,9 @@ class Connection
      * @since   1.2
      * @param   string $table     Table of database
      * @param   array  $dataWhere Array of column => value for where
-     * @return  bool
+     * @return  int|false
      */
-    public function delete($table, $dataWhere = [])
+    public function delete(string $table, array $dataWhere = []): int|false
     {
         if ($this->isConnected()) {
             $query = "DELETE FROM `" . $table . "`";
@@ -182,7 +182,7 @@ class Connection
      * @since   1.0
      * @return  bool True if success or false.
      */
-    public function disconnect()
+    public function disconnect(): bool
     {
         // Check if connection is open
         if ($this->isConnected()) {
@@ -201,9 +201,9 @@ class Connection
      *
      * @since   1.0
      * @param   string $query SQL Statement.
-     * @return  bool|integer Return an integer with number of affected rows or return false if error.
+     * @return  int|false Return an integer with number of affected rows or return false if error.
      */
-    public function exec($query)
+    public function exec(string $query): int|false
     {
         if ($this->isConnected()) {
             try {
@@ -225,7 +225,7 @@ class Connection
      * @since   1.2
      * @return  string  Return last query
      */
-    public function getLastQuery()
+    public function getLastQuery(): string
     {
         return $this->lastQuery;
     }
@@ -238,7 +238,7 @@ class Connection
      * @since   1.0
      * @return  bool|\PDO Return current PDO object use by this connection or return false if error.
      */
-    public function getPdoObject()
+    public function getPdoObject(): \PDO|false
     {
         if ($this->isConnected()) {
             return $this->pdo;
@@ -255,7 +255,7 @@ class Connection
      * @since   1.0
      * @return  string Return current connection name.
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
@@ -266,9 +266,9 @@ class Connection
      * @since   1.2
      * @param   string $table Table of database
      * @param   array  $data  Array of column => value
-     * @return  bool
+     * @return  string|false
      */
-    public function insert($table, $data)
+    public function insert(string $table, array $data): string|false
     {
         if ($this->isConnected()) {
             $query = "INSERT INTO `" . $table . "` SET ";
@@ -305,7 +305,7 @@ class Connection
      * @since   1.0
      * @return  bool Return true if connection is establised or return false.
      */
-    public function isConnected()
+    public function isConnected(): bool
     {
         return isset($this->pdo);
     }
@@ -316,7 +316,7 @@ class Connection
      * @since   1.1
      * @return  bool Return true if actual request is a transaction
      */
-    public function isTransaction()
+    public function isTransaction(): bool
     {
         if ($this->isConnected()) {
             return $this->pdo->inTransaction();
@@ -331,9 +331,9 @@ class Connection
      * Returns the ID of the last inserted row or sequence value
      *
      * @since   1.0
-     * @return  bool|integer Returns the ID of the last inserted row or sequence value
+     * @return  string|false Returns the ID of the last inserted row or sequence value
      */
-    public function lastInsertId()
+    public function lastInsertId(): string|false
     {
         if ($this->isConnected()) {
             try {
@@ -353,12 +353,12 @@ class Connection
      * Check if mysql connection is active
      *
      * @since   1.2
-     * 
+     *
      * @param   boolean $autoReconnection   If ping fail, try to reconnect
-     * 
+     *
      * @return  boolean Return success or error
      */
-    public function ping($autoReconnection = true)
+    public function ping(bool $autoReconnection = true): bool
     {
         if ($this->isConnected()) {
             try {
@@ -387,7 +387,7 @@ class Connection
      *
      * @return  bool|\Pabana\Database\Statement Returns Statement object or false if error
      */
-    public function query($query, $dataPrepare = [])
+    public function query(string $query, array $dataPrepare = []): Statement|false
     {
         if ($this->isConnected()) {
             try {
@@ -420,7 +420,7 @@ class Connection
      *
      * @return  bool|mixed Returns all result or false if error
      */
-    public function queryAll($query, $dataPrepare = [], $fetchType = 'assoc')
+    public function queryAll(string $query, array $dataPrepare = [], string $fetchType = 'assoc'): array|false
     {
         if ($this->isConnected()) {
             $statement = $this->query($query, $dataPrepare);
@@ -444,7 +444,7 @@ class Connection
      *
      * @return  bool|mixed Returns a line or false if error
      */
-    public function queryOne($query, $dataPrepare = [], $fetchType = 'assoc')
+    public function queryOne(string $query, array $dataPrepare = [], string $fetchType = 'assoc'): array|null|false
     {
         if ($this->isConnected()) {
             $statement = $this->query($query, $dataPrepare);
@@ -468,11 +468,10 @@ class Connection
      *
      * @param   string $query       SQL Statement
      * @param   array  $dataPrepare Array of data prepare
-     * @param   string $fetchType   Type de retour
      *
-     * @return  bool|mixed Return one column value or false if error
+     * @return  mixed Return one column value or false if error
      */
-    public function queryOneColumn($query, $dataPrepare = [])
+    public function queryOneColumn(string $query, array $dataPrepare = []): mixed
     {
         if ($this->isConnected()) {
             $statement = $this->query($query, $dataPrepare);
@@ -497,9 +496,9 @@ class Connection
      * @param   array  $dataSelect  Array of column => value
      * @param   array  $dataWhere   Array of column => value
      * @param   string $sType       Type de retour
-     * @return  bool
+     * @return  mixed
      */
-    private function select($table, $dataSelect, $dataWhere = [], $sType = 'all')
+    private function select(string $table, array $dataSelect, array $dataWhere = [], string $sType = 'all'): mixed
     {
         if ($this->isConnected()) {
             $query = "SELECT ";
@@ -542,9 +541,9 @@ class Connection
      * @param   string $table       Table of database
      * @param   array  $dataSelect  Array of column => value
      * @param   array  $dataWhere   Array of column => value
-     * @return  bool
+     * @return  array|false
      */
-    public function selectAll($table, $dataSelect, $dataWhere = [])
+    public function selectAll(string $table, array $dataSelect, array $dataWhere = []): array|false
     {
         if ($this->isConnected()) {
             return $this->select($table, $dataSelect, $dataWhere, 'all');
@@ -560,9 +559,9 @@ class Connection
      * @param   string $table       Table of database
      * @param   array  $dataSelect  Array of column => value
      * @param   array  $dataWhere   Array of column => value
-     * @return  bool
+     * @return  array|null|false
      */
-    public function selectOne($table, $dataSelect, $dataWhere = [])
+    public function selectOne(string $table, array $dataSelect, array $dataWhere = []): array|null|false
     {
         if ($this->isConnected()) {
             return $this->select($table, $dataSelect, $dataWhere, 'one');
@@ -578,9 +577,9 @@ class Connection
      * @param   string $table       Table of database
      * @param   array  $dataSelect  Array of column => value
      * @param   array  $dataWhere   Array of column => value
-     * @return  bool
+     * @return  mixed
      */
-    public function selectOneColumn($table, $dataSelect, $dataWhere = [])
+    public function selectOneColumn(string $table, array $dataSelect, array $dataWhere = []): mixed
     {
         if ($this->isConnected()) {
             return $this->select($table, $dataSelect, $dataWhere, 'column');
@@ -596,7 +595,7 @@ class Connection
      *
      * @return  bool True if success or false.
      */
-    public function rollBack()
+    public function rollBack(): bool
     {
         // Check if connection is open
         if ($this->isConnected()) {
@@ -616,7 +615,7 @@ class Connection
      *
      * @return  void
      */
-    public function setName($name)
+    public function setName(string $name): void
     {
         $this->name = $name;
     }
@@ -630,9 +629,9 @@ class Connection
      * @param   array  $data      Array of column => value
      * @param   array  $dataWhere Array of column => value for where
      *
-     * @return  bool
+     * @return  int|false
      */
-    public function update($table, $data, $dataWhere = [])
+    public function update(string $table, array $data, array $dataWhere = []): int|false
     {
         if ($this->isConnected()) {
             $query = "UPDATE `" . $table . "` SET ";

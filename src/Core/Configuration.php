@@ -27,7 +27,7 @@ class Configuration
      * @var     array   Array to store configuration parameters
      * @since   1.0
      */
-    private static $configList = array();
+    private static array $configList = [];
 
     /**
      * Apply configuration of php parameter
@@ -38,7 +38,7 @@ class Configuration
      *
      * @return  void
      */
-    public static function apply()
+    public static function apply(): void
     {
         $debugDisplay = self::read('debug.display');
         ini_set('display_errors', $debugDisplay);
@@ -54,7 +54,7 @@ class Configuration
      *
      * @return  void
      */
-    public static function base()
+    public static function base(): void
     {
         // Charset by default
         self::write('application.encoding', 'UTF8');
@@ -154,7 +154,7 @@ class Configuration
      *
      * @return  bool True if key exists else false
      */
-    public static function check($key)
+    public static function check(string $key): bool
     {
         return isset(self::$configList[$key]);
     }
@@ -170,10 +170,10 @@ class Configuration
      *
      * @return  void
      */
-    public static function clean($reloadBase = true)
+    public static function clean(bool $reloadBase = true): void
     {
         // Delete ALL key and value
-        self::$configList = array();
+        self::$configList = [];
         if ($reloadBase === true) {
             // Reload base configuration
             self::base();
@@ -191,7 +191,7 @@ class Configuration
      *
      * @return  bool Result of delete Key
      */
-    public static function delete($key)
+    public static function delete(string $key): bool
     {
         // Check key existence
         if (!self::check($key)) {
@@ -214,7 +214,7 @@ class Configuration
      *
      * @return  void
      */
-    public static function load($filename, $merge = true)
+    public static function load(string $filename, bool $merge = true): void
     {
         // Check if file not exist
         if (!file_exists($filename)) {
@@ -223,7 +223,7 @@ class Configuration
         // Read extension of config file
         $fileExtension = pathinfo($filename, PATHINFO_EXTENSION);
         // List allowed extension of file
-        $allowedExtensionList = array('ini', 'json', 'php', 'xml');
+        $allowedExtensionList = ['ini', 'json', 'php', 'xml'];
         // Check if extension is recognized
         if (!in_array($fileExtension, $allowedExtensionList)) {
             throw new \Exception('Config file "' . $filename . '" is in unrecognize format. Accepted format are ' . implode(', ', $allowedExtensionList) . '.');
@@ -267,7 +267,7 @@ class Configuration
      *
      * @return  mixed Value prepared
      */
-    public static function prepare($key, $value)
+    public static function prepare(string $key, mixed $value): mixed
     {
         if ($value == 'true') {
             return true;
@@ -292,9 +292,9 @@ class Configuration
      *
      * @return  array Array of key and value prepared
      */
-    public static function prepareArray($configList)
+    public static function prepareArray(array $configList): array
     {
-        $preparedConfigList = array();
+        $preparedConfigList = [];
         foreach ($configList as $key => $value) {
             $preparedConfigList[$key] = self::prepare($key, $value);
         }
@@ -313,7 +313,7 @@ class Configuration
      *
      * @return  mixed Value of Configuration parameter or default if configuration key doesn't exist
      */
-    public static function read($key, $default = false)
+    public static function read(string $key, mixed $default = false): mixed
     {
         // Check key existence
         if (!self::check($key)) {
@@ -332,7 +332,7 @@ class Configuration
      *
      * @return  array Array of all configuration
      */
-    public static function readAll()
+    public static function readAll(): array
     {
         return self::$configList;
     }
@@ -346,7 +346,7 @@ class Configuration
      *
      * @return  void
      */
-    public static function registerConstant()
+    public static function registerConstant(): void
     {
         if (!defined('DS')) {
             define('DS', DIRECTORY_SEPARATOR);
@@ -373,7 +373,7 @@ class Configuration
      *
      * @return  string Current version of Pabana
      */
-    public static function version()
+    public static function version(): string
     {
         return PAB_VERSION;
     }
@@ -391,7 +391,7 @@ class Configuration
      *
      * @return  bool Return true if success else return false;.
      */
-    public static function write($key, $value, $force = true)
+    public static function write(string $key, mixed $value, bool $force = true): bool
     {
         // Check key existence
         if (self::check($key) && $force === false) {
@@ -416,7 +416,7 @@ class Configuration
      *
      * @return  bool Return true if success else return false;.
      */
-    public static function writeAll($configArray, $force = false)
+    public static function writeAll(array $configArray, bool $force = false): bool
     {
         if ($force === true) {
             self::clean(true);

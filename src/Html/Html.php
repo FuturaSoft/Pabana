@@ -28,40 +28,40 @@ class Html
      * @var     \Pabana\Html\Doctype Doctype object
      * @since   1.1
      */
-    public $doctype;
+    public Doctype $doctype;
 
     /**
      * @var     \Pabana\Html\Head Head object
      * @since   1.1
      */
-    public $head;
+    public Head $head;
 
     /**
      * @var     \Pabana\Html\Script Script object
      * @since   1.1
      */
-    public $script;
+    public Script $script;
 
     /**
      * @var     \Pabana\Html\Doctype Doctype object
      * @since   1.0
      * @deprecated deprecated since version 1.1
      */
-    public $Doctype;
+    public Doctype $Doctype;
 
     /**
      * @var     \Pabana\Html\Head Head object
      * @since   1.0
      * @deprecated deprecated since version 1.1
      */
-    public $Head;
+    public Head $Head;
 
     /**
      * @var     \Pabana\Html\Script Script object
      * @since   1.0
      * @deprecated deprecated since version 1.1
      */
-    public $Script;
+    public Script $Script;
 
     /**
      * Constructor
@@ -89,7 +89,7 @@ class Html
      * @since   1.0
      * @return  void
      */
-    public function clean()
+    public function clean(): void
     {
         $this->doctype->clean();
         $this->head->clean();

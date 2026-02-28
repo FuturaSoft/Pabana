@@ -14,8 +14,6 @@
  */
 namespace Pabana\Database;
 
-use Pabana\Debug\Error;
-
 /**
  * Datasource class
  *
@@ -28,37 +26,37 @@ class Datasource
      * @var     string Charset use in Datasource
      * @since   1.0
      */
-    protected $charset;
+    protected string $charset = '';
 
     /**
      * @var     string Database value, can be a name in MySQL or a path in Odbc
      * @since   1.0
      */
-    protected $database;
+    protected string $database = '';
 
     /**
      * @var     string Database Management System name (Mysql, Odbc, Pgsql, ...)
      * @since   1.0
      */
-    protected $dbms;
+    protected string $dbms = '';
 
     /**
      * @var     string Datasource name
      * @since   1.0
      */
-    protected $name;
+    protected string $name = '';
 
     /**
      * @var     string Datasource password
      * @since   1.0
      */
-    protected $password;
+    protected string $password = '';
 
     /**
      * @var     string Datasource user
      * @since   1.0
      */
-    protected $user;
+    protected string $user = '';
 
     /**
      * Getter for Datasource charset
@@ -68,7 +66,7 @@ class Datasource
      * @since   1.0
      * @return  string Charset defined.
      */
-    public function getCharset()
+    public function getCharset(): string
     {
         return $this->charset;
     }
@@ -81,7 +79,7 @@ class Datasource
      * @since   1.0
      * @return  string Database name.
      */
-    public function getDatabase()
+    public function getDatabase(): string
     {
         return $this->database;
     }
@@ -94,11 +92,11 @@ class Datasource
      * @since   1.0
      * @return  array Array of option.
      */
-    public function getOption()
+    public function getOption(): array
     {
-        return array();
+        return [];
     }
-    
+
     /**
      * Getter for Datasource name
      *
@@ -107,7 +105,7 @@ class Datasource
      * @since   1.0
      * @return  string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
@@ -120,7 +118,7 @@ class Datasource
      * @since   1.0
      * @return  string
      */
-    public function getPassword()
+    public function getPassword(): string
     {
         return $this->password;
     }
@@ -133,7 +131,7 @@ class Datasource
      * @since   1.0
      * @return  string
      */
-    public function getUser()
+    public function getUser(): string
     {
         return $this->user;
     }
@@ -147,7 +145,7 @@ class Datasource
      * @since   1.0
      * @return  $this
      */
-    public function setCharset($charset)
+    public function setCharset(string $charset): static
     {
         $this->charset = $charset;
         return $this;
@@ -162,7 +160,7 @@ class Datasource
      * @since   1.0
      * @return  $this
      */
-    public function setDatabase($database)
+    public function setDatabase(string $database): static
     {
         $this->database = $database;
         return $this;
@@ -177,7 +175,7 @@ class Datasource
      * @since   1.0
      * @return  $this
      */
-    public function setDbms($dbms)
+    public function setDbms(string $dbms): static
     {
         $this->dbms = $dbms;
         return $this;
@@ -192,12 +190,12 @@ class Datasource
      * @since   1.0
      * @return  $this
      */
-    public function setName($name)
+    public function setName(string $name): static
     {
         $this->name = $name;
         return $this;
     }
-    
+
     /**
      * Setter for Datasource password
      *
@@ -207,7 +205,7 @@ class Datasource
      * @since   1.0
      * @return  $this
      */
-    public function setPassword($password)
+    public function setPassword(string $password): static
     {
         $this->password = $password;
         return $this;
@@ -222,7 +220,7 @@ class Datasource
      * @since   1.0
      * @return  $this
      */
-    public function setUser($user)
+    public function setUser(string $user): static
     {
         $this->user = $user;
         return $this;

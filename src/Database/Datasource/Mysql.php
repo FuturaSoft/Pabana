@@ -27,20 +27,20 @@ class Mysql extends Datasource
      * @var     string Hostname or IP adresse
      * @since   1.0
      */
-    private $sHost;
+    private string $sHost = '';
 
     /**
      * @var     integer Port number (by default 3306)
      * @since   1.0
      */
-    private $nPort = 3306;
+    private int $nPort = 3306;
 
     /**
      * @var     string Unix Socket path
      * @since   1.0
      */
-    private $sUnixSocket;
-    
+    private string $sUnixSocket = '';
+
     /**
      * Constructor
      *
@@ -49,7 +49,7 @@ class Mysql extends Datasource
      * @since   1.0
      * @param   string $sCnxName Connection name.
      */
-    public function __construct($sCnxName)
+    public function __construct(string $sCnxName)
     {
         $this->setName($sCnxName);
         $this->setDbms('Mysql');
@@ -63,7 +63,7 @@ class Mysql extends Datasource
      * @since   1.0
      * @return  bool True if success or false.
      */
-    protected function checkParam()
+    protected function checkParam(): bool
     {
         if (empty($this->getHost()) && empty($this->getUnixSocket())) {
             $sErrorMessage = 'Connexion to Mysql must have an host or an unix socket defined';
@@ -82,7 +82,7 @@ class Mysql extends Datasource
      * @since   1.0
      * @return  string|bool Return DSN string if success or false else.
      */
-    public function getDsn()
+    public function getDsn(): string|false
     {
         if ($this->checkParam()) {
             if (!empty($this->getHost())) {
@@ -111,7 +111,7 @@ class Mysql extends Datasource
      * @since   1.0
      * @return  string Return host.
      */
-    public function getHost()
+    public function getHost(): string
     {
         return $this->sHost;
     }
@@ -122,7 +122,7 @@ class Mysql extends Datasource
      * @since   1.0
      * @return  integer Return port.
      */
-    public function getPort()
+    public function getPort(): int
     {
         return $this->nPort;
     }
@@ -133,7 +133,7 @@ class Mysql extends Datasource
      * @since   1.0
      * @return  string Return Unix socket path.
      */
-    public function getUnixSocket()
+    public function getUnixSocket(): string
     {
         return $this->sUnixSocket;
     }
@@ -145,7 +145,7 @@ class Mysql extends Datasource
      * @param   string $sHost Host.
      * @return  $this
      */
-    public function setHost($sHost)
+    public function setHost(string $sHost): static
     {
         $this->sHost = $sHost;
         return $this;
@@ -158,7 +158,7 @@ class Mysql extends Datasource
      * @param   integer $nPort Port number.
      * @return  $this
      */
-    public function setPort($nPort)
+    public function setPort(int $nPort): static
     {
         $this->nPort = $nPort;
         return $this;
@@ -171,7 +171,7 @@ class Mysql extends Datasource
      * @param   string $sUnixSocket UNIX Socket path.
      * @return  $this
      */
-    public function setUnixSocket($sUnixSocket)
+    public function setUnixSocket(string $sUnixSocket): static
     {
         $this->sUnixSocket = $sUnixSocket;
         return $this;

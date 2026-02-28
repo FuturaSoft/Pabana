@@ -17,7 +17,6 @@ namespace Pabana\Mvc;
 use Pabana\Core\Configuration;
 use Pabana\Html\Html;
 use Pabana\Intl\Translate;
-use Pabana\Mvc\Layout;
 use Pabana\Mvc\Model;
 use Pabana\Mvc\View;
 use Pabana\Network\Http\Json;
@@ -36,71 +35,71 @@ class Controller
      * @since   1.0
      * @deprecated deprecated since version 1.1
      */
-    public $Html;
+    public ?Html $Html = null;
 
     /**
      * @var     Redirection to $layout var
      * @since   1.0
      * @deprecated deprecated since version 1.1
      */
-    public $Layout;
+    public ?Layout $Layout = null;
 
     /**
      * @var     Redirection to $model var
      * @since   1.0
      * @deprecated deprecated since version 1.1
      */
-    public $Model;
+    public ?Model $Model = null;
 
     /**
      * @var     Redirection to $request var
      * @since   1.0
      * @deprecated deprecated since version 1.1
      */
-    public $Request;
+    public ?Request $Request = null;
 
     /**
      * @var     Redirection to $view var
      * @since   1.0
      * @deprecated deprecated since version 1.1
      */
-    public $View;
+    public ?View $View = null;
 
     /**
      * @var     \Pabana\Html\Html Object Html.
      * @since   1.1
      */
-    public $html;
+    public Html $html;
 
     /**
      * @var     \Pabana\Mvc\Layout Object Layout.
      * @since   1.1
      */
-    public $layout;
+    public ?Layout $layout = null;
 
     /**
      * @var     \Pabana\Mvc\Model Object Model.
      * @since   1.1
      */
-    public $model;
+    public Model $model;
 
     /**
      * @var     \Pabana\Network\Http\Request Object Request.
      * @since   1.1
      */
-    public $request;
+    public Request $request;
 
     /**
      * @var     \Pabana\Mvc\View Object View.
      * @since   1.1
      */
-    public $view;
+    public ?View $view = null;
 
     /**
      * @var     string Controller name.
      * @since   1.1
      */
-    private $controller;
+    private string $controller;
 
     /**
      * Constructor
@@ -145,7 +144,7 @@ class Controller
      *
      * @return  false
      */
-    public function abort($code)
+    public function abort(string|int $code): false
     {
         $errorNamespace = Configuration::read('mvc.error.namespace');
         if (method_exists($errorNamespace, 'index')) {
@@ -166,7 +165,7 @@ class Controller
      * @param   string $action Name of Action
      * @return  string bodyContent of Controller, Layout and View
      */
-    final public function render($action)
+    final public function render(string $action): string|null
     {
         // Initialize view object if auto render is enable
         if (Configuration::read('mvc.view.auto_render') === true) {
@@ -262,7 +261,7 @@ class Controller
      * @param   string $layoutName Name of Layout
      * @return  void
      */
-    final public function setLayout($layoutName)
+    final public function setLayout(string $layoutName): void
     {
         $layoutNamespace = Configuration::read('mvc.layout.namespace');
         $layoutNamespace = $layoutNamespace . '\\' . $layoutName . 'Layout';
@@ -280,7 +279,7 @@ class Controller
      * @param   string $action Target action name
      * @return  void
      */
-    final public function setView($controller, $action)
+    final public function setView(string $controller, string $action): void
     {
         $this->view = new View($controller, $action);
         // To maintain compatibility with version 1.0

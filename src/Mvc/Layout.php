@@ -31,57 +31,57 @@ class Layout
      * @var     array Variable spooler to manage send var between controller and layout.
      * @since   1.0
      */
-    private $variableList;
+    private array $variableList = [];
 
     /**
      * @var     bool Define if autorender is enable.
      * @since   1.0
      */
-    private $autoRender;
+    private bool $autoRender;
 
     /**
      * @var     string Define directory of Layout part.
      * @since   1.0
      */
-    private $directory;
+    private string $directory;
 
     /**
      * @var     string Define extension of Layout part.
      * @since   1.0
      */
-    private $extension;
+    private string $extension;
 
     /**
      * @var     string Define name of Layout.
      * @since   1.0
      */
-    private $name;
+    private string $name;
 
     /**
      * @var     \Pabana\Html\Html Object Html.
      * @since   1.1
      */
-    public $html;
+    public Html $html;
 
     /**
      * @var     \Pabana\Mvc\View Object View.
      * @since   1.1
      */
-    public $view;
+    public View $view;
 
     /**
      * @var     Redirection to $html var
      * @since   1.0
      * @deprecated deprecated since version 1.1
      */
-    public $Html;
+    public ?Html $Html = null;
 
     /**
      * @var     Redirection to $view var
      * @since   1.0
      * @deprecated deprecated since version 1.1
      */
-    public $View;
+    public ?View $View = null;
 
     /**
      * Initialize layout
@@ -94,7 +94,7 @@ class Layout
      * @param   bool $cleanHtml Reset Html object (by default false)
      * @return  void
      */
-    public function __construct($view, $cleanHtml = false)
+    public function __construct(View $view, bool $cleanHtml = false)
     {
         $layoutString = new StringType(get_class($this));
         // Get layout by current class name
@@ -137,7 +137,7 @@ class Layout
      * @since   1.0
      * @return  string Html code for Layout
      */
-    public function __toString()
+    public function __toString(): string
     {
         return $this->render();
     }
@@ -151,7 +151,7 @@ class Layout
      * @param   string $elementName Element or part name
      * @return  string|bool Return Element content if success or false if error
      */
-    public function element($elementName)
+    public function element(string $elementName): string|false
     {
         if (Configuration::read('mvc.autoload_shared_var') === true && empty($this->variableList) === false) {
             foreach ($this->variableList as $varName => $varValue) {
@@ -177,7 +177,7 @@ class Layout
      * @since   1.0
      * @return  bool Autorender state
      */
-    public function getAutoRender()
+    public function getAutoRender(): bool
     {
         return $this->autoRender;
     }
@@ -188,7 +188,7 @@ class Layout
      * @since   1.0
      * @return  string Layout part directory
      */
-    public function getDirectory()
+    public function getDirectory(): string
     {
         return $this->directory;
     }
@@ -199,7 +199,7 @@ class Layout
      * @since   1.0
      * @return  string Extension of layout file
      */
-    public function getExtension()
+    public function getExtension(): string
     {
         return $this->extension;
     }
@@ -210,7 +210,7 @@ class Layout
      * @since   1.0
      * @return  string Name of layout
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
@@ -222,7 +222,7 @@ class Layout
      * @param   string $varName Name of var send to Layout
      * @return  mixed Value of var send to Layout if exist else false
      */
-    public function getVar($varName)
+    public function getVar(string $varName): mixed
     {
         if (!isset($this->variableList[$varName])) {
             trigger_error('Variable "' . $varName . '" isn\'t defined in Layout.', E_USER_WARNING);
@@ -237,7 +237,7 @@ class Layout
      * @since   1.0
      * @return  string|bool Html code render or false if error
      */
-    public function render()
+    public function render(): string|false
     {
         return $this->element('index');
     }
@@ -249,7 +249,7 @@ class Layout
      * @param   bool $autoRender Auto render value
      * @return  void
      */
-    public function setAutoRender($autoRender)
+    public function setAutoRender(bool $autoRender): void
     {
         $this->autoRender = $autoRender;
     }
@@ -261,7 +261,7 @@ class Layout
      * @param   string $directory Directory of layout part value
      * @return  void
      */
-    public function setDirectory($directory)
+    public function setDirectory(string $directory): void
     {
         $this->directory = $directory;
     }
@@ -273,7 +273,7 @@ class Layout
      * @param   string $extension Extension value for part file
      * @return  void
      */
-    public function setExtension($extension)
+    public function setExtension(string $extension): void
     {
         $this->extension = $extension;
     }
@@ -285,7 +285,7 @@ class Layout
      * @param   string $name Name of Layout
      * @return  void
      */
-    public function setName($name)
+    public function setName(string $name): void
     {
         $this->name = ucfirst($name);
     }
@@ -299,7 +299,7 @@ class Layout
      * @param   bool $force Force change of var value if var already exist
      * @return  bool Return true if success else false
      */
-    public function setVar($varName, $varValue, $force = false)
+    public function setVar(string $varName, mixed $varValue, bool $force = false): bool
     {
         if (isset($this->variableList[$varName]) && $force === false) {
             trigger_error('Variable "' . $varName . '" is already defined in Layout.', E_USER_WARNING);
@@ -316,7 +316,7 @@ class Layout
      * @param   \Pabana\Mvc\View $view View object generated in controller
      * @return  void
      */
-    public function setView($view)
+    public function setView(View $view): void
     {
         $this->view = $view;
         $this->View = $this->view;

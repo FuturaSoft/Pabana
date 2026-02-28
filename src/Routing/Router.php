@@ -30,19 +30,19 @@ class Router
      * @var     string Controller defined by Router
      * @since   1.0
      */
-    private static $sController;
+    private static string $sController = '';
 
     /**
      * @var     string Action defined by Router
      * @since   1.0
      */
-    private static $sAction;
+    private static string $sAction = '';
 
     /**
      * @var     array Parameters defined by Router
      * @since   1.0
      */
-    private static $arsParameter;
+    private static array $arsParameter = [];
 
     /**
      * Auto resolve a Route from URL by separator
@@ -51,11 +51,11 @@ class Router
      * @param   array   $arsUrlValueList Liste of url part.
      * @return  void
      */
-    private static function autoResolve($arsUrlValueList)
+    private static function autoResolve(array $arsUrlValueList): void
     {
         $sController = 'Index';
         $sAction = 'index';
-        $arsParamList = array();
+        $arsParamList = [];
         foreach ($arsUrlValueList as $nIndexValue => $sUrlValue) {
             if ($nIndexValue == 0) {
                 $sController = $sUrlValue;
@@ -88,7 +88,7 @@ class Router
      * @param   array $arsUrlValue List of part of URL.
      * @return  bool True if Route match, else false
      */
-    private static function checkRoute($arcUrlSeparator, $arsUrlValue)
+    private static function checkRoute(array $arcUrlSeparator, array $arsUrlValue): bool
     {
         $aroRouteList = RouteCollection::getAll();
         if (empty($aroRouteList)) {
@@ -108,7 +108,7 @@ class Router
                 // Valid boolean
                 $bGoodRoute = true;
                 // Array to store param
-                $arsParamList = array();
+                $arsParamList = [];
                 // Check each value of url to compare with route
                 foreach ($arsRouteValueList as $nParamIndex => $sRouteValue) {
                     if (isset($arsUrlValue[$nParamIndex])) {
@@ -150,7 +150,7 @@ class Router
      * @since   1.0
      * @return  void
      */
-    private static function checkController()
+    private static function checkController(): void
     {
         $bSetFallback = false;
         $sControllerNamespace = Configuration::read('application.namespace') . '\Controllers\\' . self::getController();
@@ -168,7 +168,7 @@ class Router
             $sFallbackAction = RouteCollection::getFallbackAction();
             self::setAction($sFallbackAction);
             // Set action to route action
-            $arsFallbackParameter = array('code' => 404);
+            $arsFallbackParameter = ['code' => 404];
             self::setParameter($arsFallbackParameter);
         }
     }
@@ -179,7 +179,7 @@ class Router
      * @since   1.0
      * @return  string Action defined by Router.
      */
-    public static function getAction()
+    public static function getAction(): string
     {
         return self::$sAction;
     }
@@ -190,7 +190,7 @@ class Router
      * @since   1.0
      * @return  string Controller defined by Router.
      */
-    public static function getController()
+    public static function getController(): string
     {
         return self::$sController;
     }
@@ -201,7 +201,7 @@ class Router
      * @since   1.0
      * @return  array Parameter defined by Router.
      */
-    public static function getParameter()
+    public static function getParameter(): array
     {
         return self::$arsParameter;
     }
@@ -213,9 +213,9 @@ class Router
      * @param   string $sUrl Current URL.
      * @return  array List of separator defined in URL.
      */
-    private static function listSeparator($sUrl)
+    private static function listSeparator(string $sUrl): array
     {
-        $armSeparatorPosition = array();
+        $armSeparatorPosition = [];
         foreach (RouteCollection::getSeparator() as $cSeparator) {
             $sUrlSearch = $sUrl;
             while ($nSeparatorPosition = strrpos($sUrlSearch, $cSeparator)) {
@@ -234,7 +234,7 @@ class Router
      * @param   string $sUrl Current URL.
      * @return  array List of value defined in URL.
      */
-    private static function listValue($sUrl)
+    private static function listValue(string $sUrl): array
     {
         $sRegexSeparator = implode('', RouteCollection::getSeparator());
         $sRegexSeparator = preg_quote($sRegexSeparator);
@@ -250,7 +250,7 @@ class Router
      * @param   string $sUrl Current URL.
      * @return  string $Url without last separator.
      */
-    private static function removeLastSeparator($sUrl)
+    private static function removeLastSeparator(string $sUrl): string
     {
         $cLastChar = substr($sUrl, -1);
         if (in_array($cLastChar, RouteCollection::getSeparator())) {
@@ -265,7 +265,7 @@ class Router
      * @since   1.0
      * @return  void
      */
-    public static function resolve()
+    public static function resolve(): void
     {
         // Get current URL
         $oRequest = new Request();
@@ -297,7 +297,7 @@ class Router
      * @param   string $sAction Action.
      * @return  void
      */
-    private static function setAction($sAction)
+    private static function setAction(string $sAction): void
     {
         self::$sAction = $sAction;
     }
@@ -309,7 +309,7 @@ class Router
      * @param   string $sController Controller.
      * @return  void
      */
-    private static function setController($sController)
+    private static function setController(string $sController): void
     {
         self::$sController = ucfirst($sController) . Configuration::read('mvc.controller.suffix', '');
     }
@@ -321,7 +321,7 @@ class Router
      * @param   array $arsParameter Parameter.
      * @return  void
      */
-    private static function setParameter($arsParameter)
+    private static function setParameter(array $arsParameter): void
     {
         self::$arsParameter = $arsParameter;
     }
@@ -332,7 +332,7 @@ class Router
      * @since   1.0
      * @return  void
      */
-    private static function setParameterInGlobal()
+    private static function setParameterInGlobal(): void
     {
         $_GET = self::$arsParameter + $_GET;
     }

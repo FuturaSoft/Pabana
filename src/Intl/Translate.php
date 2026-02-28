@@ -23,9 +23,9 @@ use Pabana\Core\Configuration;
  */
 class Translate
 {
-    private static $language_code;
-    private static $translateList;
-    private static $file;
+    private static string $language_code = '';
+    private static array $translateList = [];
+    private static string $file = '';
 
     /**
      * Get language
@@ -33,9 +33,10 @@ class Translate
      * Get defined language
      *
      * @since   1.2
-     * @return  string  Define language by code
+     * @param   bool $bFallback If true return fallback language
+     * @return  string  Language code
      */
-    public static function getLanguage($bFallback = false)
+    public static function getLanguage(bool $bFallback = false): string
     {
         if ($bFallback === true) {
             return Configuration::read('intl.lang_fallback', 'en');
@@ -54,8 +55,9 @@ class Translate
      *
      * @since   1.2
      * @param   string  $language   Define language by code
+     * @return  void
      */
-    public static function setLanguage($language)
+    public static function setLanguage(string $language): void
     {
         $langPath = APP_ROOT . DS . Configuration::read('intl.path') . DS . $language;
         if (file_exists($langPath)) {
@@ -75,8 +77,9 @@ class Translate
      *
      * @since   1.2
      * @param   string  $file   Language configuration file
+     * @return  bool True if file is loaded else false.
      */
-    public static function load($file)
+    public static function load(string $file): bool
     {
         self::$file = $file;
         $translatePath = APP_ROOT . DS . Configuration::read('intl.path') . DS . self::getLanguage() . DS . self::$file;
@@ -96,12 +99,14 @@ class Translate
     /**
      * Do translate
      *
-     * Get defined language
+     * Translate a key to its value in current language
      *
      * @since   1.2
-     * @return  string  Define language by code
+     * @param   string $keyOrValue Key to translate or default value if not found.
+     * @param   array $optionList Array of placeholders to replace.
+     * @return  string Translated string or original value if not found.
      */
-    public static function translate($keyOrValue, $optionList = [])
+    public static function translate(string $keyOrValue, array $optionList = []): string
     {
         if (isset(self::$translateList[$keyOrValue])) {
             $returnString = self::$translateList[$keyOrValue];

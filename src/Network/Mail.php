@@ -25,95 +25,94 @@ use \Pabana\Intl\Encoding;
 class Mail
 {
     /**
-     * @var    Array List of recipent of mail
+     * @var    array List of recipent of mail
      * @since   1.0
      */
-    private $recipientList = array(
-        'to' => array(),
-        'cc' => array(),
-        'bcc' => array()
-    );
+    private array $recipientList = [
+        'to' => [],
+        'cc' => [],
+        'bcc' => [],
+    ];
 
     /**
-     * @var    Array List of attachement
+     * @var    array List of attachement
      * @since   1.0
      */
-    private $attachmentList = array();
+    private array $attachmentList = [];
 
     /**
-     * @var    Array Sender of mail
+     * @var    array Sender of mail
      * @since   1.0
      */
-    private $sender = array();
+    private array $sender = [];
 
     /**
-     * @var    Array Reply adresse of mail
+     * @var    array Reply adresse of mail
      * @since   1.0
      */
-    private $reply = array();
+    private array $reply = [];
 
     /**
      * @var     string Subject of mail (by default "No title")
      * @since   1.0
      */
-    private $subject = 'No title';
+    private string $subject = 'No title';
 
     /**
      * @var     string HTML content of mail
      * @since   1.0
      */
-    private $htmlContent = '';
+    private string $htmlContent = '';
 
     /**
      * @var     string Texte content of mail
      * @since   1.0
      */
-    private $textContent = '';
+    private string $textContent = '';
 
     /**
      * @var     string Mailer (by default "Pabana")
      * @since   1.0
      */
-    private $mailer = 'Pabana';
+    private string $mailer = 'Pabana';
 
     /**
-     * @var     integer Priority of mail (1 to 3)
+     * @var     int Priority of mail (1 to 3)
      * @since   1.0
      */
-    private $priority = 1;
+    private int $priority = 1;
 
     /**
      * @var     string Boundary of mail
      * @since   1.0
      */
-    private $boundary;
+    private string $boundary;
 
     /**
      * @var     string Boundary Alt of mail
      * @since   1.0
      */
-    private $boundaryAlt;
+    private string $boundaryAlt;
 
     /**
      * @var     string Charset of mail
      * @since   1.0
      */
-    private $charset;
-    
+    private string $charset;
+
     /**
      * Constructor
      *
      * Set Boundary and charset (by default application encoding)
      *
      * @since   1.0
-     * @param   string $sCnxName Connection name.
      */
     public function __construct()
     {
         $this->setBoundary();
         $this->charset = strtolower(Configuration::read('application.encoding'));
     }
-    
+
     /**
      * Add an attachment to mail
      *
@@ -121,9 +120,9 @@ class Mail
      * @param   string $attachmentPath Attachement path.
      * @return  void
      */
-    public function addAttachment($attachmentPath)
+    public function addAttachment(string $attachmentPath): void
     {
-        $this->attachmentList[] = array($attachmentPath);
+        $this->attachmentList[] = [$attachmentPath];
     }
 
     /**
@@ -131,13 +130,13 @@ class Mail
      *
      * @since   1.0
      * @param   string $value Value to encapsulate in encode tag.
-     * @return  void
+     * @return  string
      */
-    private function addEncodeTag($value)
+    private function addEncodeTag(string $value): string
     {
         return '=?' . $this->charset . '?Q?' . $value . '?=';
     }
-    
+
     /**
      * Add a recipient of mail
      *
@@ -147,13 +146,13 @@ class Mail
      * @param   string $recipientName Name of recipient (optional).
      * @return  void
      */
-    private function addRecipient($recipientType, $recipientAddress, $recipientName = '')
+    private function addRecipient(string $recipientType, string $recipientAddress, string $recipientName = ''): void
     {
         if (filter_var($recipientAddress, FILTER_VALIDATE_EMAIL)) {
-            $this->recipientList[$recipientType][] = array($recipientAddress, $recipientName);
+            $this->recipientList[$recipientType][] = [$recipientAddress, $recipientName];
         }
     }
-    
+
     /**
      * Add a recipient "to" of mail
      *
@@ -162,11 +161,11 @@ class Mail
      * @param   string $recipientName Name of recipient (optional).
      * @return  void
      */
-    public function addRecipientTo($recipientAddress, $recipientName = '')
+    public function addRecipientTo(string $recipientAddress, string $recipientName = ''): void
     {
         $this->addRecipient('to', $recipientAddress, $recipientName);
     }
-    
+
     /**
      * Add a recipient "cc" of mail
      *
@@ -175,11 +174,11 @@ class Mail
      * @param   string $recipientName Name of recipient (optional).
      * @return  void
      */
-    public function addRecipientCc($recipientAddress, $recipientName = '')
+    public function addRecipientCc(string $recipientAddress, string $recipientName = ''): void
     {
         $this->addRecipient('cc', $recipientAddress, $recipientName);
     }
-    
+
     /**
      * Add a recipient "bcc" of mail
      *
@@ -188,11 +187,11 @@ class Mail
      * @param   string $recipientName Name of recipient (optional).
      * @return  void
      */
-    public function addRecipientBcc($recipientAddress, $recipientName = '')
+    public function addRecipientBcc(string $recipientAddress, string $recipientName = ''): void
     {
         $this->addRecipient('bcc', $recipientAddress, $recipientName);
     }
-    
+
     /**
      * Set charset use in mail
      *
@@ -200,11 +199,11 @@ class Mail
      * @param   string $charset Charset use.
      * @return  void
      */
-    public function setCharset($charset)
+    public function setCharset(string $charset): void
     {
         $this->charset = $charset;
     }
-    
+
     /**
      * Set sender of mail
      *
@@ -213,11 +212,11 @@ class Mail
      * @param   string $senderName Name of sender (optional).
      * @return  void
      */
-    public function setSender($senderAddress, $senderName = '')
+    public function setSender(string $senderAddress, string $senderName = ''): void
     {
-        $this->sender = array($senderAddress, $senderName);
+        $this->sender = [$senderAddress, $senderName];
     }
-    
+
     /**
      * Set reply of mail
      *
@@ -226,11 +225,11 @@ class Mail
      * @param   string $replyName Name of reply (optional).
      * @return  void
      */
-    public function setReply($replyAddress, $replyName = '')
+    public function setReply(string $replyAddress, string $replyName = ''): void
     {
-        $this->reply = array($replyAddress, $replyName);
+        $this->reply = [$replyAddress, $replyName];
     }
-    
+
     /**
      * Set subject of mail
      *
@@ -238,11 +237,11 @@ class Mail
      * @param   string $subject Subject of mail.
      * @return  void
      */
-    public function setSubject($subject)
+    public function setSubject(string $subject): void
     {
         $this->subject = $subject;
     }
-    
+
     /**
      * Set HTML content of mail
      *
@@ -250,11 +249,11 @@ class Mail
      * @param   string $htmlContent HTML content of mail.
      * @return  void
      */
-    public function setHtmlContent($htmlContent)
+    public function setHtmlContent(string $htmlContent): void
     {
         $this->htmlContent = $htmlContent;
     }
-    
+
     /**
      * Set text content of mail
      *
@@ -262,11 +261,11 @@ class Mail
      * @param   string $textContent Text content of mail.
      * @return  void
      */
-    public function setTextContent($textContent)
+    public function setTextContent(string $textContent): void
     {
         $this->textContent = $textContent;
     }
-    
+
     /**
      * Set mailer of mail
      *
@@ -274,42 +273,42 @@ class Mail
      * @param   string $mailer Mailer of mail.
      * @return  void
      */
-    public function setMailer($mailer)
+    public function setMailer(string $mailer): void
     {
         $this->mailer = $mailer;
     }
-    
+
     /**
      * Set priority of mail
      *
      * @since   1.0
-     * @param   integer $priority Priority of mail.
+     * @param   int $priority Priority of mail.
      * @return  void
      */
-    public function setPriority($priority)
+    public function setPriority(int $priority): void
     {
         $this->priority = $priority;
     }
-    
+
     /**
      * Generate boundary of mail
      *
      * @since   1.0
      * @return  void
      */
-    private function setBoundary()
+    private function setBoundary(): void
     {
         $this->boundary = uniqid('Pabana') . '-' . md5(rand());
         $this->boundaryAlt = uniqid('Pabana-alt') . '-' . md5(rand());
     }
-    
+
     /**
      * Get sender of mail
      *
      * @since   1.0
      * @return  string|bool Return sender of mail or false if not defined
      */
-    public function getSender()
+    public function getSender(): string|false
     {
         if (!empty($this->sender)) {
             $sender = '';
@@ -322,14 +321,14 @@ class Mail
             return false;
         }
     }
-    
+
     /**
      * Get reply of mail
      *
      * @since   1.0
      * @return  string|bool Return reply of mail or false if not defined
      */
-    public function getReply()
+    public function getReply(): string|false
     {
         if (!empty($this->reply)) {
             $reply = '';
@@ -342,40 +341,40 @@ class Mail
             return false;
         }
     }
-    
+
     /**
      * Get recipident "to" of mail
      *
      * @since   1.0
      * @return  string Return recipident "to" of mail
      */
-    public function getRecipientTo()
+    public function getRecipientTo(): string
     {
         return $this->getRecipient('to');
     }
-    
+
     /**
      * Get recipident "cc" of mail
      *
      * @since   1.0
      * @return  string Return recipident "cc" of mail
      */
-    public function getRecipientCc()
+    public function getRecipientCc(): string
     {
         return $this->getRecipient('cc');
     }
-    
+
     /**
      * Get recipident "bcc" of mail
      *
      * @since   1.0
      * @return  string Return recipident "bcc" of mail
      */
-    public function getRecipientBcc()
+    public function getRecipientBcc(): string
     {
         return $this->getRecipient('bcc');
     }
-    
+
     /**
      * Get recipident of mail
      *
@@ -383,14 +382,14 @@ class Mail
      * @param   string $recipientType Type of recipient (to, cc, bcc)
      * @return  string Return recipident of mail
      */
-    private function getRecipient($recipientType)
+    private function getRecipient(string $recipientType): string
     {
-        $returnList = array();
+        $returnList = [];
         if (!empty($this->recipientList[$recipientType])) {
             foreach ($this->recipientList[$recipientType] as $recipientItem) {
                 $recipient = '';
                 if (!empty($recipientItem[1])) {
-                    $recipient .= $this->addEncodeTag('"' . $this->recipientItem[1] . '"') . ' ';
+                    $recipient .= $this->addEncodeTag('"' . $recipientItem[1] . '"') . ' ';
                 }
                 $recipient .= '<' . $recipientItem[0] . '>';
                 $returnList[] = $recipient;
@@ -398,14 +397,14 @@ class Mail
         }
         return implode(', ', $returnList);
     }
-    
+
     /**
      * Generate header content
      *
      * @since   1.0
      * @return  string Return header content of mail
      */
-    public function getHeaderContent()
+    public function getHeaderContent(): string
     {
         $headerContent = '';
         $sender = $this->getSender();
@@ -428,23 +427,19 @@ class Mail
             $headerContent .= 'X-Mailer: ' . $this->mailer . PHP_EOL;
         }
         $headerContent .= 'MIME-Version: 1.0' . PHP_EOL;
-        if (!empty($this->attachmentList)) {
-            $contentType = 'multipart/mixed';
-        } else {
-            $contentType = 'multipart/alternative';
-        }
+        $contentType = !empty($this->attachmentList) ? 'multipart/mixed' : 'multipart/alternative';
         $headerContent .= 'Content-Type: ' . $contentType . '; boundary="' . $this->boundary . '"';
         $headerContent .= PHP_EOL . PHP_EOL;
         return $headerContent;
     }
-    
+
     /**
      * Generate email content
      *
      * @since   1.0
      * @return  string Return email content
      */
-    public function getEmailContent()
+    public function getEmailContent(): string
     {
         $mailContent = '';
         // Text content
@@ -464,14 +459,14 @@ class Mail
         $mailContent .= '--' . $this->boundary . '--';
         return $mailContent;
     }
-    
+
     /**
      * Send email
      *
      * @since   1.0
      * @return  bool Return true if email is send with success else return false
      */
-    public function send()
+    public function send(): bool
     {
         $appEncoding = Configuration::read('application.encoding');
         $encoding = new Encoding();

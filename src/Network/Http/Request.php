@@ -26,28 +26,28 @@ use Pabana\Network\Http\Request\Query;
 class Request
 {
     /**
-     * @var    Array List of Request headers
+     * @var    array List of Request headers
      * @since   1.1
      */
-    private $headerList = array();
+    private array $headerList = [];
 
     /**
      * @var     \Pabana\Network\Http\Request\File    Object to file managment
      * @since   1.2
      */
-    public $file;
+    public File $file;
 
     /**
      * @var     \Pabana\Network\Http\Request\Input    Object to input managment
      * @since   1.2
      */
-    public $input;
+    public Input $input;
 
     /**
      * @var     \Pabana\Network\Http\Request\Query    Object to query managment
      * @since   1.2
      */
-    public $query;
+    public Query $query;
 
     /**
      * Constructor
@@ -71,7 +71,7 @@ class Request
      * @param   string $charset Test charset.
      * @return  bool True if test is ok else false.
      */
-    public function acceptCharset($charset)
+    public function acceptCharset(string $charset): bool
     {
         return $this->isAcceptCharset($charset);
     }
@@ -84,7 +84,7 @@ class Request
      * @param   string $encoding Test encoding.
      * @return  bool True if test is ok else false.
      */
-    public function acceptEncoding($encoding)
+    public function acceptEncoding(string $encoding): bool
     {
         return $this->isAcceptEncoding($encoding);
     }
@@ -97,7 +97,7 @@ class Request
      * @param   string $language Test language.
      * @return  bool True if test is ok else false.
      */
-    public function acceptLanguage($language)
+    public function acceptLanguage(string $language): bool
     {
         return $this->isAcceptLanguage($language);
     }
@@ -110,7 +110,7 @@ class Request
      * @param   string $mimetype Test mimetype.
      * @return  bool True if test is ok else false.
      */
-    public function acceptMimetype($mimetype)
+    public function acceptMimetype(string $mimetype): bool
     {
         return $this->isAcceptMimetype($mimetype);
     }
@@ -122,7 +122,7 @@ class Request
      * @deprecated deprecated since version 1.1
      * @return  string Return client IP.
      */
-    public function clientIp()
+    public function clientIp(): string
     {
         return $this->getClientIp();
     }
@@ -132,10 +132,10 @@ class Request
      *
      * @since   1.0
      * @deprecated deprecated since version 1.1
-     * @param   string $tldLength Length of Top Level Domain. (by default 1)
+     * @param   int $tldLength Length of Top Level Domain. (by default 1)
      * @return  string Return domain.
      */
-    public function domain($tldLength = 1)
+    public function domain(int $tldLength = 1): string
     {
         return $this->getDomain($tldLength);
     }
@@ -144,9 +144,9 @@ class Request
      * Get Authorization method
      *
      * @since   1.1
-     * @return  string Return Authorization method.
+     * @return  string|false Return Authorization method or false if not defined.
      */
-    public function getAuthorizationMethod()
+    public function getAuthorizationMethod(): string|false
     {
         if ($this->hasHeader('Authorization')) {
             $authorization = $this->getHeader('Authorization');
@@ -159,9 +159,9 @@ class Request
      * Get Authorization value
      *
      * @since   1.1
-     * @return  string Return Authorization value.
+     * @return  string|false Return Authorization value or false if not defined.
      */
-    public function getAuthorizationValue()
+    public function getAuthorizationValue(): string|false
     {
         if ($this->hasHeader('Authorization')) {
             $authorization = $this->getHeader('Authorization');
@@ -176,7 +176,7 @@ class Request
      * @since   1.1
      * @return  string Return client IP.
      */
-    public function getClientIp()
+    public function getClientIp(): string
     {
         if ($this->hasHeader('X-Forwarded-For')) {
             $ip = preg_replace('/(?:,.*)/', '', $this->getHeader('X-Forwarded-For'));
@@ -192,10 +192,10 @@ class Request
      * Get domain
      *
      * @since   1.1
-     * @param   string $tldLength Length of Top Level Domain. (by default 1)
+     * @param   int $tldLength Length of Top Level Domain. (by default 1)
      * @return  string Return domain.
      */
-    public function getDomain($tldLength = 1)
+    public function getDomain(int $tldLength = 1): string
     {
         $segmentList = explode('.', $this->getHost());
         $domain = array_slice($segmentList, -1 * ($tldLength + 1));
@@ -209,7 +209,7 @@ class Request
      * @param   string $headerName Name of header
      * @return  mixed Return value of header if exist or false if not exist.
      */
-    public function getHeader($headerName)
+    public function getHeader(string $headerName): mixed
     {
         if ($this->hasHeader($headerName)) {
             return $this->headerList[$headerName];
@@ -223,18 +223,18 @@ class Request
      * @since   1.1
      * @return  array Return array of header for current request.
      */
-    public function getHeaderList()
+    public function getHeaderList(): array
     {
         if (!function_exists('apache_request_headers')) {
             $headers = [];
         } else {
             $headers = apache_request_headers();
         }
-        $copy_server = array(
+        $copy_server = [
             'CONTENT_TYPE'   => 'Content-Type',
             'CONTENT_LENGTH' => 'Content-Length',
-            'CONTENT_MD5'    => 'Content-Md5'
-        );
+            'CONTENT_MD5'    => 'Content-Md5',
+        ];
         foreach ($_SERVER as $key => $value) {
             if (substr($key, 0, 5) === 'HTTP_') {
                 $key = substr($key, 5);
@@ -250,7 +250,7 @@ class Request
             if (isset($_SERVER['REDIRECT_HTTP_AUTHORIZATION'])) {
                 $headers['Authorization'] = $_SERVER['REDIRECT_HTTP_AUTHORIZATION'];
             } elseif (isset($_SERVER['PHP_AUTH_USER'])) {
-                $basic_pass = isset($_SERVER['PHP_AUTH_PW']) ? $_SERVER['PHP_AUTH_PW'] : '';
+                $basic_pass = $_SERVER['PHP_AUTH_PW'] ?? '';
                 $headers['Authorization'] = 'Basic ' . base64_encode($_SERVER['PHP_AUTH_USER'] . ':' . $basic_pass);
             } elseif (isset($_SERVER['PHP_AUTH_DIGEST'])) {
                 $headers['Authorization'] = $_SERVER['PHP_AUTH_DIGEST'];
@@ -263,9 +263,9 @@ class Request
      * Get host
      *
      * @since   1.1
-     * @return  string Return host.
+     * @return  mixed Return host.
      */
-    public function getHost()
+    public function getHost(): mixed
     {
         return $this->getHeader('host');
     }
@@ -276,7 +276,7 @@ class Request
      * @since   1.1
      * @return  string Return request method (GET, POST, ...).
      */
-    public function getMethod()
+    public function getMethod(): string
     {
         if ($this->hasHeader('X-Http-Method-Override')) {
             return $this->getHeader('X-Http-Method-Override');
@@ -288,20 +288,20 @@ class Request
      * Get request port
      *
      * @since   1.1
-     * @return  integer Return request port.
+     * @return  int Return request port.
      */
-    public function getPort()
+    public function getPort(): int
     {
-        return $_SERVER['SERVER_PORT'];
+        return (int) $_SERVER['SERVER_PORT'];
     }
 
     /**
      * Get referer
      *
      * @since   1.1
-     * @return  string Return referer.
+     * @return  mixed Return referer.
      */
-    public function getReferer()
+    public function getReferer(): mixed
     {
         return $this->getHeader('Referer');
     }
@@ -312,9 +312,9 @@ class Request
      * @since   1.1
      * @return  string Return request scheme (http or https).
      */
-    public function getScheme()
+    public function getScheme(): string
     {
-        if (isset($_SERVER['HTTPS']) || empty($_SERVER['HTTPS'])) {
+        if (isset($_SERVER['HTTPS']) && !empty($_SERVER['HTTPS'])) {
             return 'https';
         } else {
             return 'http';
@@ -325,10 +325,10 @@ class Request
      * Get subdomain
      *
      * @since   1.1
-     * @param   string $tldLength Length of Top Level Domain. (by default 1)
-     * @return  string Return subdomain.
+     * @param   int $tldLength Length of Top Level Domain. (by default 1)
+     * @return  array Return subdomain.
      */
-    public function getSubdomain($tldLength = 1)
+    public function getSubdomain(int $tldLength = 1): array
     {
         $segmentList = explode('.', $this->getHost());
         return array_slice($segmentList, 0, -1 * ($tldLength + 1));
@@ -340,7 +340,7 @@ class Request
      * @since   1.1
      * @return  string Return request url.
      */
-    public function getUrl()
+    public function getUrl(): string
     {
         return $_SERVER['REQUEST_URI'];
     }
@@ -349,9 +349,9 @@ class Request
      * Get user agent
      *
      * @since   1.1
-     * @return  string Return user agent.
+     * @return  mixed Return user agent.
      */
-    public function getUserAgent()
+    public function getUserAgent(): mixed
     {
         return $this->getHeader('User-Agent');
     }
@@ -361,9 +361,9 @@ class Request
      *
      * @since   1.1
      * @param   string $headerName Name of header
-     * @return  mixed Return true if exist or false if not exist.
+     * @return  bool Return true if exist or false if not exist.
      */
-    public function hasHeader($headerName)
+    public function hasHeader(string $headerName): bool
     {
         return isset($this->headerList[$headerName]);
     }
@@ -373,9 +373,9 @@ class Request
      *
      * @since   1.0
      * @deprecated deprecated since version 1.1
-     * @return  string Return host.
+     * @return  mixed Return host.
      */
-    public function host()
+    public function host(): mixed
     {
         return $this->getHost();
     }
@@ -388,34 +388,18 @@ class Request
      * @param   string $sTest Type of test (get, put, patch, post, delete, head, options, ajax, json, xml)
      * @return  bool Return true if test is ok or return false.
      */
-    public function is($sTest)
+    public function is(string $sTest): bool
     {
-        $arsMethod = array('get', 'put', 'patch', 'post', 'delete', 'head', 'options');
+        $arsMethod = ['get', 'put', 'patch', 'post', 'delete', 'head', 'options'];
         if (in_array($sTest, $arsMethod)) {
-            if (strtolower($this->getMethod()) == $sTest) {
-                return true;
-            } else {
-                return false;
-            }
-        } elseif ($sTest == 'ajax') {
-            if (strtolower($this->getHeader('X-Requested-With')) == 'xmlhttprequest') {
-                return true;
-            } else {
-                return false;
-            }
-        } elseif ($sTest == 'json') {
-            if ($this->isAcceptMimetype('application/json') === true) {
-                return true;
-            } else {
-                return false;
-            }
-        } elseif ($sTest == 'xml') {
-            if ($this->isAcceptMimetype('application/xml') === true || $this->isAcceptMimetype('text/xml') === true) {
-                return true;
-            } else {
-                return false;
-            }
+            return strtolower($this->getMethod()) == $sTest;
         }
+        return match ($sTest) {
+            'ajax' => strtolower($this->getHeader('X-Requested-With')) == 'xmlhttprequest',
+            'json' => $this->isAcceptMimetype('application/json') === true,
+            'xml' => $this->isAcceptMimetype('application/xml') === true || $this->isAcceptMimetype('text/xml') === true,
+            default => false,
+        };
     }
 
     /**
@@ -424,9 +408,9 @@ class Request
      * @since   1.1
      * @param   string $acceptHeader Accept header.
      * @param   string $test Accept test.
-     * @return  bool True if test is ok else false.
+     * @return  bool|array True if test is ok else false.
      */
-    private function isAccept($acceptHeader, $test)
+    private function isAccept(string $acceptHeader, string $test): bool|array
     {
         $acceptList = $this->parseAccept($acceptHeader);
         if (empty($test)) {
@@ -451,7 +435,7 @@ class Request
      * @param   string $charset Test charset.
      * @return  bool True if test is ok else false.
      */
-    public function isAcceptCharset($charset)
+    public function isAcceptCharset(string $charset): bool
     {
         if ($this->hasHeader('Accept-Charset')) {
             return $this->isAccept($this->getHeader('Accept-Charset'), $charset);
@@ -466,7 +450,7 @@ class Request
      * @param   string $encoding Test encoding.
      * @return  bool True if test is ok else false.
      */
-    public function isAcceptEncoding($encoding)
+    public function isAcceptEncoding(string $encoding): bool
     {
         if ($this->hasHeader('Accept-Encoding')) {
             return $this->isAccept($this->getHeader('Accept-Encoding'), $encoding);
@@ -481,7 +465,7 @@ class Request
      * @param   string $language Test language.
      * @return  bool True if test is ok else false.
      */
-    public function isAcceptLanguage($language)
+    public function isAcceptLanguage(string $language): bool
     {
         if ($this->hasHeader('Accept-Language')) {
             return $this->isAccept($this->getHeader('Accept-Language'), $language);
@@ -496,7 +480,7 @@ class Request
      * @param   string $mimetype Test mimetype.
      * @return  bool True if test is ok else false.
      */
-    public function isAcceptMimetype($mimetype)
+    public function isAcceptMimetype(string $mimetype): bool
     {
         if ($this->hasHeader('Accept')) {
             return $this->isAccept($this->getHeader('Accept'), $mimetype);
@@ -510,7 +494,7 @@ class Request
      * @since   1.1
      * @return  bool Return true if test is ok or return false.
      */
-    public function isAjax()
+    public function isAjax(): bool
     {
         if (strtolower($this->getHeader('X-Requested-With')) == 'xmlhttprequest') {
             return true;
@@ -525,7 +509,7 @@ class Request
      * @param   string $methodName Method name (GET, POST, ...).
      * @return  bool Return true if test is ok or return false.
      */
-    public function isMethod($methodName)
+    public function isMethod(string $methodName): bool
     {
         if ($this->getMethod() == strtoupper($methodName)) {
             return true;
@@ -540,7 +524,7 @@ class Request
      * @deprecated deprecated since version 1.1
      * @return  string Return request method (GET, POST, ...).
      */
-    public function method()
+    public function method(): string
     {
         return $this->getMethod();
     }
@@ -552,7 +536,7 @@ class Request
      * @param   string $sHeaderLine Accept header line.
      * @return  array Return sort accept value.
      */
-    private function parseAccept($sHeaderLine)
+    private function parseAccept(string $sHeaderLine): array
     {
         $arsAccept = [];
         $arsHeader = explode(',', $sHeaderLine);
@@ -586,9 +570,9 @@ class Request
      *
      * @since   1.0
      * @deprecated deprecated since version 1.1
-     * @return  integer Return request port.
+     * @return  int Return request port.
      */
-    public function port()
+    public function port(): int
     {
         return $this->getPort();
     }
@@ -600,7 +584,7 @@ class Request
      * @deprecated deprecated since version 1.1
      * @return  string Return request scheme (http or https).
      */
-    public function scheme()
+    public function scheme(): string
     {
         return $this->getScheme();
     }
@@ -610,10 +594,10 @@ class Request
      *
      * @since   1.0
      * @deprecated deprecated since version 1.1
-     * @param   string $tldLength Length of Top Level Domain. (by default 1)
-     * @return  string Return subdomain.
+     * @param   int $tldLength Length of Top Level Domain. (by default 1)
+     * @return  array Return subdomain.
      */
-    public function subdomain($tldLength = 1)
+    public function subdomain(int $tldLength = 1): array
     {
         return $this->getSubdomain($tldLength);
     }
@@ -625,7 +609,7 @@ class Request
      * @deprecated deprecated since version 1.1
      * @return  string Return request url.
      */
-    public function url()
+    public function url(): string
     {
         return $this->getUrl();
     }
@@ -635,9 +619,9 @@ class Request
      *
      * @since   1.0
      * @deprecated deprecated since version 1.1
-     * @return  string Return user agent.
+     * @return  mixed Return user agent.
      */
-    public function userAgent()
+    public function userAgent(): mixed
     {
         return $this->getUserAgent();
     }

@@ -27,31 +27,31 @@ class RouteCollection
      * @var    array Liste of route
      * @since   1.0
      */
-    private static $arsRouteCollection;
+    private static array $arsRouteCollection = [];
 
     /**
      * @var    string Fallback action (by default "index")
      * @since   1.0
      */
-    private static $sFallbackAction = 'index';
+    private static string $sFallbackAction = 'index';
 
     /**
      * @var    string Fallback controller (by default "Error")
      * @since   1.0
      */
-    private static $sFallbackController = 'Error';
+    private static string $sFallbackController = 'Error';
 
     /**
      * @var    array List of separator of url (by default '/', '?', '&', '=')
      * @since   1.0
      */
-    private static $arcSeparator = array('/', '?', '&', '=');
+    private static array $arcSeparator = ['/', '?', '&', '='];
 
     /**
      * @var    char Default separator ('/')
      * @since   1.0
      */
-    private static $cDefaultSeparator = '/';
+    private static string $cDefaultSeparator = '/';
 
     /**
      * Create a route to collection
@@ -60,7 +60,7 @@ class RouteCollection
      * @param   string $sRoute Route.
      * @param   array $arsOption Option (controller, action and param).
      */
-    public static function add($sRoute, $arsOption)
+    public static function add(string $sRoute, array $arsOption): void
     {
         self::$arsRouteCollection[] = new Route($sRoute, $arsOption);
     }
@@ -71,7 +71,7 @@ class RouteCollection
      * @since   1.0
      * @return  string Fallback action.
      */
-    public static function getFallbackAction()
+    public static function getFallbackAction(): string
     {
         return self::$sFallbackAction;
     }
@@ -82,7 +82,7 @@ class RouteCollection
      * @since   1.0
      * @return  string Fallback controller.
      */
-    public static function getFallbackController()
+    public static function getFallbackController(): string
     {
         return self::$sFallbackController;
     }
@@ -93,7 +93,7 @@ class RouteCollection
      * @since   1.0
      * @return  array List of route defined in collection.
      */
-    public static function getAll()
+    public static function getAll(): array
     {
         return self::$arsRouteCollection;
     }
@@ -104,7 +104,7 @@ class RouteCollection
      * @since   1.0
      * @return  char Default separator.
      */
-    public static function getDefaultSeparator()
+    public static function getDefaultSeparator(): string
     {
         return self::$cDefaultSeparator;
     }
@@ -115,7 +115,7 @@ class RouteCollection
      * @since   1.0
      * @return  array List of separator.
      */
-    public static function getSeparator()
+    public static function getSeparator(): array
     {
         return self::$arcSeparator;
     }
@@ -128,7 +128,7 @@ class RouteCollection
      * @param   string $sAction Fallback action.
      * @return  void
      */
-    public static function setFallback($sController, $sAction)
+    public static function setFallback(string $sController, string $sAction): void
     {
         self::$sFallbackAction = $sAction;
         self::$sFallbackController = $sController;
@@ -142,7 +142,7 @@ class RouteCollection
      * @param   bool $bMerge Merge default separtor to separator list.
      * @return  void
      */
-    public static function setDefaultSeparator($cSeparator, $bMerge = true)
+    public static function setDefaultSeparator(string $cSeparator, bool $bMerge = true): void
     {
         self::$cDefaultSeparator = $cSeparator;
         self::setSeparator($cSeparator, $bMerge);
@@ -156,7 +156,7 @@ class RouteCollection
      * @param   bool $bMerge Merge $mSeparator with separator list.
      * @return  void
      */
-    public static function setSeparator($mSeparator, $bMerge = true)
+    public static function setSeparator(array|string $mSeparator, bool $bMerge = true): void
     {
         if (is_array($mSeparator)) {
             if ($bMerge === true) {
@@ -170,7 +170,7 @@ class RouteCollection
                     self::$arcSeparator[] = $mSeparator;
                 }
             } else {
-                self::$arcSeparator = array($mSeparator);
+                self::$arcSeparator = [$mSeparator];
             }
         }
     }

@@ -23,7 +23,7 @@ class StringType
      * @var     string String manipulate by this class.
      * @since   1.1
      */
-    private $stringVar;
+    private string $stringVar;
 
     /**
      * Constructor
@@ -34,7 +34,7 @@ class StringType
      * @param   string $stringVar String who will be transform in StringType (by default empty String)
      * @return  void
      */
-    public function __construct($stringVar = '')
+    public function __construct(string $stringVar = '')
     {
         $this->stringVar = $stringVar;
     }
@@ -45,7 +45,7 @@ class StringType
      * @since   1.1
      * @return  string Value of String manipulated by this class.
      */
-    public function __toString()
+    public function __toString(): string
     {
         return $this->stringVar;
     }
@@ -54,9 +54,9 @@ class StringType
      * Return camal case to snake case string
      *
      * @since   1.2
-     * @return  string  String.
+     * @return  $this
      */
-    public function camalToSnake()
+    public function camalToSnake(): static
     {
         $this->stringVar = strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', $this->stringVar));
         return $this;
@@ -69,7 +69,7 @@ class StringType
      * @param   int $position Position of charactère
      * @return  char|bool Char at a position or false if no char at this position.
      */
-    public function charAt($position)
+    public function charAt(int $position): string|false
     {
         if (isset($this->stringVar[$position])) {
             return $this->stringVar[$position];
@@ -83,7 +83,7 @@ class StringType
      * @since   1.1
      * @return  string Class basename.
      */
-    public function classBasename()
+    public function classBasename(): string
     {
         return basename(str_replace('\\', '/', $this->stringVar));
     }
@@ -95,7 +95,7 @@ class StringType
      * @param   mixed $mixedVar The mixed value that is concatenated to the end of this String.
      * @return  void
      */
-    public function concat($mixedVar)
+    public function concat(mixed $mixedVar): void
     {
         $this->stringVar .= $mixedVar;
     }
@@ -108,7 +108,7 @@ class StringType
      * @param   string $newString The new string.
      * @return  void
      */
-    public function replace($oldString, $newString)
+    public function replace(string $oldString, string $newString): void
     {
         $this->stringVar = str_replace($oldString, $newString, $this->stringVar);
     }

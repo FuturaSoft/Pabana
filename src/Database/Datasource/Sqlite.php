@@ -23,8 +23,8 @@ use Pabana\Database\Datasource;
  */
 class Sqlite extends Datasource
 {
-    private $bMemory = false;
-    
+    private bool $bMemory = false;
+
     /**
      * Constructor
      *
@@ -33,7 +33,7 @@ class Sqlite extends Datasource
      * @since   1.0
      * @param   string $sCnxName Connection name.
      */
-    public function __construct($sCnxName)
+    public function __construct(string $sCnxName)
     {
         $this->setName($sCnxName);
         $this->setDbms('Sqlite');
@@ -47,7 +47,7 @@ class Sqlite extends Datasource
      * @since   1.0
      * @return  bool True if success or false.
      */
-    protected function checkParam()
+    protected function checkParam(): bool
     {
         if (empty($this->getDatabase()) && $this->getMemory() === false) {
             $sErrorMessage = 'Connexion to SQLite must have a database defined or be in memory';
@@ -57,7 +57,7 @@ class Sqlite extends Datasource
             return true;
         }
     }
-    
+
     /**
      * Get DSN string
      *
@@ -66,7 +66,7 @@ class Sqlite extends Datasource
      * @since   1.0
      * @return  string|bool Return DSN string if success or false else.
      */
-    public function getDsn()
+    public function getDsn(): string|false
     {
         if ($this->checkParam()) {
             $sDsn = 'sqlite:';
@@ -80,14 +80,14 @@ class Sqlite extends Datasource
             return false;
         }
     }
-    
-    public function getMemory()
+
+    public function getMemory(): bool
     {
         return $this->bMemory;
     }
-    
-    public function setMemory($bCnxMemory)
+
+    public function setMemory(bool $bCnxMemory): void
     {
-        $this->bMemory = $bMemory;
+        $this->bMemory = $bCnxMemory;
     }
 }

@@ -25,13 +25,13 @@ class ConnectionCollection
      * @var     array List of connection in collection
      * @since   1.0
      */
-    private static $connectionList;
+    private static array $connectionList = [];
 
     /**
      * @var     string Name of default connection
      * @since   1.0
      */
-    private static $defaultConnectionName;
+    private static string $defaultConnectionName = '';
 
     /**
      * Add a connection to collection
@@ -43,7 +43,7 @@ class ConnectionCollection
      * @param   bool $setAsDefault If defined connection will be defined as default connection.
      * @return  void
      */
-    public static function add($connection, $setAsDefault = false)
+    public static function add(Connection $connection, bool $setAsDefault = false): void
     {
         $connectionName = $connection->getName();
         self::$connectionList[$connectionName] = $connection;
@@ -61,7 +61,7 @@ class ConnectionCollection
      * @param   string $connectionName Connection who will check.
      * @return  bool Return true if connection exist in collection or return false.
      */
-    public static function exists($connectionName)
+    public static function exists(string $connectionName): bool
     {
         return isset(self::$connectionList[$connectionName]);
     }
@@ -74,9 +74,9 @@ class ConnectionCollection
      * @since   1.0
      * @return  bool Return true if default connection exist in collection or return false.
      */
-    public static function existsDefault()
+    public static function existsDefault(): bool
     {
-        return isset(self::$defaultConnectionName);
+        return self::$defaultConnectionName !== '';
     }
 
     /**
@@ -86,12 +86,12 @@ class ConnectionCollection
      * @param   string $connectionName Connection who will get.
      * @return  bool|\Pabana\Database\Connection Return Connection object if exist or return false.
      */
-    public static function get($connectionName)
+    public static function get(string $connectionName): Connection|false
     {
         if (self::exists($connectionName) === true) {
             return self::$connectionList[$connectionName];
         } else {
-            throw new Exception('Datasource "' . $connectionName . '" isn\'t defined in DatasourceCollection');
+            throw new \Exception('Datasource "' . $connectionName . '" isn\'t defined in DatasourceCollection');
             return false;
         }
     }
@@ -102,13 +102,13 @@ class ConnectionCollection
      * @since   1.0
      * @return  bool|\Pabana\Database\Connection Return default Connection object if exist or return false.
      */
-    public static function getDefault()
+    public static function getDefault(): Connection|false
     {
         if (self::existsDefault()) {
             $defaultConnectionName = self::$defaultConnectionName;
             return self::$connectionList[$defaultConnectionName];
         } else {
-            throw new Exception('Datasource "' . $defaultConnectionName . '" isn\'t defined in DatasourceCollection');
+            throw new \Exception('Default datasource isn\'t defined in DatasourceCollection');
             return false;
         }
     }
@@ -119,7 +119,7 @@ class ConnectionCollection
      * @since   1.0
      * @return  array Return connection collection array.
      */
-    public static function getAll()
+    public static function getAll(): array
     {
         return self::$connectionList;
     }
@@ -134,10 +134,10 @@ class ConnectionCollection
      * @param   bool $force Force change of default connection.
      * @return  bool Return true if success or false if error.
      */
-    public static function setDefault($connectionName, $force = true)
+    public static function setDefault(string $connectionName, bool $force = true): bool
     {
         if ($force === false && self::existsDefault() === true) {
-            throw new Exception('A default Datasource is already defined.');
+            throw new \Exception('A default Datasource is already defined.');
             return false;
         } else {
             self::$defaultConnectionName = $connectionName;

@@ -19,18 +19,23 @@ namespace Pabana\Network\Http;
  */
 class Json
 {
-    public static function send($data = [], $code = 200)
+    /**
+     * Send JSON response
+     *
+     * @since   1.2
+     * @param   array $data Data to encode as JSON.
+     * @param   int $code HTTP response code.
+     * @return  bool Return true if success code (2xx) else false.
+     */
+    public static function send(array $data = [], int $code = 200): bool
     {
         http_response_code($code);
         header('Content-Type: application/json');
         if (!empty($data)) {
-            echo json_encode($data, JSON_THROW_ON_ERROR + JSON_INVALID_UTF8_SUBSTITUTE);
+            echo json_encode($data, JSON_THROW_ON_ERROR | JSON_INVALID_UTF8_SUBSTITUTE);
         } else {
             echo '{}';
         }
-        if ($code >= 200 && $code < 300) {
-            return true;
-        }
-        return false;
+        return $code >= 200 && $code < 300;
     }
 }

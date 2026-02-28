@@ -25,13 +25,13 @@ class Guard
      * @var     integer   Define HTTP error code
      * @since   1.2
      */
-    private $errorCode;
+    private int $errorCode;
 
     /**
      * @var     array   Define error return
      * @since   1.2
      */
-    private $errorData;
+    private array $errorData;
 
     /**
      * Initialize guard
@@ -55,7 +55,7 @@ class Guard
      * @since   1.2
      * @return  integer HTTP error code
      */
-    public function getErrorCode()
+    public function getErrorCode(): int
     {
         return $this->errorCode;
     }
@@ -66,7 +66,7 @@ class Guard
      * @since   1.2
      * @return  array Error data
      */
-    public function getErrorData()
+    public function getErrorData(): array
     {
         return $this->errorData;
     }
@@ -79,7 +79,7 @@ class Guard
      * @param   integer $iErrorCode HTTP error code.
      * @return  void
      */
-    public function setError($aErrorData = null, $iErrorCode = 500)
+    public function setError(?array $aErrorData = null, int $iErrorCode = 500): void
     {
         $this->errorData = $aErrorData;
         $this->errorCode = $iErrorCode;

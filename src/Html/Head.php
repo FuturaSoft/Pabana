@@ -32,79 +32,79 @@ class Head
      * @var     \Pabana\Html\Head\Charset Charset object
      * @since   1.1
      */
-    public $charset;
+    public Charset $charset;
 
     /**
      * @var     \Pabana\Html\Head\Css Css object
      * @since   1.1
      */
-    public $css;
+    public Css $css;
 
     /**
      * @var     \Pabana\Html\Head\Icon Icon object
      * @since   1.1
      */
-    public $icon;
+    public Icon $icon;
 
     /**
      * @var     \Pabana\Html\Head\Link Link object
      * @since   1.1
      */
-    public $link;
+    public Link $link;
 
     /**
      * @var     \Pabana\Html\Head\Meta Meta object
      * @since   1.1
      */
-    public $meta;
+    public Meta $meta;
 
     /**
      * @var     \Pabana\Html\Head\Title Title object
      * @since   1.1
      */
-    public $title;
+    public Title $title;
 
     /**
      * @var     \Pabana\Html\Head\Charset Charset object
      * @since   1.0
      * @deprecated deprecated since version 1.1
      */
-    public $Charset;
+    public Charset $Charset;
 
     /**
      * @var     \Pabana\Html\Head\Css Css object
      * @since   1.0
      * @deprecated deprecated since version 1.1
      */
-    public $Css;
+    public Css $Css;
 
     /**
      * @var     \Pabana\Html\Head\Icon Icon object
      * @since   1.0
      * @deprecated deprecated since version 1.1
      */
-    public $Icon;
+    public Icon $Icon;
 
     /**
      * @var     \Pabana\Html\Head\Link Link object
      * @since   1.0
      * @deprecated deprecated since version 1.1
      */
-    public $Link;
+    public Link $Link;
 
     /**
      * @var     \Pabana\Html\Head\Meta Meta object
      * @since   1.0
      * @deprecated deprecated since version 1.1
      */
-    public $Meta;
+    public Meta $Meta;
 
     /**
      * @var     \Pabana\Html\Head\Title Title object
      * @since   1.0
      * @deprecated deprecated since version 1.1
      */
-    public $Title;
+    public Title $Title;
 
     /**
      * Constructor
@@ -138,7 +138,7 @@ class Head
      * @since   1.0
      * @return  string Html code to initialize all head's object
      */
-    public function __toString()
+    public function __toString(): string
     {
         return $this->render();
     }
@@ -151,7 +151,7 @@ class Head
      * @since   1.0
      * @return void
      */
-    public function clean()
+    public function clean(): void
     {
         $this->charset->clean();
         $this->css->clean();
@@ -169,7 +169,7 @@ class Head
      * @since   1.0
      * @return  string Html code to initialize all head's object
      */
-    public function render()
+    public function render(): string
     {
         $htmlContent = '';
         $htmlContent .= $this->charset->render();

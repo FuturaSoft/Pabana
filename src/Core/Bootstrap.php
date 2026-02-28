@@ -27,14 +27,14 @@ class Bootstrap
      * @var     \Pabana\Network\Http\Request Request helper to access to Request class
      * @since   1.1
      */
-    public $request;
+    public Request $request;
 
     /**
      * @var     Redirection to $request var
      * @since   1.0
      * @deprecated deprecated since version 1.1
      */
-    public $Request;
+    public Request $Request;
 
     /**
      * Constructor

@@ -25,13 +25,13 @@ class Meta
      * @var     array List of defined meta http-equiv
      * @since   1.0
      */
-    private static $httpEquivList = array();
+    private static array $httpEquivList = [];
 
     /**
      * @var     array List of defined default meta
      * @since   1.0
      */
-    private static $metaList = array();
+    private static array $metaList = [];
 
     /**
      * toString
@@ -41,7 +41,7 @@ class Meta
      * @since   1.0
      * @return  string Html code to initialize meta
      */
-    public function __toString()
+    public function __toString(): string
     {
         return $this->render();
     }
@@ -52,12 +52,12 @@ class Meta
      * Clean list of default meta and http-equiv meta
      *
      * @since   1.0
-     * @return  $this
+     * @return  void
      */
-    public function clean()
+    public function clean(): void
     {
-        self::$httpEquivList = array();
-        self::$metaList = array();
+        self::$httpEquivList = [];
+        self::$metaList = [];
     }
 
     /**
@@ -68,7 +68,7 @@ class Meta
      * @since   1.0
      * @return  string Html code to initialize meta
      */
-    public function render()
+    public function render(): string
     {
         $htmlContent = '';
         foreach (self::$httpEquivList as $httpEquivName => $httpEquivValue) {
@@ -88,7 +88,7 @@ class Meta
      * @param   string $metaValue Meta tag value.
      * @return  $this
      */
-    public function set($metaName, $metaValue)
+    public function set(string $metaName, string $metaValue): static
     {
         self::$metaList[$metaName] = $metaValue;
         return $this;
@@ -101,7 +101,7 @@ class Meta
      * @param   string $applicationName Application name.
      * @return  $this
      */
-    public function setApplicationName($applicationName)
+    public function setApplicationName(string $applicationName): static
     {
         return $this->set('application-name', $applicationName);
     }
@@ -113,7 +113,7 @@ class Meta
      * @param   string $author Author name.
      * @return  $this
      */
-    public function setAuthor($author)
+    public function setAuthor(string $author): static
     {
         return $this->set('author', $author);
     }
@@ -125,7 +125,7 @@ class Meta
      * @param   string $defaultStyle Default style.
      * @return  $this
      */
-    public function setDefaultStyle($defaultStyle)
+    public function setDefaultStyle(string $defaultStyle): static
     {
         return $this->setHttpEquiv('default-style', $defaultStyle);
     }
@@ -137,7 +137,7 @@ class Meta
      * @param   string $description Description.
      * @return  $this
      */
-    public function setDescription($description)
+    public function setDescription(string $description): static
     {
         return $this->set('description', $description);
     }
@@ -149,7 +149,7 @@ class Meta
      * @param   string $generator Generator.
      * @return  $this
      */
-    public function setGenerator($generator)
+    public function setGenerator(string $generator): static
     {
         return $this->set('generator', $generator);
     }
@@ -162,7 +162,7 @@ class Meta
      * @param   string $httpEquivValue Http-equiv value.
      * @return  $this
      */
-    public function setHttpEquiv($httpEquivName, $httpEquivValue)
+    public function setHttpEquiv(string $httpEquivName, string $httpEquivValue): static
     {
         self::$httpEquivList[$httpEquivName] = $httpEquivValue;
         return $this;
@@ -175,7 +175,7 @@ class Meta
      * @param   string $keyword Keywords.
      * @return  $this
      */
-    public function setKeyword($keyword)
+    public function setKeyword(string $keyword): static
     {
         return $this->set('keywords', $keyword);
     }
@@ -187,7 +187,7 @@ class Meta
      * @param   string $refresh Refresh.
      * @return  $this
      */
-    public function setRefresh($refresh)
+    public function setRefresh(string $refresh): static
     {
         return $this->setHttpEquiv('refresh', $refresh);
     }
@@ -199,7 +199,7 @@ class Meta
      * @param   string $uaCompatible X-UA-Compatible.
      * @return  $this
      */
-    public function setUaCompatible($uaCompatible)
+    public function setUaCompatible(string $uaCompatible): static
     {
         return $this->setHttpEquiv('X-UA-Compatible', $uaCompatible);
     }
@@ -211,7 +211,7 @@ class Meta
      * @param   string $viewport Viewport.
      * @return  $this
      */
-    public function setViewport($viewport)
+    public function setViewport(string $viewport): static
     {
         return $this->set('viewport', $viewport);
     }

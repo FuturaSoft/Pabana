@@ -31,50 +31,50 @@ class View
      * @var     array Variable spooler to manage send var between controller, layout and view.
      * @since   1.0
      */
-    private $variableList;
+    private array $variableList = [];
 
     /**
      * @var     bool Define if autorender is enable.
      * @since   1.0
      */
-    private $autoRender;
+    private bool $autoRender;
 
     /**
      * @var     string Define directory of View.
      * @since   1.0
      */
-    private $directory;
+    private string $directory;
 
     /**
      * @var     string Define extension of View.
      * @since   1.0
      */
-    private $extension;
+    private string $extension;
 
     /**
      * @var     string Define name of View.
      * @since   1.0
      */
-    private $name;
+    private string $name;
 
     /**
      * @var     Redirection to $html var
      * @since   1.0
      * @deprecated deprecated since version 1.1
      */
-    public $Html;
+    public ?Html $Html = null;
 
     /**
      * @var     \Pabana\Html\Html Object Html.
      * @since   1.1
      */
-    public $html;
+    public Html $html;
 
     /**
      * @var     \Pabana\Network\Http\Request Object Request.
      * @since   1.2
      */
-    public $request;
+    public Request $request;
 
     /**
      * Initialize view
@@ -87,7 +87,7 @@ class View
      * @param   string $action Name of Action
      * @return  void
      */
-    public function __construct($controller, $action)
+    public function __construct(string $controller, string $action)
     {
         // Load Mvc\Html helper to $html var
         $this->html = new Html();
@@ -119,7 +119,7 @@ class View
      * @since   1.0
      * @return  string|bool View content if success or false if error
      */
-    public function __toString()
+    public function __toString(): string
     {
         return $this->render();
     }
@@ -133,7 +133,7 @@ class View
      * @param   string $elementName Element or part name
      * @return  string|bool Return Element content if success or false if error
      */
-    public function element($elementName)
+    public function element(string $elementName): string|false
     {
         if (Configuration::read('mvc.autoload_shared_var') === true && empty($this->variableList) === false) {
             foreach ($this->variableList as $varName => $varValue) {
@@ -159,7 +159,7 @@ class View
      * @since   1.0
      * @return  bool Autorender state
      */
-    public function getAutoRender()
+    public function getAutoRender(): bool
     {
         return $this->autoRender;
     }
@@ -170,7 +170,7 @@ class View
      * @since   1.0
      * @return  string View directory
      */
-    public function getDirectory()
+    public function getDirectory(): string
     {
         return $this->directory;
     }
@@ -181,7 +181,7 @@ class View
      * @since   1.0
      * @return  string Extension of view file
      */
-    public function getExtension()
+    public function getExtension(): string
     {
         return $this->extension;
     }
@@ -192,7 +192,7 @@ class View
      * @since   1.0
      * @return  string Name of view
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
@@ -204,7 +204,7 @@ class View
      * @param   string $varName Name of var send to View
      * @return  mixed Value of var send to View if exist else false
      */
-    public function getVar($varName)
+    public function getVar(string $varName): mixed
     {
         if (!isset($this->variableList[$varName])) {
             trigger_error('Variable "' . $varName . '" isn\'t defined in View.', E_USER_WARNING);
@@ -219,7 +219,7 @@ class View
      * @since   1.0
      * @return  string|bool Return View content if success or false if error
      */
-    public function render()
+    public function render(): string|false
     {
         $viewPath = $this->getDirectory() . '/'. $this->getName() . '.' . $this->getExtension();
         if (!file_exists($viewPath)) {
@@ -244,7 +244,7 @@ class View
      * @param   bool $autoRender Auto render value
      * @return  void
      */
-    public function setAutoRender($autoRender)
+    public function setAutoRender(bool $autoRender): void
     {
         $this->autoRender = $autoRender;
     }
@@ -256,7 +256,7 @@ class View
      * @param   string $directory Directory of view
      * @return  void
      */
-    public function setDirectory($directory)
+    public function setDirectory(string $directory): void
     {
         $this->directory = $directory;
     }
@@ -268,7 +268,7 @@ class View
      * @param   string $extension Extension of view file
      * @return  void
      */
-    public function setExtension($extension)
+    public function setExtension(string $extension): void
     {
         $this->extension = $extension;
     }
@@ -280,7 +280,7 @@ class View
      * @param   string $name Name of view file
      * @return  void
      */
-    public function setName($name)
+    public function setName(string $name): void
     {
         if (Configuration::read('mvc.view.camal_to_snake', false) === true) {
             $nameString = new StringType($name);
@@ -298,7 +298,7 @@ class View
      * @param   bool $force Force change of var value if var already exist
      * @return  bool Return true if success else false
      */
-    public function setVar($varName, $varValue, $force = false)
+    public function setVar(string $varName, mixed $varValue, bool $force = false): bool
     {
         if (isset($this->variableList[$varName]) && $force === false) {
             trigger_error('Variable "' . $varName . '" is already defined in View.', E_USER_WARNING);

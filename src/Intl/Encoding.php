@@ -32,7 +32,7 @@ class Encoding
      * @param   string $value String who you want detect encoding.
      * @return  string Encoding use for string in argument.
      */
-    public function detect($value)
+    public function detect(string $value): string|false
     {
         return mb_detect_encoding($value);
     }
@@ -50,7 +50,7 @@ class Encoding
      * @param   bool $ignore Enable ignore (by default true)
      * @return  string|array String or array according to $mValue.
      */
-    public function convert($value, $inCharset = 'auto', $outCharset = 'auto', $translit = true, $ignore = true)
+    public function convert(string|array $value, string $inCharset = 'auto', string $outCharset = 'auto', bool $translit = true, bool $ignore = true): string|array
     {
         $return = $value;
         if (is_string($value)) {
@@ -70,7 +70,7 @@ class Encoding
                 $return = $value;
             }
         } elseif (is_array($value)) {
-            $return = array();
+            $return = [];
             foreach ($value as $arrayKey => $arrayValue) {
                 $arrayKeyConvert = $this->convert($arrayKey, $inCharset, $outCharset, $translit, $ignore);
                 if ($return === false) {

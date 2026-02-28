@@ -27,31 +27,31 @@ class Odbc extends Datasource
      * @var     string ODBC driver name
      * @since   1.0
      */
-    private $sDriver;
+    private string $sDriver = '';
 
     /**
      * @var     integer Exclusive
      * @since   1.0
      */
-    private $nExclusive;
+    private int $nExclusive = 0;
 
     /**
      * @var     integer Extended Ansi SQL
      * @since   1.0
      */
-    private $nExtendedAnsiSql;
+    private int $nExtendedAnsiSql = 0;
 
     /**
      * @var     integer Locale identifier
      * @since   1.0
      */
-    private $nLocaleIdentifier;
+    private int $nLocaleIdentifier = 0;
 
     /**
      * @var     string System database path
      * @since   1.0
      */
-    private $sSystemDatabase;
+    private string $sSystemDatabase = '';
 
     /**
      * Constructor
@@ -61,7 +61,7 @@ class Odbc extends Datasource
      * @since   1.0
      * @param   string $sCnxName Connection name.
      */
-    public function __construct($sCnxName)
+    public function __construct(string $sCnxName)
     {
         $this->setName($sCnxName);
         $this->setDbms('Odbc');
@@ -75,7 +75,7 @@ class Odbc extends Datasource
      * @since   1.0
      * @return  bool True if success or false.
      */
-    protected function checkParam()
+    protected function checkParam(): bool
     {
         if (empty($this->getDriver())) {
             $sErrorMessage = 'Connexion by Odbc must have a driver defined';
@@ -85,7 +85,7 @@ class Odbc extends Datasource
             return true;
         }
     }
-    
+
     /**
      * Get DSN string
      *
@@ -94,7 +94,7 @@ class Odbc extends Datasource
      * @since   1.0
      * @return  string|bool Return DSN string if success or false else.
      */
-    public function getDsn()
+    public function getDsn(): string|false
     {
         if ($this->checkParam()) {
             $sDsn = 'odbc:Driver={' . $this->getDriver() . '};';
@@ -113,56 +113,56 @@ class Odbc extends Datasource
         }
     }
 
-    public function getDriver()
+    public function getDriver(): string
     {
         return $this->sDriver;
     }
-    
-    public function getExclusive()
+
+    public function getExclusive(): int
     {
         return $this->nExclusive;
     }
-    
-    public function getExtendedAnsiSql()
+
+    public function getExtendedAnsiSql(): int
     {
         return $this->nExtendedAnsiSql;
     }
-    
-    public function getLocaleIdentifier()
+
+    public function getLocaleIdentifier(): int
     {
         return $this->nLocaleIdentifier;
     }
-    
-    public function getSystemDatabase()
+
+    public function getSystemDatabase(): string
     {
         return $this->sSystemDatabase;
     }
-    
-    public function setDriver($sDriver)
+
+    public function setDriver(string $sDriver): static
     {
         $this->sDriver = $sDriver;
         return $this;
     }
-    
-    public function setExclusive($nExclusive)
+
+    public function setExclusive(int $nExclusive): static
     {
         $this->nExclusive = $nExclusive;
         return $this;
     }
-    
-    public function setExtendedAnsiSql($nExtendedAnsiSql)
+
+    public function setExtendedAnsiSql(int $nExtendedAnsiSql): static
     {
         $this->nExtendedAnsiSql = $nExtendedAnsiSql;
         return $this;
     }
-    
-    public function setLocaleIdentifier($nLocaleIdentifier)
+
+    public function setLocaleIdentifier(int $nLocaleIdentifier): static
     {
         $this->nLocaleIdentifier = $nLocaleIdentifier;
         return $this;
     }
-    
-    public function setSystemDatabase($sSystemDatabase)
+
+    public function setSystemDatabase(string $sSystemDatabase): static
     {
         $this->sSystemDatabase = $sSystemDatabase;
         return $this;
